@@ -1,20 +1,22 @@
-import express from 'express';
+import koa from 'koa';
+import router from 'koa-router';
 import {RouteSet} from '../..';
 
-let app = express();
+let app = koa();
+app.use(router(app));
 
 let controllers = {
   welcome: {
-    index:  (req, res) => {
-      res.send('Welcome Index!');
+    index:  function *() {
+      this.body = 'Welcome Index!';
     }
   },
   photos: {
-    index: (req, res) => {
-      res.send('photos index');
+    index: function *() {
+      this.body = 'photos index';
     },
-    show: (req, res) => {
-      res.send(`photo ${req.params.id}`);
+    show: function *() {
+      this.body = `photo ${this.params.id}`;
     }
   }
 };
