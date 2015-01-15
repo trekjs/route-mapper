@@ -26,59 +26,108 @@ describe('Mapper#resourcesPathNames', () => {
 describe('Mapper#root', () => {
   let router = new RouteSet();
   router.draw((m) => {
-    it("should be root", () => {
-      //m.root('photos');
-      //m.scope("/", () => {
-      //  m.get("/", { to: 'pages#index' });
-      //});
+    it("root route", () => {
+      m.root('welcome#index');
+      //m.root({ to: 'welcome#index' });
     });
   });
 });
 
-describe('Mapper#scope', () => {
+describe('Mapper#get', () => {
   let router = new RouteSet();
   router.draw((m) => {
-    it("should be scope", () => {
-      //m.scope('/api', { as: 'api' }, () => {
-      //  m.scope('/v1', { as: 'v1' }, () => {
-      //    //m.resources('images')
-      //  });
-      //});
+    it("get route", () => {
+      m.get('products/:id', { to: 'catalog#view' });
     });
   });
 });
 
-describe('Mapper#resources', function () {
+describe('Mapper#get', () => {
   let router = new RouteSet();
   router.draw((m) => {
-    it("should be resources", () => {
-      //m.resources('photos', { only: ['index', 'show'] });
-      //m.resources('comments', { except: ['destroy'] });
-      //m.resources('users', () => {
-      //  m.resources('posts', () => {
-      //    m.resources('images');
-      //  });
-      //});
+    it("named get route", () => {
+      m.get('products/:id', { to: 'catalog#view', as: 'purchase' });
+    });
+  });
+});
 
+describe('Mapper#resources', () => {
+  let router = new RouteSet();
+  router.draw((m) => {
+    it("resources route", () => {
+      m.resources('products');
+    });
+  });
+});
 
-      //m.scope({ shallow: true, path:'store', as: 'sekret' }, () => {
-      //  m.resources('books', () => {
-      //    m.resources('dirs', () => {
-      //      m.resources('pages', () => {});
-      //    });
-      //  });
-      //});
+describe('Mapper#resources', () => {
+  let router = new RouteSet();
+  router.draw((m) => {
+    it("resources route with options", () => {
+      m.resources('products', () => {
+       m.member(() => {
+         m.get('short');
+         m.post('toggle');
+       });
+ 
+       m.collection(() => {
+         m.get('sold');
+       });
+      });
+    });
+  });
+});
 
-      m.scope({ shallow: true, shallow_path: 'store', shallow_prefix: 'sekret' }, function () {
-        m.resources('books', function () {
-          m.resources('dirs', function () {
-            m.resources('pages', function () {
-              m.resources('notes');
-            });
-          });
+describe('Mapper#resources', () => {
+  let router = new RouteSet();
+  router.draw((m) => {
+    it("resources route with sub-resources", () => {
+      m.resources('products', () => {
+       m.resources('comments', 'sales');
+       m.resource('seller');
+      });
+    });
+  });
+});
+
+describe('Mapper#resources', () => {
+  let router = new RouteSet();
+  router.draw((m) => {
+    it("resources route with more complex sub-resources", () => {
+      m.resources('products', () => {
+       m.resources('comments')
+       m.resources('sales', () => {
+         m.get('recent', { on: 'collection' });
+       });
+      });
+    });
+  });
+});
+
+describe('Mapper#resources', () => {
+  let router = new RouteSet();
+  router.draw((m) => {
+    it("resources route with concerns", () => {
+     m.concern('toggleable', () => {
+       m.post('toggle');
+     });
+     m.resources('posts', { concerns: 'toggleable' });
+     m.resources('photos', { concerns: 'toggleable' });
+    });
+  });
+});
+
+describe('Mapper#resources', () => {
+  let router = new RouteSet();
+  router.draw((m) => {
+    it("resources route with a namespace", () => {
+      m.namespace('admin', () => {
+        m.namespace('my', () => {
+       // Directs /admin/products/* to Admin::ProductsController
+       // (app/controllers/admin/products_controller.rb)
+          m.resources('products');
         });
       });
-
     });
   });
 });

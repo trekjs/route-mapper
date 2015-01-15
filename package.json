@@ -2,9 +2,9 @@
   "name": "route-mapper",
   "version": "0.0.0",
   "description": "Generate Rails Routing Style Mapper.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "repository": "trekjs/route-mapper",
   "keywords": [
@@ -21,9 +21,16 @@
   "license": "MIT",
   "devDependencies": {
     "6to5": "^2.12.3",
+    "express": "^4.11.0",
     "gulp": "^3.8.10",
     "gulp-6to5": "^2.0.2",
     "mocha": "^2.1.0",
     "should": "^4.6.0"
+  },
+  "dependencies": {
+    "actions": "^1.2.0",
+    "core-js": "^0.4.4",
+    "lodash-node": "lodash/lodash-node#master",
+    "pluralize": "^1.1.0"
   }
 }
