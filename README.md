@@ -1,7 +1,34 @@
 
-# route-mapper
+## route-mapper
 
-Generate Rails Routing Style Routers Mapper.
+Generate Rails Routing Style.
+
+
+### Features
+
+* Nested
+* Resources
+* ...
+
+
+### APIs
+
+* `root`
+* `match`
+* `scope`
+* `get`
+* `post`
+* `patch`
+* `put`
+* `delete`
+* `namespace`
+* `resources`
+  * `collection`
+  * `member`
+* `resource`
+* `concern`
+* `concerns`
+
 
 
 ### Usage
