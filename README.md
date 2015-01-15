@@ -8,6 +8,8 @@ Generate Rails Routing Style.
 
 * Nested
 * Resources
+* Namespace
+* RESTful
 * ...
 
 
