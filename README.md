@@ -12,6 +12,7 @@ Generate Rails Routing Style.
 * Namespace
 * Resources
 * RESTful
+* Chain Style
 * ...
 
 

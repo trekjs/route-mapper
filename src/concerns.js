@@ -11,6 +11,7 @@ class Concerns {
       }
     }
     this._concerns[name] = callable;
+    return this;
   }
 
   concerns(...args) {
@@ -23,6 +24,7 @@ class Concerns {
         throw 'No concern named ' + name + ' was found!'
       }
     });
+    return this;
   }
 }
 
