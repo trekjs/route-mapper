@@ -43,8 +43,17 @@ Generate Rails Routing Style.
 ```js
 let router = new RouteSet();
 router.draw((m) => {
-  m.root('welcome#index');
+  // resources
   m.resources('photos');
+
+  // resources nested
+  m.resources('posts', () => {
+    m.resources('comments');
+  });
+
+  // root
+  m.root('welcome#index');
+
 });
 ```
 
@@ -81,8 +90,8 @@ router.draw((m) => {
 
 router.routes.forEach((r) => {
   r.via.forEach((m) => {
-    let controller = r.controller || r.default_controller;
-    let action = r.action || r.default_action;
+    let controller = r.controller;
+    let action = r.action;
     let c;
     let a;
     if ((c = controllers[controller]) && (a = c[action])) {
@@ -147,8 +156,8 @@ router.draw((m) => {
 
 router.routes.forEach((r) => {
   r.via.forEach((m) => {
-    let controller = r.controller || r.default_controller;
-    let action = r.action || r.default_action;
+    let controller = r.controller;
+    let action = r.action;
     let c;
     let a;
     if ((c = controllers[controller]) && (a = c[action])) {
