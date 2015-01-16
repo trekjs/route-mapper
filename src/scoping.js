@@ -75,6 +75,10 @@ class Scoping {
     return this.scope(options, cb);
   }
 
+  constraints(constraints = {}, cb) {
+    return this.scope({ constraints: constraints }, cb);
+  }
+
   namespace(...args) {
     return namespace.apply(this, args);
   }

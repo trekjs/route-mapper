@@ -23,6 +23,14 @@ let router = new RouteSet();
 router.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
+  m.constraints({ subdomain: 'api' }, () => {
+    m.namespace('api',  { defaults: { format: 'json' }, path: '/' }, () => {
+        m.scope({ module: 'v1' }, () => {
+          m.resources('users');
+        });
+      }
+    );
+  });
 });
 
 router.routes.forEach((r) => {

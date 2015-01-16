@@ -57,7 +57,7 @@ class Mapping {
       this.controller = toEndpoint[0] || this.default_controller;
       this.action = toEndpoint[1] || this.default_action;
     }
-    this.controller = this.addControllerModule(this.controller, context.get('module'));
+    this.controller = this.addControllerModule(this.controller || this.default_controller, context.get('module'));
 
     this.format = formatted;
     this.via = via;

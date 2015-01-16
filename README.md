@@ -7,8 +7,8 @@ Generate Rails Routing Style.
 ### Features
 
 * Nested
-* Resources
 * Namespace
+* Resources
 * RESTful
 * ...
 
@@ -17,17 +17,22 @@ Generate Rails Routing Style.
 
 * `root`
 * `match`
-* `scope`
 * `get`
 * `post`
 * `patch`
 * `put`
 * `delete`
+* `scope`
+* `controller`
 * `namespace`
+* `constraints`
+* `defaults`
+* `resource`
 * `resources`
   * `collection`
   * `member`
-* `resource`
+  * `nested`
+* `shallow`
 * `concern`
 * `concerns`
 
