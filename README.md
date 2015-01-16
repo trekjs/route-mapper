@@ -1,14 +1,14 @@
 
 ## route-mapper
 
-Generate Rails Routing Style.
+Generate Rails Style & RESTful Routes.
 
   [![es6+][es6-image]][es6-url]
   [![NPM version][npm-image]][npm-url]
 
 ### Features
 
-* Nested
+* Nesting
 * Namespace
 * Resources
 * RESTful
@@ -61,7 +61,7 @@ router.draw((m) => {
 ```
 
 
-#### Express working with `route-mapper`:
+#### Express example:
 
 ```js
 import express from 'express';
@@ -106,7 +106,7 @@ router.routes.forEach((r) => {
 app.listen(2333);
 ```
 
-#### Koa working with `route-mapper`:
+#### Koa example:
 
 ```js
 import koa from 'koa';
