@@ -3,6 +3,8 @@
 
 Generate Rails Routing Style.
 
+  [![es6+][es6-image]][es6-url]
+  [![NPM version][npm-image]][npm-url]
 
 ### Features
 
@@ -168,3 +170,10 @@ router.routes.forEach((r) => {
 
 app.listen(2333);
 ```
+
+
+
+[es6-image]: https://img.shields.io/badge/es-6+-brightgreen.svg?style=flat-square
+[es6-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla
+[npm-image]: https://img.shields.io/npm/v/route-mapper.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/route-mapper
