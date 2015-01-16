@@ -54,16 +54,23 @@ class Mapping {
 
     if (this.to) {
       let toEndpoint = splitTo(this.to);
-      this.controller = toEndpoint[0] || this.default_controller;
-      this.action = toEndpoint[1] || this.default_action;
+      this._controller = toEndpoint[0] || this.default_controller;
+      this._action = toEndpoint[1] || this.default_action;
     }
-    this.controller = this.addControllerModule(this.controller || this.default_controller, context.get('module'));
+    this._controller = this.addControllerModule(this.controller, context.get('module'));
 
     this.format = formatted;
     this.via = via;
     this.path = path;
 
-    console.log(as, via, path, (this.controller || this.default_controller) + '#' + (this.action || this.default_action));
+    console.log(as, via, path, this.controller + '#' + this.action);
+  }
+
+  get controller() {
+    return this._controller || this.default_controller;
+  }
+  get action() {
+    return this._action || this.default_action;
   }
 
   normalizePath(path, format) {

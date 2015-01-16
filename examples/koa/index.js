@@ -48,8 +48,8 @@ router.draw((m) => {
 
 router.routes.forEach((r) => {
   r.via.forEach((m) => {
-    let controller = r.controller || r.default_controller;
-    let action = r.action || r.default_action;
+    let controller = r.controller;
+    let action = r.action;
     let c;
     let a;
     if ((c = controllers[controller]) && (a = c[action])) {
