@@ -62,8 +62,9 @@ router.draw((m) => {
 });
 ```
 
+### [Examples](./examples):
 
-#### Express example:
+#### [Express example](./examples/express):
 
 ```js
 import express from 'express';
@@ -108,7 +109,7 @@ router.routes.forEach((r) => {
 app.listen(3300);
 ```
 
-#### Koa example:
+#### [Koa example](./examples/koa):
 
 ```js
 import koa from 'koa';
