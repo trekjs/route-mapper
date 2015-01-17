@@ -1,11 +1,12 @@
 # route-mapper
 
 Generate Rails Style Routing & RESTful Routes. See [Rails Routing][] doc.   
-Writes with `ES6`, build with [6to5][] for `ES5`.
+Writes with `ES6+`, build with [6to5][] for `ES5`.
 
 [![es6+][es6-image]][es6-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
+[![David-dm status][David-dm-image]][David-dm-url]
 
 
 ## Usage
@@ -222,11 +223,13 @@ app.listen(3300);
 
 
 
+[Rails Routing]: http://guides.rubyonrails.org/routing.html
+[6to5]: https://6to5.org/
 [es6-image]: https://img.shields.io/badge/es-6+-brightgreen.svg?style=flat-square
 [es6-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla
 [npm-image]: https://img.shields.io/npm/v/route-mapper.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/route-mapper
-[Rails Routing]: http://guides.rubyonrails.org/routing.html
-[6to5]: https://6to5.org/
 [travis-image]: https://img.shields.io/travis/trekjs/route-mapper/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/trekjs/route-mapper
+[David-dm-image]: https://david-dm.org/trekjs/route-mapper.svg?style=flat-square
+[David-dm-url]: https://david-dm.org/trekjs/route-mapper
