@@ -61,7 +61,7 @@ routeMapper.draw((m) => {
 
   // Example resource route within a namespace:
   m.namespace('admin', () => {
-    # Directs /admin/products/*
+    // Directs /admin/products/*
     m.resources('products');
   });
 
