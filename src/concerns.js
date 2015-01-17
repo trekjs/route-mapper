@@ -2,6 +2,7 @@ import isFunction from 'lodash-node/modern/lang/isFunction';
 import {buildArgs} from './utils';
 
 class Concerns {
+
   concern(name, callable = null, cb) {
     if (!callable) {
       callable = function(options) {
@@ -21,7 +22,7 @@ class Concerns {
       if (isFunction(concern)) {
         concern.call(this, options);
       } else {
-        throw 'No concern named ' + name + ' was found!'
+        throw new Error(`No concern named ${name} was found!`);
       }
     });
     return this;

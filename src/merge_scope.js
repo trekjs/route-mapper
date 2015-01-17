@@ -1,30 +1,31 @@
 import {normalizePath, compact} from './utils';
 
-let mergeScope = {
+export default {
 
   // parent/child
   path(parent, child) {
-    return normalizePath([parent, child].join('/'));
+    //return normalizePath([parent, child].join('/'));
+    return parent ? normalizePath(`${parent}/${child}`) : child;
   },
 
   // parent/child
   shallow_path(parent, child) {
-    return normalizePath([parent, child].join('/'));
+    return parent ? normalizePath(`${parent}/${child}`) : child;
   },
 
   // parent_child
   as(parent, child) {
-    return parent ? [parent, child].join('_') : child;
+    return parent ? `${parent}_${child}` : child;
   },
 
   // parent_child
   shallow_prefix(parent, child) {
-    return parent ? [parent, child].join('_') : child;
+    return parent ? `${parent}_${child}` : child;
   },
 
   // parent/child
   module(parent, child) {
-    return parent ? normalizePath([parent, child].join('/')) : child;
+    return parent ? normalizePath(`${parent}/${child}`) : child;
   },
 
   controller(parent, child) {
@@ -67,5 +68,3 @@ let mergeScope = {
   }
 
 };
-
-export default mergeScope;

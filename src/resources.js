@@ -36,14 +36,13 @@ class Resource {
   get actions() {
     let only = this.options.only;
     let except = this.options.except;
-    if (typeof only === 'string') only = [only];
-    if (typeof except === 'string') except = [except];
+    if (isString(only)) only = [only];
+    if (isString(except)) except = [except];
     if (only && only.length) return only;
     else if (except && except.length) {
       return this.defaultActions.filter((a) => except.indexOf(a) < 0);
-    } else {
-      return this.defaultActions;
     }
+    return this.defaultActions;
   }
 
   get name() {
@@ -63,7 +62,7 @@ class Resource {
   }
 
   get collectionName() {
-    return this.singular === this.plural ? this.plural + '_index' : this.plural;
+    return this.singular === this.plural ? `${this.plural}_index` : this.plural;
   }
 
   get resourceScope() {
@@ -75,7 +74,7 @@ class Resource {
   }
 
   get memberScope() {
-    return this.path + '/:' + this.param;
+    return `${this.path}/:${this.param}`;
   }
 
   get shallowScope() {
@@ -84,15 +83,15 @@ class Resource {
 
   get nestedParam() {
     //return (this.param && this.param !== 'id') ? this.param : this.singular + '_' + this.param;
-    return this.singular + '_' + this.param;
+    return `${this.singular}_${this.param}`;
   }
 
   get nestedScope() {
-    return this.path + '/:' + this.nestedParam;
+    return `${this.path}/:${this.nestedParam}`;
   }
 
   newScope(newPath) {
-    return this.path + '/' + newPath;
+    return `${this.path}/${newPath}`;
   }
 
   isShallow() {
@@ -110,7 +109,7 @@ class SingletonResource extends Resource {
   }
 
   get defaultActions() {
-    return SINGLETON_ACTIONS.slice();
+    return SINGLETON_ACTIONS;
   }
 
   get plural() {
@@ -142,18 +141,19 @@ class SingletonResource extends Resource {
 class Resources {
 
   resourcesPathNames(options) {
-    return Object.assign(this.context.get('path_names'), options);
+    return Object.assign(Object.create(null), this.context.get('path_names'), options);
   }
 
   resource(...args) {
     let [resources, options, cb] = buildArgs(...args);
+    let kind = 'resource';
 
-    if (this.applyCommonBehaviorFor('resource', resources, options, cb)) {
+    if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
       return this;
     }
 
     this.resourceScope(
-      'resource',
+      kind,
       new SingletonResource(resources.pop(), options), () => {
 
       if (isFunction(cb)) { cb.call(this); }
@@ -163,6 +163,7 @@ class Resources {
       }
 
       let actions = this.parentResource().actions;
+
       if (actions.includes('create')) {
         this.collection(() => {
           this.post('create');
@@ -177,18 +178,20 @@ class Resources {
 
       this.setMemberMappingsForResource();
     });
+
     return this;
   }
 
   resources(...args) {
     let [resources, options, cb] = buildArgs(...args);
+    let kind = 'resources';
 
-    if (this.applyCommonBehaviorFor('resources', resources, options, cb)) {
+    if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
       return this;
     }
 
     this.resourceScope(
-      'resources',
+      kind,
       new Resource(resources.pop(), options), () => {
 
       if (isFunction(cb)) { cb.call(this); }
@@ -198,6 +201,7 @@ class Resources {
       }
 
       let actions = this.parentResource().actions;
+
       this.collection(() => {
         if (actions.includes('index')) {
           this.get('index');
@@ -215,23 +219,25 @@ class Resources {
 
       this.setMemberMappingsForResource();
     });
+
     return this;
   }
 
   collection(cb) {
     if (!this.isResourceScope()) {
-      throw 'Can\'t use collection outside resource(s) scope';
+      throw new Error(`Can't use collection outside resource(s) scope`);
     }
 
     this.withScopeLevel('collection', () => {
       this.scope(this.parentResource().collectionScope, cb);
     });
+
     return this;
   }
 
   member(cb) {
     if (!this.isResourceScope()) {
-      throw 'Can\'t use member outside resource(s) scope';
+      throw new Error(`Can't use member outside resource(s) scope`);
     }
 
     this.withScopeLevel('member', () => {
@@ -241,22 +247,25 @@ class Resources {
         this.scope(this.parentResource().memberScope, cb);
       }
     });
+
     return this;
   }
 
   ['new'](cb) {
     if (!this.isResourceScope()) {
-      throw 'Can\'t use new outside resource(s) scope';
+      throw new Error(`Can't use new outside resource(s) scope`);
     }
+
     this.withScopeLevel('new', () => {
       this.scope(this.parentResource().newScope(this.actionPath('new')), cb);
     });
+
     return this;
   }
 
   nested(cb) {
     if (!this.isResourceScope()) {
-      throw 'Can\'t use nested outside resource(s) scope';
+      throw new Error(`Can't use nested outside resource(s) scope`);
     }
 
     this.withScopeLevel('nested', () => {
@@ -266,6 +275,7 @@ class Resources {
         this.scope(this.parentResource().nestedScope, this.nestedOptions(), cb);
       }
     });
+
     return this;
   }
 
@@ -300,7 +310,7 @@ class Resources {
     } else if (isObject(path) && isEmpty(options)) {
       options = path;
     } else {
-      throw 'must be called with a path and/or options';
+      throw new Error('Must be called with a path and/or options');
     }
 
     if (this.context.isResources()) {
@@ -312,6 +322,7 @@ class Resources {
     } else {
       root.call(this, options);
     }
+
     return this;
   }
 
@@ -339,7 +350,7 @@ class Resources {
     }
 
     if (options.on && !VALID_ON_OPTIONS.includes(options.on)) {
-      throw 'Unknown scope ' + options.on + ' given to :on';
+      throw new Error(`Unknown scope ${options.on} given to :on`);
     }
 
     let controller = this.context.get('controller');
@@ -358,6 +369,7 @@ class Resources {
       }
       this.decomposedMatch(p, routeOptions);
     });
+
     return this;
   }
 
@@ -458,7 +470,7 @@ class Resources {
         delete options[k];
       }
     });
-    if (Object.keys(scopeOptions).length > 0) {
+    if (Object.keys(scopeOptions).length) {
       this.scope(scopeOptions, () => {
         this[method](resources.pop(), options, cb);
       });
