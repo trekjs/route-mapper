@@ -1,12 +1,75 @@
+# route-mapper
 
-## route-mapper
-
-Generate Rails Style & RESTful Routes.
+Generate Rails Style Routing & RESTful Routes.
+See [Rails Routing][] doc.
 
   [![es6+][es6-image]][es6-url]
   [![NPM version][npm-image]][npm-url]
 
-### Features
+
+## Usage
+
+```js
+let routeMapper = new RouteMapper();
+routeMapper.draw((m) => {
+
+  // You can have the root of your site routed with "root"
+  m.root('welcome#index');
+
+  // /products/233  controller = catalog, action = view
+  m.get('products/:id', { to: 'catalog#view' });
+
+  // Example named route that can be invoked with purchase_url(id: product.id)
+  // /products/233/purchase === purchase_url(233)
+  m.get('products/:id/purchase', { to: 'catalog#purchase', as: 'purchase' });
+
+  // Example resource route (maps HTTP verbs to controller actions automatically):
+  m.resources('products');
+
+  // Example resource route with options:
+  m.resources('products', () => {
+    m.member(() => {
+      m.get('short');
+      m.post('toggle');
+    });
+
+    m.collection(() => {
+      m.get('sold');
+    });
+  });
+
+  // Example resource route with sub-resources:
+  m.resources('products', () => {
+    m.resources('comments', 'sales');
+    m.resource('seller');
+  });
+
+  // Example resource route with more complex sub-resources:
+  m.resources('products', () => {
+    m.resources('comments')
+    m.resources('sales', () => {
+      m.get('recent', { on: 'collection' });
+    });
+  });
+
+  // Example resource route with concerns:
+  m.concern('toggleable', () => {
+    m.post('toggle');
+  });
+  m.resources('posts', { concerns: 'toggleable' });
+  m.resources('photos', { concerns: 'toggleable' });
+
+  // Example resource route within a namespace:
+  m.namespace('admin', () => {
+    # Directs /admin/products/*
+    m.resources('products');
+  });
+
+});
+```
+
+
+## Features
 
 * Nesting
 * Namespace
@@ -18,7 +81,7 @@ Generate Rails Style & RESTful Routes.
 * ...
 
 
-### APIs
+## APIs
 
 * `root`
 * `match`
@@ -42,29 +105,9 @@ Generate Rails Style & RESTful Routes.
 * `concerns`
 
 
+## [Examples](./examples)
 
-### Usage
-
-```js
-let router = new RouteSet();
-router.draw((m) => {
-  // resources
-  m.resources('photos');
-
-  // resources nested
-  m.resources('posts', () => {
-    m.resources('comments');
-  });
-
-  // root
-  m.root('welcome#index');
-
-});
-```
-
-### [Examples](./examples):
-
-#### [Express example](./examples/express):
+### [Express example](./examples/express)
 
 ```js
 import express from 'express';
@@ -88,13 +131,13 @@ let controllers = {
   }
 };
 
-let routes = new RouteMapper();
-routes.draw((m) => {
+let routeMapper = new RouteMapper();
+routeMapper.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
 });
 
-routes.routes.forEach((r) => {
+routeMapper.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
@@ -109,7 +152,7 @@ routes.routes.forEach((r) => {
 app.listen(3300);
 ```
 
-#### [Koa example](./examples/koa):
+### [Koa example](./examples/koa)
 
 ```js
 import koa from 'koa';
@@ -151,8 +194,8 @@ let controllers = {
   },
 };
 
-let routes = new RouteMapper();
-routes.draw((m) => {
+let routeMapper = new RouteMapper();
+routeMapper.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
   m.resources('posts', () => {
@@ -160,7 +203,7 @@ routes.draw((m) => {
   });
 });
 
-routes.routes.forEach((r) => {
+routeMapper.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
@@ -181,3 +224,4 @@ app.listen(3300);
 [es6-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla
 [npm-image]: https://img.shields.io/npm/v/route-mapper.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/route-mapper
+[Rails Routing]: http://guides.rubyonrails.org/routing.html
