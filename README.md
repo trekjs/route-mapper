@@ -68,7 +68,7 @@ router.draw((m) => {
 
 ```js
 import express from 'express';
-import {RouteSet} from '../..';
+import RouteMapper from '../..';
 
 let app = express();
 
@@ -88,13 +88,13 @@ let controllers = {
   }
 };
 
-let router = new RouteSet();
-router.draw((m) => {
+let routes = new RouteMapper();
+routes.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
 });
 
-router.routes.forEach((r) => {
+routes.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
@@ -114,7 +114,7 @@ app.listen(3300);
 ```js
 import koa from 'koa';
 import router from 'koa-router';
-import {RouteSet} from '../..';
+import RouteMapper from '../..';
 
 let app = koa();
 app.use(router(app));
@@ -151,8 +151,8 @@ let controllers = {
   },
 };
 
-let router = new RouteSet();
-router.draw((m) => {
+let routes = new RouteMapper();
+routes.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
   m.resources('posts', () => {
@@ -160,7 +160,7 @@ router.draw((m) => {
   });
 });
 
-router.routes.forEach((r) => {
+routes.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
