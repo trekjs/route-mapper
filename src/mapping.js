@@ -100,6 +100,9 @@ class Mapping {
       if (/^\//.test(controller)) {
         return controller.substr(1);
       } else {
+        if (/^\//.test(modyoule)) {
+          modyoule = modyoule.substr(1);
+        }
         return compact([modyoule, controller]).join('/');
       }
     }

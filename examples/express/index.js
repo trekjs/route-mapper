@@ -1,26 +1,10 @@
 import express from 'express';
-import {RouteSet} from '../..';
+import RouteMapper from '../..';
 
 let app = express();
 
-let controllers = {
-  welcome: {
-    index:  (req, res) => {
-      res.send('Welcome Index!');
-    }
-  },
-  photos: {
-    index: (req, res) => {
-      res.send('photos index');
-    },
-    show: (req, res) => {
-      res.send(`photo ${req.params.id}`);
-    }
-  }
-};
-
-let router = new RouteSet();
-router.draw((m) => {
+let routes = new RouteMapper();
+routes.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
   m.constraints({ subdomain: 'api' }, () => {
@@ -33,14 +17,24 @@ router.draw((m) => {
   });
 });
 
-router.routes.forEach((r) => {
+
+app.use(function (req, res, next) {
+  res.locals.urlHelpers = routes.urlHelpers;
+  next();
+});
+
+
+routes.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
-    let c;
+    let c = require(__dirname + '/controllers/' + controller + '.js');
     let a;
-    if ((c = controllers[controller]) && (a = c[action])) {
-      app[m](r.path, a);
+    if (c && (a = c[action])) {
+      if (!Array.isArray(a)) {
+        a = [a];
+      }
+      app[m](r.path, ...a);
     };
   });
 });

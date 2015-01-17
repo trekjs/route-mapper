@@ -27,7 +27,7 @@ routes.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
-    let c = require('./controllers/' + controller + '.js');
+    let c = require(__dirname + '/controllers/' + controller + '.js');
     let a;
     if (c && (a = c[action])) {
       if (!Array.isArray(a)) {
