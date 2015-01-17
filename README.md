@@ -19,8 +19,8 @@ routeMapper.draw((m) => {
   // /products/233  controller = catalog, action = view
   m.get('products/:id', { to: 'catalog#view' });
 
-  // Example named route that can be invoked with purchase_url(id: product.id)
-  // /products/233/purchase === purchase_url(233)
+  // Example named route that can be invoked with purchase_path(id: product.id)
+  // /products/233/purchase === purchase_path(233)
   m.get('products/:id/purchase', { to: 'catalog#purchase', as: 'purchase' });
 
   // Example resource route (maps HTTP verbs to controller actions automatically):
@@ -78,6 +78,7 @@ routeMapper.draw((m) => {
 * Chaining
 * Named Routes
 * URL Helpers
+* Pluralized or Singularized
 * ...
 
 

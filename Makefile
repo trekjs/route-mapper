@@ -1,11 +1,13 @@
 
+MOCHA = ./node_modules/.bin/mocha
+
 SRC = lib/*.js
 
 TESTS = test/*.test.js
 
 test:
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--compilers js:6to5/register \
+	@NODE_ENV=test $(MOCHA) \
+		--require test/6to5.js \
 		--require should \
 		$(TESTS) \
 		--bail
