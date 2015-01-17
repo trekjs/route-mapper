@@ -1,7 +1,7 @@
 # route-mapper
 
-Generate Rails Style Routing & RESTful Routes.
-See [Rails Routing][] doc.
+Generate Rails Style Routing & RESTful Routes. See [Rails Routing][] doc.   
+Writes with `ES6`, build with [6to5][] for `ES5`.
 
   [![es6+][es6-image]][es6-url]
   [![NPM version][npm-image]][npm-url]
@@ -226,3 +226,4 @@ app.listen(3300);
 [npm-image]: https://img.shields.io/npm/v/route-mapper.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/route-mapper
 [Rails Routing]: http://guides.rubyonrails.org/routing.html
+[6to5]: https://6to5.org/
