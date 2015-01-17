@@ -12,7 +12,9 @@ Generate Rails Style & RESTful Routes.
 * Namespace
 * Resources
 * RESTful
-* Chain Style
+* Chaining
+* Named Routes
+* URL Helpers
 * ...
 
 
@@ -103,7 +105,7 @@ router.routes.forEach((r) => {
   });
 });
 
-app.listen(2333);
+app.listen(3300);
 ```
 
 #### Koa example:
@@ -169,7 +171,7 @@ router.routes.forEach((r) => {
   });
 });
 
-app.listen(2333);
+app.listen(3300);
 ```
 
 

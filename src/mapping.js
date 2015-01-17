@@ -1,6 +1,9 @@
 import isString from 'lodash-node/modern/lang/isString';
 import isRegExp from 'lodash-node/modern/lang/isRegExp';
+import debug from 'debug';
 import {normalizePath, compact} from './utils';
+
+var debug = debug('route-mapper:mapping');
 
 class Mapping {
 
@@ -62,8 +65,9 @@ class Mapping {
     this.format = formatted;
     this.via = via;
     this.path = path;
+    this.type = context.scopeLevel;
 
-    console.log(as, via, path, this.controller + '#' + this.action);
+    debug('route: %s %s %s %s %s', this.type, this.as, this.via, this.path, this.controller + '#' + this.action);
   }
 
   get controller() {
@@ -71,6 +75,9 @@ class Mapping {
   }
   get action() {
     return this._action || this.default_action;
+  }
+  get name() {
+    return this.as;
   }
 
   normalizePath(path, format) {

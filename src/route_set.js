@@ -23,6 +23,9 @@ class RouteSet {
   get namedRoutes() {
     return this._routes.namedRoutes;
   }
+  get urlHelpers() {
+    return this._routes.urlHelpers;
+  }
 
   draw(cb = noop) {
     let mapper = new Mapper(this);

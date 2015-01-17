@@ -1,61 +1,41 @@
 import koa from 'koa';
 import router from 'koa-router';
-import {RouteSet} from '../..';
+import RouteMapper from '../..';
 
 let app = koa();
-app.use(router(app));
 
-let controllers = {
-  welcome: {
-    index:  function *() {
-      this.body = 'Welcome Index!';
-    }
-  },
-  photos: {
-    index: function *() {
-      this.body = 'photos index';
-    },
-    show: function *() {
-      this.body = `photo ${this.params.id}`;
-    }
-  },
-  posts: {
-    index: function *() {
-      this.body = 'posts index';
-    },
-    show: function *() {
-      this.body = `posts ${this.params.id}`;
-    }
-  },
-  comments: {
-    index: function *() {
-      this.body = 'comments index';
-    },
-    show: function *() {
-      this.body = `post ${this.params.post_id}, comment ${this.params.id}`;
-    }
-  },
-};
-
-let router = new RouteSet();
-router.draw((m) => {
+let routes = new RouteMapper();
+routes.draw((m) => {
   m.root('welcome#index');
-  m.resources('photos');
+  m.get('about', { to: 'welcome#about' });
   m.resources('posts', () => {
     m.resources('comments');
   });
+  m.scope({ path: '~:username?', module: 'users', as: 'user'}, () => {
+    m.root('welcome#index');
+  });
 });
 
-router.routes.forEach((r) => {
+app.use(function *(next) {
+  this.urlHelpers = routes.urlHelpers;
+  yield next;
+});
+
+app.use(router(app));
+
+routes.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
-    let c;
+    let c = require('./controllers/' + controller + '.js');
     let a;
-    if ((c = controllers[controller]) && (a = c[action])) {
-      app[m](r.path, a);
+    if (c && (a = c[action])) {
+      if (!Array.isArray(a)) {
+        a = [a];
+      }
+      app[m](r.path, ...a);
     };
   });
 });
 
-app.listen(2333);
+app.listen(3300);

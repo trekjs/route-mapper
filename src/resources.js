@@ -5,10 +5,13 @@ import isString from 'lodash-node/modern/lang/isString';
 import isEmpty from 'lodash-node/modern/lang/isEmpty';
 import {plural, singular} from 'pluralize';
 import {ACTIONS, SINGLETON_ACTIONS} from 'actions';
+import debug from 'debug';
 import {buildArgs, hasOwn, normalizePath, compact} from './utils';
 import {root} from './base';
 import {namespace} from './scoping';
 import Mapping from './mapping';
+
+var debug = debug('route-mapper:resources');
 
 const VALID_ON_OPTIONS = ['new', 'collection', 'member'];
 const RESOURCE_OPTIONS = ['as', 'controller', 'path', 'only', 'except', 'param', 'concerns'];
@@ -80,6 +83,7 @@ class Resource {
   }
 
   get nestedParam() {
+    //return (this.param && this.param !== 'id') ? this.param : this.singular + '_' + this.param;
     return this.singular + '_' + this.param;
   }
 
@@ -593,8 +597,6 @@ class Resources {
     delete options.as;
 
     let mapping = Mapping.build(this.context, this.set, path, as, options);
-    console.dir(mapping);
-
     this.set.addRoute(mapping);
   }
 
