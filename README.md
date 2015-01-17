@@ -3,8 +3,9 @@
 Generate Rails Style Routing & RESTful Routes. See [Rails Routing][] doc.   
 Writes with `ES6`, build with [6to5][] for `ES5`.
 
-  [![es6+][es6-image]][es6-url]
-  [![NPM version][npm-image]][npm-url]
+[![es6+][es6-image]][es6-url]
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
 
 
 ## Usage
@@ -227,3 +228,5 @@ app.listen(3300);
 [npm-url]: https://npmjs.org/package/route-mapper
 [Rails Routing]: http://guides.rubyonrails.org/routing.html
 [6to5]: https://6to5.org/
+[travis-image]: https://img.shields.io/travis/trekjs/route-mapper/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/trekjs/route-mapper
