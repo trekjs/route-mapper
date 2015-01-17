@@ -1,7 +1,7 @@
 {
   "name": "route-mapper",
   "version": "0.0.1",
-  "description": "Generate Rails Style & RESTful Routes.",
+  "description": "Route Mapper - Generate Rails Style Routing & RESTful Routes",
   "main": "lib/index.js",
   "scripts": {
     "test": "make test"
@@ -20,7 +20,7 @@
   "author": "fundon <cfddream@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "6to5": "^2.12.3",
+    "6to5": "^2.12.6",
     "express": "^4.11.0",
     "gulp": "^3.8.10",
     "gulp-6to5": "^2.0.2",
@@ -31,9 +31,9 @@
   },
   "dependencies": {
     "actions": "^1.2.0",
-    "core-js": "^0.4.4",
+    "core-js": "^0.4.5",
     "debug": "^2.1.1",
     "lodash-node": "lodash/lodash-node#master",
-    "pluralize": "^1.1.0"
+    "pluralize": "^1.1.1"
   }
 }
