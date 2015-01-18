@@ -118,36 +118,37 @@ import RouteMapper from '../..';
 
 let app = express();
 
-let controllers = {
-  welcome: {
-    index:  (req, res) => {
-      res.send('Welcome Index!');
-    }
-  },
-  photos: {
-    index: (req, res) => {
-      res.send('photos index');
-    },
-    show: (req, res) => {
-      res.send(`photo ${req.params.id}`);
-    }
-  }
-};
-
 let routeMapper = new RouteMapper();
 routeMapper.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
+  m.constraints({ subdomain: 'api' }, () => {
+    m.namespace('api',  { defaults: { format: 'json' }, path: '/' }, () => {
+        m.scope({ module: 'v1' }, () => {
+          m.resources('users');
+        });
+      }
+    );
+  });
+});
+
+
+app.use(function (req, res, next) {
+  res.locals.urlHelpers = routeMapper.urlHelpers;
+  next();
 });
 
 routeMapper.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
-    let c;
+    let c = require(__dirname + '/controllers/' + controller + '.js');
     let a;
-    if ((c = controllers[controller]) && (a = c[action])) {
-      app[m](r.path, a);
+    if (c && (a = c[action])) {
+      if (!Array.isArray(a)) {
+        a = [a];
+      }
+      app[m](r.path, ...a);
     };
   });
 });
@@ -163,57 +164,37 @@ import router from 'koa-router';
 import RouteMapper from '../..';
 
 let app = koa();
-app.use(router(app));
-
-let controllers = {
-  welcome: {
-    index:  function *() {
-      this.body = 'Welcome Index!';
-    }
-  },
-  photos: {
-    index: function *() {
-      this.body = 'photos index';
-    },
-    show: function *() {
-      this.body = `photo ${this.params.id}`;
-    }
-  },
-  posts: {
-    index: function *() {
-      this.body = 'posts index';
-    },
-    show: function *() {
-      this.body = `posts ${this.params.id}`;
-    }
-  },
-  comments: {
-    index: function *() {
-      this.body = 'comments index';
-    },
-    show: function *() {
-      this.body = `post ${this.params.post_id}, comment ${this.params.id}`;
-    }
-  },
-};
 
 let routeMapper = new RouteMapper();
 routeMapper.draw((m) => {
   m.root('welcome#index');
-  m.resources('photos');
+  m.get('about', { to: 'welcome#about' });
   m.resources('posts', () => {
     m.resources('comments');
   });
+  m.scope({ path: '~:username?', module: 'users', as: 'user'}, () => {
+    m.root('welcome#index');
+  });
 });
+
+app.use(function *(next) {
+  this.urlHelpers = routeMapper.urlHelpers;
+  yield next;
+});
+
+app.use(router(app));
 
 routeMapper.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
-    let c;
+    let c = require(__dirname + '/controllers/' + controller + '.js');
     let a;
-    if ((c = controllers[controller]) && (a = c[action])) {
-      app[m](r.path, a);
+    if (c && (a = c[action])) {
+      if (!Array.isArray(a)) {
+        a = [a];
+      }
+      app[m](r.path, ...a);
     };
   });
 });
