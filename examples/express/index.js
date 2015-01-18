@@ -3,8 +3,8 @@ import RouteMapper from '../..';
 
 let app = express();
 
-let routes = new RouteMapper();
-routes.draw((m) => {
+let routeMapper = new RouteMapper();
+routeMapper.draw((m) => {
   m.root('welcome#index');
   m.resources('photos');
   m.constraints({ subdomain: 'api' }, () => {
@@ -19,12 +19,12 @@ routes.draw((m) => {
 
 
 app.use(function (req, res, next) {
-  res.locals.urlHelpers = routes.urlHelpers;
+  res.locals.urlHelpers = routeMapper.urlHelpers;
   next();
 });
 
 
-routes.routes.forEach((r) => {
+routeMapper.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;

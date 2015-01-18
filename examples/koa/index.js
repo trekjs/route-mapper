@@ -4,8 +4,8 @@ import RouteMapper from '../..';
 
 let app = koa();
 
-let routes = new RouteMapper();
-routes.draw((m) => {
+let routeMapper = new RouteMapper();
+routeMapper.draw((m) => {
   m.root('welcome#index');
   m.get('about', { to: 'welcome#about' });
   m.resources('posts', () => {
@@ -17,13 +17,13 @@ routes.draw((m) => {
 });
 
 app.use(function *(next) {
-  this.urlHelpers = routes.urlHelpers;
+  this.urlHelpers = routeMapper.urlHelpers;
   yield next;
 });
 
 app.use(router(app));
 
-routes.routes.forEach((r) => {
+routeMapper.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
