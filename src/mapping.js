@@ -111,7 +111,7 @@ class Mapping {
 
 }
 
-let splitTo = (to) => {
+var splitTo = (to) => {
   if (/#/.test(to)) {
     return to.split('#');
   }

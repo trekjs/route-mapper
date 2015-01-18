@@ -3,11 +3,11 @@ import isObject from 'lodash-node/modern/lang/isObject';
 import isArray from 'lodash-node/modern/lang/isArray';
 import {normalize} from 'path';
 
-let _hasOwn = Object.prototype.hasOwnProperty;
+var _hasOwn = Object.prototype.hasOwnProperty;
 
-export let hasOwn = (o, k) => _hasOwn.call(o, k);
+export var hasOwn = (o, k) => _hasOwn.call(o, k);
 
-export let normalizePath = (path) => {
+export var normalizePath = (path) => {
   path = '/' + path;
   path = normalize(path);
   path = path.replace(/(%[a-f0-9]{2})/g, ($1) => $1.toUpperCase());
@@ -22,7 +22,7 @@ export let normalizePath = (path) => {
 // [cb] => [[], {}, cb]
 // [path] => [paths, {}, undefined]
 // [] => [[], {}, undefined]
-export let buildArgs = (...args) => {
+export var buildArgs = (...args) => {
   let l = args.length, last = args[l - 1], cb, options, resources;
   if (!last && l > 0) {
    args.pop();
@@ -45,12 +45,12 @@ export let buildArgs = (...args) => {
 
 
 // [1, 2, 3, [4, 5, 6]] => [1, 2, 3, 4, 5, 6]
-export let flatten = list => list.reduce(
+export var flatten = list => list.reduce(
   (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
 );
 
 // [null, undefined, false, ''] => []
-export let compact = list => list.filter(
+export var compact = list => list.filter(
   (e) => !(e === null || e === false || e === '' || e === void 0)
 );
 
@@ -60,4 +60,4 @@ export let compact = list => list.filter(
 // [false] => false
 // ['', ''] => false
 // [0] => true
-export let any = list => compact(list).length > 0;
+export var any = list => compact(list).length > 0;
