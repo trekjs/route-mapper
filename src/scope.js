@@ -3,7 +3,8 @@ import {hasOwn} from './utils';
 const OPTIONS = [
   'path', 'shallow_path', 'as', 'shallow_prefix', 'module',
   'controller', 'action', 'path_names', 'constraints',
-  'shallow', /*'blocks',*/ 'defaults', 'options'];
+  'shallow', /*'blocks',*/ 'defaults', 'options'
+];
 
 const RESOURCE_SCOPES = ['resource', 'resources'];
 const RESOURCE_METHOD_SCOPES = ['collection', 'member', 'new'];
