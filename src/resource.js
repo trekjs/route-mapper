@@ -23,8 +23,9 @@ class Resource {
     let except = this.options.except;
     if (isString(only)) only = [only];
     if (isString(except)) except = [except];
-    if (only && only.length) return only;
-    else if (except && except.length) {
+    if (only && only.length) {
+      return only;
+    } else if (except && except.length) {
       return this.defaultActions.filter((a) => except.indexOf(a) < 0);
     }
     return this.defaultActions;
