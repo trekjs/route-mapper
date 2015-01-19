@@ -1,19 +1,19 @@
+import isArray from 'lodash-node/modern/lang/isArray';
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
-import isArray from 'lodash-node/modern/lang/isArray';
 import {normalize} from 'path';
 
 var _hasOwn = Object.prototype.hasOwnProperty;
 
 export var hasOwn = (o, k) => _hasOwn.call(o, k);
 
-export var normalizePath = (path) => {
+export var normalizePath = path => {
   path = '/' + path;
   path = normalize(path);
   path = path.replace(/(%[a-f0-9]{2})/g, ($1) => $1.toUpperCase());
   if (path === '') path = '/';
   return path;
-}
+};
 
 // [path, path, path, options, cb] => [paths, options, cb]
 // [path, cb] => [paths, {}, cb]
@@ -23,7 +23,7 @@ export var normalizePath = (path) => {
 // [path] => [paths, {}, undefined]
 // [] => [[], {}, undefined]
 export var buildArgs = (...args) => {
-  let l = args.length, last = args[l - 1], cb, options, resources;
+  let l = args.length, last = args[l - 1], cb, options, paths;
   if (!last && l > 0) {
    args.pop();
    return buildArgs(...args);
@@ -31,22 +31,22 @@ export var buildArgs = (...args) => {
     cb = last;
     args.pop();
     let res = buildArgs(...args);
-    resources = res[0];
+    paths = res[0];
     options = res[1];
   } else if (isObject(last) && !isArray(last)) {
     options = last;
     args.pop();
-    resources = args;
+    paths = args;
   } else {
-    resources = args;
+    paths = args;
   }
-  return [flatten(resources), options || {}, cb];
+  return [flatten(paths), options || newObject(), cb];
 }
 
 
 // [1, 2, 3, [4, 5, 6]] => [1, 2, 3, 4, 5, 6]
 export var flatten = list => list.reduce(
-  (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+  (a, b) => a.concat(isArray(b) ? flatten(b) : b), []
 );
 
 // [null, undefined, false, ''] => []
@@ -61,3 +61,6 @@ export var compact = list => list.filter(
 // ['', ''] => false
 // [0] => true
 export var any = list => compact(list).length > 0;
+
+// Object.create(null)
+export var newObject = () => Object.create(null);

@@ -5,11 +5,11 @@ class Concerns {
 
   concern(name, callable = null, cb) {
     if (!callable) {
-      callable = function(options) {
+      callable = (options) => {
         if (isFunction(cb)) {
           cb.call(this, options);
         }
-      }
+      };
     }
     this._concerns[name] = callable;
     return this;
@@ -27,6 +27,7 @@ class Concerns {
     });
     return this;
   }
+
 }
 
 export default Concerns;

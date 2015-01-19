@@ -1,4 +1,4 @@
-import {normalizePath, compact} from './utils';
+import {compact, newObject, normalizePath} from './utils';
 
 export default {
 
@@ -51,7 +51,7 @@ export default {
   //blocks(parent, child) { },
 
   options(parent, child) {
-    parent = Object.assign(parent || {});
+    parent = Object.assign(parent || newObject());
     let excepts = this.overrideKeys(child);
     for (let key of excepts) {
       delete parent[key];

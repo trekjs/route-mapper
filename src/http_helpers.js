@@ -31,9 +31,10 @@ class HttpHelpers {
   _map_method(method, args) {
     let [paths, options, cb] = buildArgs(...args);
     options.via = method;
-    this.match(...paths, options, cb);
+    this.match(paths, options, cb);
     return this;
   }
+
 }
 
 export default HttpHelpers;
