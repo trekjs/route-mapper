@@ -17,7 +17,7 @@ class Mapper {
   }
 }
 
-let proto = Mapper.prototype;
+var proto = Mapper.prototype;
 
 Object.assign(proto, Base.prototype);
 Object.assign(proto, HttpHelpers.prototype);
