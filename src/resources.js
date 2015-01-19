@@ -4,7 +4,7 @@ import isObject from 'lodash-node/modern/lang/isObject';
 import isRegExp from 'lodash-node/modern/lang/isRegExp';
 import isString from 'lodash-node/modern/lang/isString';
 import debug from 'debug';
-import {buildArgs, compact, hasOwn, normalizePath} from './utils';
+import {buildArgs, compact, hasOwn, newObject, normalizePath} from './utils';
 import {root} from './base';
 import {namespace} from './scoping';
 import Mapping from './mapping';
@@ -20,7 +20,7 @@ const CANONICAL_ACTIONS = ['index', 'create', 'new', 'show', 'update', 'destroy'
 class Resources {
 
   resourcesPathNames(options) {
-    return Object.assign(Object.create(null), this.context.get('path_names'), options);
+    return Object.assign(newObject(), this.context.get('path_names'), options);
   }
 
   resource(...args) {
@@ -460,10 +460,6 @@ class Resources {
       let scopePath = this.context.get('path');
       let actionPath = this.actionPath(action, path);
       return compact([scopePath, actionPath]).join('/');
-      //if (scopePath) {
-      //  return [scopePath, actionPath].join('/');
-      //}
-      //return actionPath;
     }
   }
 
