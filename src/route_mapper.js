@@ -2,19 +2,16 @@ import noop from 'lodash-node/modern/utility/noop';
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import Mapper from './mapper';
 import Routes from './routes';
+import {DEFAULT_RESOURCES_PATH_NAMES} from './const';
 
-class RouteSet {
-
-  static get DEFAULT_RESOURCES_PATH_NAMES() {
-    return {
-      'new': 'new',
-      'edit': 'edit'
-    };
-  }
+class RouteMapper {
 
   constructor() {
+    if (!(this instanceof RouteMapper)) {
+      return new RouteMapper();
+    }
     this._routes = new Routes();
-    this.resourcesPathNames = RouteSet.DEFAULT_RESOURCES_PATH_NAMES;
+    this.resourcesPathNames = DEFAULT_RESOURCES_PATH_NAMES;
   }
 
   get routes() {
@@ -39,4 +36,4 @@ class RouteSet {
   }
 }
 
-export default RouteSet
+export default RouteMapper;
