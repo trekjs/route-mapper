@@ -3,28 +3,28 @@ import {buildArgs} from './utils';
 class HttpHelpers {
 
   // get('bacon', { to: 'food#bacon' })
-  get(...args) {
-    return this._map_method('get', args);
+  get() {
+    return this._map_method('get', arguments);
   }
 
   // post('bacon', { to: 'food#bacon' })
-  post(...args) {
-    return this._map_method('post', args);
+  post() {
+    return this._map_method('post', arguments);
   }
 
   // patch('bacon', { to: 'food#bacon' })
-  patch(...args) {
-    return this._map_method('patch', args);
+  patch() {
+    return this._map_method('patch', arguments);
   }
 
   // put('bacon', { to: 'food#bacon' })
-  put(...args) {
-    return this._map_method('put', args);
+  put() {
+    return this._map_method('put', arguments);
   }
 
   // delete('bacon', { to: 'food#bacon' })
-  delete(...args) {
-    return this._map_method('delete', args);
+  delete() {
+    return this._map_method('delete', arguments);
   }
 
   // private
