@@ -1,9 +1,8 @@
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
 import {buildArgs, compact, newObject, normalizePath, flatten, hasOwn} from './utils';
+import {URL_OPTIONS} from './const';
 import mergeScope from './merge_scope';
-
-const URL_OPTIONS = ['protocol', 'subdomain', 'domain', 'host', 'port'];
 
 class Scoping {
 

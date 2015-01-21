@@ -6,9 +6,9 @@ import {DEFAULT_RESOURCES_PATH_NAMES} from './const';
 
 class RouteMapper {
 
-  constructor() {
+  constructor(options = Object(null)) {
     if (!(this instanceof RouteMapper)) {
-      return new RouteMapper();
+      return new RouteMapper(options);
     }
     this._routes = new Routes();
     this.resourcesPathNames = DEFAULT_RESOURCES_PATH_NAMES;
