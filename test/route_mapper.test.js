@@ -28,10 +28,12 @@ describe('Mapper#root', () => {
     m.root('welcome#index');
   });
   it("root", () => {
-    routeMapper.routes.length.should.equal(1);
-    routeMapper.routes[0].path.should.equal('/');
-    routeMapper.routes[0].name.should.equal('root');
-    routeMapper.urlHelpers.root_path().should.equal('/');
+    let routes = routeMapper.routes;
+    let urlHelpers = routeMapper.urlHelpers;
+    routes.length.should.equal(1);
+    routes[0].path.should.equal('/');
+    routes[0].name.should.equal('root');
+    urlHelpers.root_path().should.equal('/');
   });
 });
 
@@ -41,10 +43,11 @@ describe('Mapper#get', () => {
     m.get('products/:id', { to: 'catalog#view' });
   });
   it("get", () => {
-    routeMapper.routes.length.should.equal(1);
-    routeMapper.routes[0].path.should.equal('/products/:id');
-    routeMapper.routes[0].controller.should.equal('catalog');
-    routeMapper.routes[0].action.should.equal('view');
+    let routes = routeMapper.routes;
+    routes.length.should.equal(1);
+    routes[0].path.should.equal('/products/:id');
+    routes[0].controller.should.equal('catalog');
+    routes[0].action.should.equal('view');
   });
 });
 
@@ -69,14 +72,16 @@ describe('Mapper#resources', () => {
     m.resources('products');
   });
   it("resource route (maps HTTP verbs to controller actions automatically)", () => {
-    routeMapper.routes.length.should.equal(8);
-    Object.keys(routeMapper.urlHelpers).length.should.equal(4);
+    let routes = routeMapper.routes;
+    let urlHelpers = routeMapper.urlHelpers;
+    routes.length.should.equal(8);
+    Object.keys(urlHelpers).length.should.equal(4);
     let helpers = ['products', 'new_product', 'edit_product', 'product'].map((e) => e + '_path');
-    Object.keys(routeMapper.urlHelpers).should.eql(helpers);
-    routeMapper.urlHelpers.products_path().should.equal('/products');
-    routeMapper.urlHelpers.new_product_path().should.equal('/products/new');
-    routeMapper.urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
-    routeMapper.urlHelpers.product_path(233).should.equal('/products/233');
+    Object.keys(urlHelpers).should.eql(helpers);
+    urlHelpers.products_path().should.equal('/products');
+    urlHelpers.new_product_path().should.equal('/products/new');
+    urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
+    urlHelpers.product_path(233).should.equal('/products/233');
   });
 });
 
@@ -95,17 +100,19 @@ describe('Mapper#resources', () => {
     });
   });
   it("resource route with options", () => {
-    routeMapper.routes.length.should.equal(11);
-    Object.keys(routeMapper.urlHelpers).length.should.equal(7);
+    let routes = routeMapper.routes;
+    let urlHelpers = routeMapper.urlHelpers;
+    routes.length.should.equal(11);
+    Object.keys(urlHelpers).length.should.equal(7);
     let helpers = ['short_product', 'toggle_product', 'sold_products', 'products', 'new_product', 'edit_product', 'product'].map((e) => e + '_path');
-    Object.keys(routeMapper.urlHelpers).should.eql(helpers);
-    routeMapper.urlHelpers.short_product_path(233).should.equal('/products/233/short');
-    routeMapper.urlHelpers.toggle_product_path(233).should.equal('/products/233/toggle');
-    routeMapper.urlHelpers.sold_products_path().should.equal('/products/sold');
-    routeMapper.urlHelpers.products_path().should.equal('/products');
-    routeMapper.urlHelpers.new_product_path().should.equal('/products/new');
-    routeMapper.urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
-    routeMapper.urlHelpers.product_path(233).should.equal('/products/233');
+    Object.keys(urlHelpers).should.eql(helpers);
+    urlHelpers.short_product_path(233).should.equal('/products/233/short');
+    urlHelpers.toggle_product_path(233).should.equal('/products/233/toggle');
+    urlHelpers.sold_products_path().should.equal('/products/sold');
+    urlHelpers.products_path().should.equal('/products');
+    urlHelpers.new_product_path().should.equal('/products/new');
+    urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
+    urlHelpers.product_path(233).should.equal('/products/233');
   });
 });
 
@@ -118,33 +125,35 @@ describe('Mapper#resources', () => {
     });
   });
   it("resource route with sub-resources", () => {
-    routeMapper.routes.length.should.equal(31);
-    Object.keys(routeMapper.urlHelpers).length.should.equal(15);
+    let routes = routeMapper.routes;
+    let urlHelpers = routeMapper.urlHelpers;
+    routes.length.should.equal(31);
+    Object.keys(urlHelpers).length.should.equal(15);
     let helpers = [
       'product_comments', 'new_product_comment', 'edit_product_comment', 'product_comment',
       'product_sales', 'new_product_sale', 'edit_product_sale', 'product_sale',
       'product_seller', 'new_product_seller', 'edit_product_seller',
       'products', 'new_product', 'edit_product', 'product'
     ].map((e) => e + '_path');
-    Object.keys(routeMapper.urlHelpers).should.eql(helpers);
-    routeMapper.urlHelpers.product_comments_path(233).should.equal('/products/233/comments');
-    routeMapper.urlHelpers.new_product_comment_path(233).should.equal('/products/233/comments/new');
-    routeMapper.urlHelpers.edit_product_comment_path(233, 377).should.equal('/products/233/comments/377/edit');
-    routeMapper.urlHelpers.product_comment_path(233, 377).should.equal('/products/233/comments/377');
+    Object.keys(urlHelpers).should.eql(helpers);
+    urlHelpers.product_comments_path(233).should.equal('/products/233/comments');
+    urlHelpers.new_product_comment_path(233).should.equal('/products/233/comments/new');
+    urlHelpers.edit_product_comment_path(233, 377).should.equal('/products/233/comments/377/edit');
+    urlHelpers.product_comment_path(233, 377).should.equal('/products/233/comments/377');
 
-    routeMapper.urlHelpers.product_sales_path(233).should.equal('/products/233/sales');
-    routeMapper.urlHelpers.new_product_sale_path(233).should.equal('/products/233/sales/new');
-    routeMapper.urlHelpers.edit_product_sale_path(233, 377).should.equal('/products/233/sales/377/edit');
-    routeMapper.urlHelpers.product_sale_path(233, 377).should.equal('/products/233/sales/377');
+    urlHelpers.product_sales_path(233).should.equal('/products/233/sales');
+    urlHelpers.new_product_sale_path(233).should.equal('/products/233/sales/new');
+    urlHelpers.edit_product_sale_path(233, 377).should.equal('/products/233/sales/377/edit');
+    urlHelpers.product_sale_path(233, 377).should.equal('/products/233/sales/377');
 
-    routeMapper.urlHelpers.product_seller_path(233).should.equal('/products/233/seller');
-    routeMapper.urlHelpers.new_product_seller_path(233).should.equal('/products/233/seller/new');
-    routeMapper.urlHelpers.edit_product_seller_path(233).should.equal('/products/233/seller/edit');
+    urlHelpers.product_seller_path(233).should.equal('/products/233/seller');
+    urlHelpers.new_product_seller_path(233).should.equal('/products/233/seller/new');
+    urlHelpers.edit_product_seller_path(233).should.equal('/products/233/seller/edit');
 
-    routeMapper.urlHelpers.products_path().should.equal('/products');
-    routeMapper.urlHelpers.new_product_path().should.equal('/products/new');
-    routeMapper.urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
-    routeMapper.urlHelpers.product_path(233).should.equal('/products/233');
+    urlHelpers.products_path().should.equal('/products');
+    urlHelpers.new_product_path().should.equal('/products/new');
+    urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
+    urlHelpers.product_path(233).should.equal('/products/233');
   });
 });
 
@@ -160,29 +169,31 @@ describe('Mapper#resources', () => {
     });
   });
   it("resource route with more complex sub-resources", () => {
-    routeMapper.routes.length.should.equal(25);
-    Object.keys(routeMapper.urlHelpers).length.should.equal(13);
+    let routes = routeMapper.routes;
+    let urlHelpers = routeMapper.urlHelpers;
+    routes.length.should.equal(25);
+    Object.keys(urlHelpers).length.should.equal(13);
     let helpers = [
       'product_comments', 'new_product_comment', 'edit_product_comment', 'product_comment',
       'recent_product_sales', 'product_sales', 'new_product_sale', 'edit_product_sale', 'product_sale',
       'products', 'new_product', 'edit_product', 'product'
     ].map((e) => e + '_path');
-    Object.keys(routeMapper.urlHelpers).should.eql(helpers);
-    routeMapper.urlHelpers.product_comments_path(233).should.equal('/products/233/comments');
-    routeMapper.urlHelpers.new_product_comment_path(233).should.equal('/products/233/comments/new');
-    routeMapper.urlHelpers.edit_product_comment_path(233, 377).should.equal('/products/233/comments/377/edit');
-    routeMapper.urlHelpers.product_comment_path(233, 377).should.equal('/products/233/comments/377');
+    Object.keys(urlHelpers).should.eql(helpers);
+    urlHelpers.product_comments_path(233).should.equal('/products/233/comments');
+    urlHelpers.new_product_comment_path(233).should.equal('/products/233/comments/new');
+    urlHelpers.edit_product_comment_path(233, 377).should.equal('/products/233/comments/377/edit');
+    urlHelpers.product_comment_path(233, 377).should.equal('/products/233/comments/377');
 
-    routeMapper.urlHelpers.recent_product_sales_path(233).should.equal('/products/233/sales/recent');
-    routeMapper.urlHelpers.product_sales_path(233).should.equal('/products/233/sales');
-    routeMapper.urlHelpers.new_product_sale_path(233).should.equal('/products/233/sales/new');
-    routeMapper.urlHelpers.edit_product_sale_path(233, 377).should.equal('/products/233/sales/377/edit');
-    routeMapper.urlHelpers.product_sale_path(233, 377).should.equal('/products/233/sales/377');
+    urlHelpers.recent_product_sales_path(233).should.equal('/products/233/sales/recent');
+    urlHelpers.product_sales_path(233).should.equal('/products/233/sales');
+    urlHelpers.new_product_sale_path(233).should.equal('/products/233/sales/new');
+    urlHelpers.edit_product_sale_path(233, 377).should.equal('/products/233/sales/377/edit');
+    urlHelpers.product_sale_path(233, 377).should.equal('/products/233/sales/377');
 
-    routeMapper.urlHelpers.products_path().should.equal('/products');
-    routeMapper.urlHelpers.new_product_path().should.equal('/products/new');
-    routeMapper.urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
-    routeMapper.urlHelpers.product_path(233).should.equal('/products/233');
+    urlHelpers.products_path().should.equal('/products');
+    urlHelpers.new_product_path().should.equal('/products/new');
+    urlHelpers.edit_product_path(233).should.equal('/products/233/edit');
+    urlHelpers.product_path(233).should.equal('/products/233');
   });
 });
 
@@ -196,24 +207,26 @@ describe('Mapper#resources', () => {
     m.resources('photos', { concerns: 'toggleable' });
   });
   it("resource route with concerns", () => {
-    routeMapper.routes.length.should.equal(18);
-    Object.keys(routeMapper.urlHelpers).length.should.equal(10);
+    let routes = routeMapper.routes;
+    let urlHelpers = routeMapper.urlHelpers;
+    routes.length.should.equal(18);
+    Object.keys(urlHelpers).length.should.equal(10);
     let helpers = [
       'post_toggle', 'posts', 'new_post', 'edit_post', 'post',
       'photo_toggle', 'photos', 'new_photo', 'edit_photo', 'photo'
     ].map((e) => e + '_path');
-    Object.keys(routeMapper.urlHelpers).should.eql(helpers);
-    routeMapper.urlHelpers.post_toggle_path(233).should.equal('/posts/233/toggle');
-    routeMapper.urlHelpers.posts_path(233).should.equal('/posts');
-    routeMapper.urlHelpers.new_post_path().should.equal('/posts/new');
-    routeMapper.urlHelpers.edit_post_path(233).should.equal('/posts/233/edit');
-    routeMapper.urlHelpers.post_path(233).should.equal('/posts/233');
+    Object.keys(urlHelpers).should.eql(helpers);
+    urlHelpers.post_toggle_path(233).should.equal('/posts/233/toggle');
+    urlHelpers.posts_path(233).should.equal('/posts');
+    urlHelpers.new_post_path().should.equal('/posts/new');
+    urlHelpers.edit_post_path(233).should.equal('/posts/233/edit');
+    urlHelpers.post_path(233).should.equal('/posts/233');
 
-    routeMapper.urlHelpers.photo_toggle_path(377).should.equal('/photos/377/toggle');
-    routeMapper.urlHelpers.photos_path(377).should.equal('/photos');
-    routeMapper.urlHelpers.new_photo_path().should.equal('/photos/new');
-    routeMapper.urlHelpers.edit_photo_path(377).should.equal('/photos/377/edit');
-    routeMapper.urlHelpers.photo_path(377).should.equal('/photos/377');
+    urlHelpers.photo_toggle_path(377).should.equal('/photos/377/toggle');
+    urlHelpers.photos_path(377).should.equal('/photos');
+    urlHelpers.new_photo_path().should.equal('/photos/new');
+    urlHelpers.edit_photo_path(377).should.equal('/photos/377/edit');
+    urlHelpers.photo_path(377).should.equal('/photos/377');
   });
 });
 
@@ -225,15 +238,17 @@ describe('Mapper#resources', () => {
     });
   });
   it("resource route within a namespace", () => {
-    routeMapper.routes.length.should.equal(8);
-    Object.keys(routeMapper.urlHelpers).length.should.equal(4);
+    let routes = routeMapper.routes;
+    let urlHelpers = routeMapper.urlHelpers;
+    routes.length.should.equal(8);
+    Object.keys(urlHelpers).length.should.equal(4);
     let helpers = [
       'admin_products', 'new_admin_product', 'edit_admin_product', 'admin_product'
     ].map((e) => e + '_path');
-    Object.keys(routeMapper.urlHelpers).should.eql(helpers);
-    routeMapper.urlHelpers.admin_products_path().should.equal('/admin/products');
-    routeMapper.urlHelpers.new_admin_product_path().should.equal('/admin/products/new');
-    routeMapper.urlHelpers.edit_admin_product_path(233).should.equal('/admin/products/233/edit');
-    routeMapper.urlHelpers.admin_product_path(233).should.equal('/admin/products/233');
+    Object.keys(urlHelpers).should.eql(helpers);
+    urlHelpers.admin_products_path().should.equal('/admin/products');
+    urlHelpers.new_admin_product_path().should.equal('/admin/products/new');
+    urlHelpers.edit_admin_product_path(233).should.equal('/admin/products/233/edit');
+    urlHelpers.admin_product_path(233).should.equal('/admin/products/233');
   });
 });
