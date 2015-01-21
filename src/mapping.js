@@ -109,6 +109,8 @@ class Mapping {
     return controller;
   }
 
+  toRoute() {}
+
 }
 
 var splitTo = (to) => {

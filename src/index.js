@@ -1,5 +1,5 @@
 import Mapper from './mapper';
-import RouteMapper from './route_set';
+import RouteMapper from './route_mapper';
 import {HTTP_METHODS} from './const';
 //import UrlFor from './url_for';
 

@@ -1,13 +1,22 @@
+import Route from './route';
+import {newObject, hasOwn} from './utils';
+
 class Routes {
 
   constructor() {
     this.routes = [];
-    this.namedRoutes = {};
-    this.urlHelpers = {};
+    this.namedRoutes = newObject();
+
+    this.pathHelpers = newObject();
+    //this.urlHelpers = new WeakMap();
   }
 
   get length() {
     return this.routes.length;
+  }
+
+  get size() {
+    return this.length;
   }
 
   each(cb) {
@@ -16,28 +25,40 @@ class Routes {
 
   clear() {
     this.routes.length = 0;
-    this.namedRoutes = {};
+    this.namedRoutes = newObject();
+    this.pathHelpers = newObject();
+    //this.urlHelpers.clear();
   }
 
-  addRoute(route) {
+  addRoute(mapping) {
+    let name = mapping.name;
+    let route = mapping;
+    //let route = new Route(mapping);
     this.routes.push(route);
-    if (route.name && !this.namedRoutes[route.name]) {
-      this.namedRoutes[route.name] = route;
-      let urlPath = (...args) => {
-        if (urlPath.params) {
-          let path = urlPath.path;
-          args = args.slice(0, urlPath.params.length);
-          args.forEach((a, i) => {
-            path = path.replace(urlPath.params[i], a);
-          });
-          return path;
-        }
-        return urlPath.path;
-      };
-      urlPath.path = route.path;
-      urlPath.params = urlPath.path.match(/:[a-zA-Z0-9_\*\?]+/g);
-      this.urlHelpers[route.name + '_path'] =  urlPath;
+    if (name && !hasOwn(this.namedRoutes, name)) {
+      let pathName = `${name}_path`;
+      this.pathHelpers[pathName] = this._generatePath(name, route);
+      //this.urlHelpers.add(urlName);
+      this.namedRoutes[name] = route;
     }
+    return route;
+  }
+
+  _generatePath(name, route) {
+    let genPath = (...args) => {
+      if (genPath.params) {
+        let path = genPath.path;
+        args = args.slice(0, genPath.params.length);
+        args.forEach((a, i) => {
+          path = path.replace(genPath.params[i], a);
+        });
+        return path;
+      }
+      return genPath.path;
+    };
+    genPath.path = route.path;
+    genPath.params = genPath.path.match(/:[a-zA-Z0-9_\*\?]+/g);
+    return genPath;
   }
 
 }

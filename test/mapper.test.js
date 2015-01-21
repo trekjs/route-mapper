@@ -10,7 +10,7 @@ describe('Mapper#constructor', () => {
   });
 });
 
-describe('Mapper#urlHelpers', () => {
+describe('Mapper#pathHelpers', () => {
   let set = new RouteMapper();
   let m = new Mapper(set);
   m.resource('post', { as: '' });
@@ -19,16 +19,17 @@ describe('Mapper#urlHelpers', () => {
     m.resource('comment', { as: '' });
   })
 
-  let urlHelpers = set.urlHelpers;
+  let pathHelpers = set.pathHelpers;
   let paths = ['new_path', 'edit_path', 'post_path', 'new_post_path', 'edit_post_path' ]
   it("resource where as is empty", () => {
-    Object.keys(set.urlHelpers).should.eql(paths);
-    urlHelpers.new_path().should.equal('/post/new');
-    urlHelpers.new_post_path().should.equal('/post/comment/new');
+    let pathHelpers = set.pathHelpers;
+    Object.keys(pathHelpers).should.eql(paths);
+    pathHelpers.new_path().should.equal('/post/new');
+    pathHelpers.new_post_path().should.equal('/post/comment/new');
   });
 });
 
-describe('Mapper#urlHelpers', () => {
+describe('Mapper#pathHelpers', () => {
   let set = new RouteMapper();
   let m = new Mapper(set);
   m.resources('posts', { as: '' });
@@ -37,17 +38,17 @@ describe('Mapper#urlHelpers', () => {
     m.resource('comments', { as: '' });
   })
 
-  let urlHelpers = set.urlHelpers;
+  let pathHelpers = set.pathHelpers;
   let paths = ['_index_path', 'new_path', 'edit_path', 'posts_path', 'new_posts_path', 'edit_posts_path' ];
   it("resources where as is empty", () => {
-    Object.keys(set.urlHelpers).should.eql(paths);
-    urlHelpers.new_path().should.equal('/posts/new');
-    urlHelpers.new_posts_path().should.equal('/posts/comments/new');
+    Object.keys(set.pathHelpers).should.eql(paths);
+    pathHelpers.new_path().should.equal('/posts/new');
+    pathHelpers.new_posts_path().should.equal('/posts/comments/new');
   });
 });
 
 
-describe('Mapper#urlHelpers', () => {
+describe('Mapper#pathHelpers', () => {
   let set = new RouteMapper();
   let m = new Mapper(set);
 
@@ -56,15 +57,15 @@ describe('Mapper#urlHelpers', () => {
     m.resources('comments');
   })
 
-  let urlHelpers = set.urlHelpers;
+  let pathHelpers = set.pathHelpers;
   let paths = ['_index_path', 'new_path', 'edit_path', 'posts_path', 'new_posts_path', 'edit_posts_path' ];
   let paths = [
     'user_path', 'new_user_path', 'edit_user_path',
     'comments_path', 'new_comment_path', 'edit_comment_path', 'comment_path'
   ];
   it("scope where as is empty", () => {
-    Object.keys(urlHelpers).should.eql(paths);
-    urlHelpers.new_user_path().should.equal('/post/user/new');
-    urlHelpers.new_comment_path().should.equal('/post/comments/new');
+    Object.keys(pathHelpers).should.eql(paths);
+    pathHelpers.new_user_path().should.equal('/post/user/new');
+    pathHelpers.new_comment_path().should.equal('/post/comments/new');
   });
 });

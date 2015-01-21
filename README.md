@@ -134,7 +134,7 @@ routeMapper.draw((m) => {
 
 
 app.use(function (req, res, next) {
-  res.locals.urlHelpers = routeMapper.urlHelpers;
+  res.locals.pathHelpers = routeMapper.pathHelpers;
   next();
 });
 
@@ -178,7 +178,7 @@ routeMapper.draw((m) => {
 });
 
 app.use(function *(next) {
-  this.urlHelpers = routeMapper.urlHelpers;
+  this.pathHelpers = routeMapper.pathHelpers;
   yield next;
 });
 

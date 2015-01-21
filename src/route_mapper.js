@@ -10,6 +10,7 @@ class RouteMapper {
     if (!(this instanceof RouteMapper)) {
       return new RouteMapper(options);
     }
+
     this._routes = new Routes();
     this.resourcesPathNames = DEFAULT_RESOURCES_PATH_NAMES;
   }
@@ -22,8 +23,16 @@ class RouteMapper {
     return this._routes.namedRoutes;
   }
 
+  get pathHelpers() {
+    return this._routes.pathHelpers;
+  }
+
   get urlHelpers() {
     return this._routes.urlHelpers;
+  }
+
+  clear() {
+    this._routes.clear();
   }
 
   draw(cb = noop) {

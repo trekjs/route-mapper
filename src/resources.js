@@ -488,6 +488,7 @@ class Resources {
     delete options.as;
 
     let mapping = Mapping.build(this.context, this.set, path, as, options);
+    // mapping.toRoute();
     this.set.addRoute(mapping);
   }
 
