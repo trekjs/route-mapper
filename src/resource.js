@@ -32,7 +32,8 @@ class Resource {
   }
 
   get name() {
-    return this.as || this._name;
+    //return this.as || this._name;
+    return isString(this.as) ? this.as : this._name;
   }
 
   get plural() {

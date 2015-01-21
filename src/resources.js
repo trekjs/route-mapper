@@ -402,8 +402,12 @@ class Resources {
 
   withScopeLevel(kind, cb) {
     if (isFunction(cb)) {
+      // begin, new
       this.context = this.context.createLevel(kind);
+
       cb.call(this);
+
+      // end, reroll
       this.context = this.context.parent;
     }
   }
@@ -518,9 +522,9 @@ class Resources {
       memberName = parentResource.memberName;
     }
 
-    let name = this.context.actionName(namePrefix, prefix, collectionName, memberName);
+    let actionName = this.context.actionName(namePrefix, prefix, collectionName, memberName);
+    let candidate = compact(actionName).join('_');
 
-    let candidate = compact(name).join('_')
     if (candidate) {
       if (!as) {
         if (/^[_a-zA-Z]/.test(candidate) && !(hasOwn(this.set.namedRoutes, candidate))) {

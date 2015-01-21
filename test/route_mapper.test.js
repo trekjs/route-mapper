@@ -11,7 +11,6 @@ describe('RouteMapper#draw', () => {
   });
 });
 
-
 describe('Mapper#resourcesPathNames', () => {
   let routeMapper = new RouteMapper();
   routeMapper.draw((m) => {

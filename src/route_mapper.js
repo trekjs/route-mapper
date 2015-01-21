@@ -17,9 +17,11 @@ class RouteMapper {
   get routes() {
     return this._routes.routes;
   }
+
   get namedRoutes() {
     return this._routes.namedRoutes;
   }
+
   get urlHelpers() {
     return this._routes.urlHelpers;
   }
@@ -34,6 +36,7 @@ class RouteMapper {
   addRoute(mapping) {
     this._routes.addRoute(mapping);
   }
+
 }
 
 export default RouteMapper;

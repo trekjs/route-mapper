@@ -52,15 +52,15 @@ class Scoping {
       }
     });
 
-    // begin, new
-    this.context = this.context.create(scope);
-
     if (isFunction(cb)) {
-      cb.call(this);
-    }
+      // begin, new
+      this.context = this.context.create(scope);
 
-    // end, reroll
-    this.context = this.context.parent;
+      cb.call(this);
+
+      // end, reroll
+      this.context = this.context.parent;
+    }
 
     return this;
   }
