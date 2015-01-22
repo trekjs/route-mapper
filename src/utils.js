@@ -3,10 +3,6 @@ import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
 import {normalize} from 'path';
 
-var _hasOwn = Object.prototype.hasOwnProperty;
-
-export var hasOwn = (o, k) => _hasOwn.call(o, k);
-
 export var normalizePath = path => {
   path = '/' + path;
   path = normalize(path);

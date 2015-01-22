@@ -1,6 +1,7 @@
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
-import {buildArgs, compact, newObject, normalizePath, flatten, hasOwn} from './utils';
+import has from 'lodash-node/modern/object/has';
+import {buildArgs, compact, newObject, normalizePath, flatten} from './utils';
 import {URL_OPTIONS} from './const';
 import mergeScope from './merge_scope';
 
@@ -17,10 +18,10 @@ class Scoping {
     options.constraints ?= newObject();
 
     if (!this.isNestedScope()) {
-      if(hasOwn(options, 'path')) {
+      if(has(options, 'path')) {
         options.shallow_path ?= options.path;
       }
-      if(hasOwn(options, 'as')) {
+      if(has(options, 'as')) {
         options.shallow_prefix ?= options.as;
       }
     }

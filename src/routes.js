@@ -1,5 +1,6 @@
+import has from 'lodash-node/modern/object/has';
 import Route from './route';
-import {newObject, hasOwn} from './utils';
+import {newObject} from './utils';
 
 class Routes {
 
@@ -35,7 +36,7 @@ class Routes {
     let route = mapping;
     //let route = new Route(mapping);
     this.routes.push(route);
-    if (name && !hasOwn(this.namedRoutes, name)) {
+    if (name && !has(this.namedRoutes, name)) {
       let pathName = `${name}_path`;
       this.pathHelpers[pathName] = this._generatePath(name, route);
       //this.urlHelpers.add(urlName);

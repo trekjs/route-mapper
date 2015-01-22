@@ -3,8 +3,9 @@ import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
 import isRegExp from 'lodash-node/modern/lang/isRegExp';
 import isString from 'lodash-node/modern/lang/isString';
+import has from 'lodash-node/modern/object/has';
 import debug from 'debug';
-import {buildArgs, compact, hasOwn, newObject, normalizePath} from './utils';
+import {buildArgs, compact, newObject, normalizePath} from './utils';
 import {root} from './base';
 import {namespace} from './scoping';
 import Mapping from './mapping';
@@ -224,7 +225,7 @@ class Resources {
       paths = [options.path];
     }
 
-    if (!hasOwn(options, 'anchor')) {
+    if (!has(options, 'anchor')) {
       options.anchor = true;
     }
 
@@ -528,7 +529,7 @@ class Resources {
 
     if (candidate) {
       if (!as) {
-        if (/^[_a-zA-Z]/.test(candidate) && !(hasOwn(this.set.namedRoutes, candidate))) {
+        if (/^[_a-zA-Z]/.test(candidate) && !(has(this.set.namedRoutes, candidate))) {
           return candidate;
         }
       } else {

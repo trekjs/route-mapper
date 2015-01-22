@@ -1,4 +1,4 @@
-import {hasOwn} from './utils';
+import has from 'lodash-node/modern/object/has';
 
 const OPTIONS = [
   'path', 'shallow_path', 'as', 'shallow_prefix', 'module',
@@ -56,8 +56,8 @@ class Scope {
 
   // maybe should use Proxy
   get(key, value = null) {
-    if (hasOwn(this.hash, key)) { return this.hash[key]; }
-    if (hasOwn(this.parent, key)) { return this.parent[key]; }
+    if (has(this.hash, key)) { return this.hash[key]; }
+    if (has(this.parent, key)) { return this.parent[key]; }
     if (this.parent instanceof Scope) { return this.parent.get(key, value); }
     return value;
   }
