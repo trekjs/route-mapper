@@ -1,6 +1,6 @@
 {
   "name": "route-mapper",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Route Mapper - Generate Rails Style Routing & RESTful Routes",
   "main": "lib/index.js",
   "scripts": {
@@ -21,22 +21,22 @@
   "author": "fundon <cfddream@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "6to5": "^2.13.5",
-    "express": "^4.11.1",
+    "6to5": "^3.3.3",
+    "express": "^4.11.2",
     "gulp": "^3.8.10",
-    "gulp-6to5": "^2.0.2",
+    "gulp-6to5": "^3.0.0",
     "hapi": "^8.1.0",
-    "koa": "^0.15.0",
+    "koa": "^0.16.0",
     "koa-router": "^3.8.0",
     "mocha": "^2.1.0",
-    "should": "^4.6.1",
+    "should": "^4.6.2",
     "webpack": "^1.5.3"
   },
   "dependencies": {
+    "6to5-runtime": "^3.3.3",
     "actions": "^1.2.0",
-    "core-js": "^0.4.6",
     "debug": "^2.1.1",
-    "lodash-node": "lodash/lodash-node#master",
-    "pluralize": "^1.1.1"
+    "lodash-node": "^3.0.1",
+    "pluralize": "^1.1.2"
   }
 }

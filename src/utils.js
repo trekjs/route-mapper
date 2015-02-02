@@ -60,3 +60,12 @@ export var any = list => compact(list).length > 0;
 
 // Object.create(null)
 export var newObject = () => Object.create(null);
+
+
+// mixin(Mapper.prototype, Base.prototype);
+export var mixin = Object.define || (target, source) => {
+  Object.getOwnPropertyNames(source).forEach((key) => {
+    Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+  });
+  return target;
+};

@@ -19,10 +19,10 @@ class Mapper {
 
 var proto = Mapper.prototype;
 
-Object.assign(proto, Base.prototype);
-Object.assign(proto, HttpHelpers.prototype);
-Object.assign(proto, Scoping.prototype);
-Object.assign(proto, Concerns.prototype);
-Object.assign(proto, Resources.prototype);
+Object.define(proto, Base.prototype);
+Object.define(proto, HttpHelpers.prototype);
+Object.define(proto, Scoping.prototype);
+Object.define(proto, Concerns.prototype);
+Object.define(proto, Resources.prototype);
 
 export default Mapper;

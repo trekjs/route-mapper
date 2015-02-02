@@ -49,7 +49,14 @@ class Resource {
   }
 
   get collectionName() {
-    return this.singular === this.plural ? `${this.plural}_index` : this.plural;
+    if (!this.plural) {
+      return 'index';
+    } else if (this.singular === this.plural) {
+      return `${this.plural}_index`;
+    } else {
+      return this.plural;
+    }
+    //return this.plural this.singular === this.plural ? `${this.plural}_index` : this.plural;
   }
 
   get resourceScope() {
