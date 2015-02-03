@@ -7,6 +7,7 @@ gulp.task('default', function () {
  return gulp.src('src/**/*.js')
    .pipe(to5({
      optional: ['selfContained'],
+     blacklist: ['es6.templateLiterals'],
      experimental: true,
      playground: true
    }))
