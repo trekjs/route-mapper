@@ -39,5 +39,3 @@ routeMapper.routes.forEach((r) => {
 });
 
 app.listen(3300);
-
-console.log(module);
