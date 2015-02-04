@@ -1,6 +1,5 @@
-import create from 'lodash-node/modern/object/create';
-
-const DEFAULT_OPTIONS = { as: 'root', via: 'get' };
+import assign from 'lodash-node/modern/object/assign';
+import {DEFAULT_OPTIONS} from './const';
 
 class Base {
 
@@ -25,14 +24,14 @@ class Base {
   // defaults
   // anchor
   // format
-  match(path, options = null, cb) {}
+  match(path, options, cb) {}
 
-  mount(app, options = null, cb) {}
+  mount(app, options, cb) {}
 
 }
 
-export var root = function(options = create(null), cb) {
-  options = Object.assign(create(null), DEFAULT_OPTIONS, options);
+export var root = function(options, cb) {
+  options = assign({}, DEFAULT_OPTIONS, options);
   return this.match('/', options, cb);
 }
 

@@ -1,8 +1,8 @@
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
 import has from 'lodash-node/modern/object/has';
-import create from 'lodash-node/modern/object/create';
 import compact from 'lodash-node/modern/array/compact';
+import assign from 'lodash-node/modern/object/assign';
 import {buildArgs} from './utils';
 import {URL_OPTIONS} from './const';
 import mergeScope from './merge_scope';
@@ -10,14 +10,14 @@ import mergeScope from './merge_scope';
 class Scoping {
 
   scope(...args) {
-    let [paths, options, cb] = buildArgs(...args);
-    let scope = create(null);
+    let [paths, options, cb] = buildArgs.apply(undefined, args);
+    let scope = {};
 
     paths = compact(paths);
     if (paths.length) {
       options.path = paths.join('/');
     }
-    options.constraints ?= create(null);
+    options.constraints ?= {};
 
     if (!this.isNestedScope()) {
       if(has(options, 'path')) {
@@ -29,16 +29,16 @@ class Scoping {
     }
 
     if (isObject(options.constraints)) {
-      let defaults = create(null);
+      let defaults = {};
       for (let k of Object.keys(options.constraints)) {
         if (URL_OPTIONS.includes(k)) {
           defaults[k] = options.constraints[k];
         }
       }
-      options.defaults = Object.assign(defaults, options.defaults || create(null));
+      options.defaults = assign(defaults, options.defaults || {});
     } else {
       //block = options.constraints;
-      options.constraints = create(null);
+      options.constraints = {};
     }
 
     this.context.options.forEach((option) => {
@@ -68,38 +68,38 @@ class Scoping {
     return this;
   }
 
-  controller(controller, options = create(null), cb) {
+  controller(controller, options = {}, cb) {
     if (isFunction(options)) {
       cb = options;
-      options = create(null);
+      options = {};
     }
     options.controller = controller;
     return this.scope(options, cb);
   }
 
-  constraints(constraints = create(null), cb) {
-    return this.scope(create({ constraints: constraints }), cb);
+  constraints(constraints = {}, cb) {
+    return this.scope({ constraints: constraints }, cb);
   }
 
   namespace(...args) {
     return namespace.apply(this, args);
   }
 
-  defaults(defaults = create(null), cb) {
-    return this.scope(create({ defaults: defaults }), cb);
+  defaults(defaults = {}, cb) {
+    return this.scope({ defaults: defaults }, cb);
   }
 }
 
-export var namespace = function(path, options = create(null), cb) {
+export var namespace = function(path, options = {}, cb) {
   path = String(path);
-  let defaults = create({
+  let defaults = {
     module:         path,
     path:           options.path || path,
     as:             options.as || path,
     shallow_path:   options.path || path,
     shallow_prefix: options.as || path
-  });
-  Object.assign(defaults, options);
+  };
+  assign(defaults, options);
   return this.scope(defaults, cb);
 }
 

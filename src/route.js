@@ -1,4 +1,3 @@
-
 class Route {
 
   constructor(name) {

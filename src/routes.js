@@ -1,14 +1,13 @@
 import has from 'lodash-node/modern/object/has';
-import create from 'lodash-node/modern/object/create';
 import Route from './route';
 
 class Routes {
 
   constructor() {
     this.routes = [];
-    this.namedRoutes = create(null);
+    this.namedRoutes = {};
 
-    this.pathHelpers = create(null);
+    this.pathHelpers = {};
     //this.urlHelpers = new WeakMap();
   }
 
@@ -26,8 +25,8 @@ class Routes {
 
   clear() {
     this.routes.length = 0;
-    this.namedRoutes = create(null);
-    this.pathHelpers = create(null);
+    this.namedRoutes = {};
+    this.pathHelpers = {};
     //this.urlHelpers.clear();
   }
 

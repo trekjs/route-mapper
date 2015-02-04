@@ -1,3 +1,8 @@
+export const DEFAULT_OPTIONS = {
+  as: 'root',
+  via: 'get'
+};
+
 export const DEFAULT_RESOURCES_PATH_NAMES = {
   'new': 'new',
   'edit': 'edit'

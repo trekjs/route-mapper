@@ -16,7 +16,7 @@ class Concerns {
   }
 
   concerns(...args) {
-    let [names, options, cb] = buildArgs(...args);
+    let [names, options, cb] = buildArgs.apply(undefined, args);
     names.forEach((name) => {
       let concern = this._concerns[name];
       if (isFunction(concern)) {

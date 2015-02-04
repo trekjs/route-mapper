@@ -3,7 +3,6 @@ import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
 import compact from 'lodash-node/modern/array/compact';
 import flatten from 'lodash-node/modern/array/flatten';
-import create from 'lodash-node/modern/object/create';
 import {normalize} from 'path';
 
 export var normalizePath = path => {
@@ -25,11 +24,11 @@ export var buildArgs = (...args) => {
   let l = args.length, last = args[l - 1], cb, options, paths;
   if (!last && l > 0) {
    args.pop();
-   return buildArgs(...args);
+   return buildArgs.apply(undefined, args);
   } else if (isFunction(last)) {
     cb = last;
     args.pop();
-    let res = buildArgs(...args);
+    let res = buildArgs.apply(undefined, args);
     paths = res[0];
     options = res[1];
   } else if (isObject(last) && !isArray(last)) {
@@ -39,13 +38,5 @@ export var buildArgs = (...args) => {
   } else {
     paths = args;
   }
-  return [flatten(paths, true), options || create(null), cb];
-}
-
-// mixin(Mapper.prototype, Base.prototype);
-export var mixin = Object.define || (target, source) => {
-  Object.getOwnPropertyNames(source).forEach((key) => {
-    Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-  });
-  return target;
+  return [flatten(paths, true), options || {}, cb];
 };

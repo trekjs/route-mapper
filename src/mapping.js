@@ -1,6 +1,7 @@
 import isString from 'lodash-node/modern/lang/isString';
 import isRegExp from 'lodash-node/modern/lang/isRegExp';
 import compact from 'lodash-node/modern/array/compact';
+import assign from 'lodash-node/modern/object/assign';
 import debug from 'debug';
 import {normalizePath} from './utils';
 
@@ -11,7 +12,7 @@ class Mapping {
   static build(context, set, path, as, options) {
     let contextOptions = context.get('options');
     if (contextOptions) {
-      options = Object.assign({}, contextOptions, options);
+      options = assign({}, contextOptions, options);
     }
 
     delete options.only;
@@ -20,7 +21,7 @@ class Mapping {
     delete options.shallow_prefix;
     delete options.shallow;
 
-    let defaults = Object.assign({}, (context.get('defaults') || {}), options.defaults || {});
+    let defaults = assign({}, (context.get('defaults') || {}), options.defaults || {});
     delete options.defaults;
 
     return new Mapping(context, set, path, defaults, as, options);

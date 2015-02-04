@@ -1,4 +1,4 @@
-import create from 'lodash-node/modern/object/create';
+import assign from 'lodash-node/modern/object/assign';
 import {normalizePath} from './utils';
 
 export default {
@@ -52,12 +52,12 @@ export default {
   //blocks(parent, child) { },
 
   options(parent, child) {
-    parent = Object.assign(parent || create(null));
+    parent = assign(parent || {});
     let excepts = this.overrideKeys(child);
     for (let key of excepts) {
       delete parent[key];
     }
-    return Object.assign(parent, child);
+    return assign(parent, child);
   },
 
   shallow(parent, child) {

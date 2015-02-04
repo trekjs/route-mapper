@@ -4,8 +4,8 @@ import isObject from 'lodash-node/modern/lang/isObject';
 import isRegExp from 'lodash-node/modern/lang/isRegExp';
 import isString from 'lodash-node/modern/lang/isString';
 import has from 'lodash-node/modern/object/has';
-import create from 'lodash-node/modern/object/create';
 import compact from 'lodash-node/modern/array/compact';
+import assign from 'lodash-node/modern/object/assign';
 import debug from 'debug';
 import {buildArgs, normalizePath} from './utils';
 import {root} from './base';
@@ -23,11 +23,11 @@ const CANONICAL_ACTIONS = ['index', 'create', 'new', 'show', 'update', 'destroy'
 class Resources {
 
   resourcesPathNames(options) {
-    return Object.assign(create(null), this.context.get('path_names'), options);
+    return assign({}, this.context.get('path_names'), options);
   }
 
   resource(...args) {
-    let [resources, options, cb] = buildArgs(...args);
+    let [resources, options, cb] = buildArgs.apply(undefined, args);
     let kind = 'resource';
 
     if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
@@ -65,7 +65,7 @@ class Resources {
   }
 
   resources(...args) {
-    let [resources, options, cb] = buildArgs(...args);
+    let [resources, options, cb] = buildArgs.apply(undefined, args);
     let kind = 'resources';
 
     if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
@@ -164,7 +164,7 @@ class Resources {
   // Scoping#namespace
   //namespace(path, options = {}, cb) {
   namespace(...args) {
-    args = buildArgs(...args);
+    args = buildArgs.apply(undefined, args);
     if (this.isResourceScope()) {
       this.nested(() => {
         namespace.apply(this, args);
@@ -214,7 +214,7 @@ class Resources {
   // match { on: 'member', via: 'get' }
   //match(path, ...rest) {
   match(...args) {
-    let [paths, options, cb] = buildArgs(...args);
+    let [paths, options, cb] = buildArgs.apply(undefined, args);
 
     let to = options.to;
     if (to) {
@@ -242,7 +242,7 @@ class Resources {
     }
 
     paths.forEach((p) => {
-      let routeOptions = Object.assign(options);
+      let routeOptions = assign(options);
       routeOptions.path = p;
       let pathWithoutFormat = p.replace(/\(\.:format\)$/, '');
       if (this.isUsingMatchShorthand(pathWithoutFormat, routeOptions)) {
@@ -286,7 +286,7 @@ class Resources {
 
   //shallowScope(path, options = {}, cb) {
   shallowScope(...args) {
-    let [paths, options, cb] = buildArgs(...args);
+    let [paths, options, cb] = buildArgs.apply(undefined, args);
     let scope = {
       as: this.context.get('shallow_prefix'),
       path: this.context.get('shallow_path')
@@ -361,7 +361,7 @@ class Resources {
 
     if (!this.isActionOptions(options)) {
       if (this.isScopeActionOptions()) {
-        Object.assign(options, this.scopeActionOptions());
+        assign(options, this.scopeActionOptions());
       }
     }
 

@@ -55,7 +55,7 @@ class Scope {
   }
 
   // maybe should use Proxy
-  get(key, value = null) {
+  get(key, value) {
     if (has(this.hash, key)) { return this.hash[key]; }
     if (has(this.parent, key)) { return this.parent[key]; }
     if (this.parent instanceof Scope) { return this.parent.get(key, value); }
