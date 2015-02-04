@@ -3,9 +3,9 @@ import {buildArgs} from './utils';
 
 class Concerns {
 
-  concern(name, callable = null, cb) {
+  concern(name, callable, cb) {
     if (!callable) {
-      callable = (options) => {
+      callable = options => {
         if (isFunction(cb)) {
           cb.call(this, options);
         }
@@ -17,7 +17,7 @@ class Concerns {
 
   concerns(...args) {
     let [names, options, cb] = buildArgs.apply(undefined, args);
-    names.forEach((name) => {
+    names.forEach(name => {
       let concern = this._concerns[name];
       if (isFunction(concern)) {
         concern.call(this, options);

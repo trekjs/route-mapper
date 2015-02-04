@@ -90,7 +90,7 @@ class Scoping {
   }
 }
 
-export var namespace = function(path, options = {}, cb) {
+export function namespace (path, options = {}, cb) {
   path = String(path);
   let defaults = {
     module:         path,

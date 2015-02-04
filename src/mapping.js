@@ -69,6 +69,8 @@ class Mapping {
     this.path = path;
     this.type = context.scopeLevel;
 
+    this.addRequestMethod(this.via, this.conditions);
+
     debug('route: %s %s %s %s %s', this.type, this.as, this.via, this.path, this.controller + '#' + this.action);
   }
 
@@ -80,6 +82,20 @@ class Mapping {
   }
   get name() {
     return this.as;
+  }
+
+  addRequestMethod(via, conditions) {
+    if (via[0] === 'all') return;
+    if (!via.length) {
+      throw new Error(
+        `You should not use the \`match\` method in your router without specifying an HTTP method.\n \
+        If you want to expose your action to both GET and POST, add \`via: ['get', 'post']\` option.\n \
+        If you want to expose your action to GET, use \`get\` in the router:\n \
+          Instead of: match "controller#action"\n \
+          Do: get "controller#action`
+      );
+    }
+    conditions.request_method = via.map(m => { return m.replace(/_/g, '-') });
   }
 
   normalizePath(path, format) {

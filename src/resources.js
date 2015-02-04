@@ -13,12 +13,9 @@ import {namespace} from './scoping';
 import Mapping from './mapping';
 import Resource from './resource';
 import SingletonResource from './singleton_resource';
+import {VALID_ON_OPTIONS, RESOURCE_OPTIONS, CANONICAL_ACTIONS} from './const';
 
 var debug = debug('route-mapper:resources');
-
-const VALID_ON_OPTIONS = ['new', 'collection', 'member'];
-const RESOURCE_OPTIONS = ['as', 'controller', 'path', 'only', 'except', 'param', 'concerns'];
-const CANONICAL_ACTIONS = ['index', 'create', 'new', 'show', 'update', 'destroy'];
 
 class Resources {
 
