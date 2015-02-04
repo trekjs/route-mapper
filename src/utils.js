@@ -1,6 +1,7 @@
 import isArray from 'lodash-node/modern/lang/isArray';
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
+import compact from 'lodash-node/modern/array/compact';
 import {normalize} from 'path';
 
 export var normalizePath = path => {
@@ -43,11 +44,6 @@ export var buildArgs = (...args) => {
 // [1, 2, 3, [4, 5, 6]] => [1, 2, 3, 4, 5, 6]
 export var flatten = list => list.reduce(
   (a, b) => a.concat(isArray(b) ? flatten(b) : b), []
-);
-
-// [null, undefined, false, ''] => []
-export var compact = list => list.filter(
-  (e) => !(e === null || e === false || e === '' || e === void 0)
 );
 
 // [1, null, false] => true

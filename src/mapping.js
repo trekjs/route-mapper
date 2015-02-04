@@ -1,7 +1,8 @@
 import isString from 'lodash-node/modern/lang/isString';
 import isRegExp from 'lodash-node/modern/lang/isRegExp';
+import compact from 'lodash-node/modern/array/compact';
 import debug from 'debug';
-import {normalizePath, compact} from './utils';
+import {normalizePath} from './utils';
 
 var debug = debug('route-mapper:mapping');
 

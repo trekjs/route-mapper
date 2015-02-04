@@ -1,7 +1,8 @@
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
 import has from 'lodash-node/modern/object/has';
-import {buildArgs, compact, newObject, normalizePath, flatten} from './utils';
+import compact from 'lodash-node/modern/array/compact';
+import {buildArgs, newObject, normalizePath, flatten} from './utils';
 import {URL_OPTIONS} from './const';
 import mergeScope from './merge_scope';
 

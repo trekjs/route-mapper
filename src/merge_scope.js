@@ -1,4 +1,4 @@
-import {compact, newObject, normalizePath} from './utils';
+import {newObject, normalizePath} from './utils';
 
 export default {
 
