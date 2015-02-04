@@ -2,6 +2,8 @@ import isArray from 'lodash-node/modern/lang/isArray';
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import isObject from 'lodash-node/modern/lang/isObject';
 import compact from 'lodash-node/modern/array/compact';
+import flatten from 'lodash-node/modern/array/flatten';
+import create from 'lodash-node/modern/object/create';
 import {normalize} from 'path';
 
 export var normalizePath = path => {
@@ -37,26 +39,8 @@ export var buildArgs = (...args) => {
   } else {
     paths = args;
   }
-  return [flatten(paths), options || newObject(), cb];
+  return [flatten(paths, true), options || create(null), cb];
 }
-
-
-// [1, 2, 3, [4, 5, 6]] => [1, 2, 3, 4, 5, 6]
-export var flatten = list => list.reduce(
-  (a, b) => a.concat(isArray(b) ? flatten(b) : b), []
-);
-
-// [1, null, false] => true
-// [null] => false
-// [undefined] => false
-// [false] => false
-// ['', ''] => false
-// [0] => true
-export var any = list => compact(list).length > 0;
-
-// Object.create(null)
-export var newObject = () => Object.create(null);
-
 
 // mixin(Mapper.prototype, Base.prototype);
 export var mixin = Object.define || (target, source) => {

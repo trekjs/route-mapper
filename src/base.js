@@ -1,4 +1,4 @@
-import {newObject} from './utils';
+import create from 'lodash-node/modern/object/create';
 
 const DEFAULT_OPTIONS = { as: 'root', via: 'get' };
 
@@ -31,8 +31,8 @@ class Base {
 
 }
 
-export var root = function(options = newObject(), cb) {
-  options = Object.assign(newObject(), DEFAULT_OPTIONS, options);
+export var root = function(options = create(null), cb) {
+  options = Object.assign(create(null), DEFAULT_OPTIONS, options);
   return this.match('/', options, cb);
 }
 

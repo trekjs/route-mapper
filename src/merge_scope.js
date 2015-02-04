@@ -1,4 +1,5 @@
-import {newObject, normalizePath} from './utils';
+import create from 'lodash-node/modern/object/create';
+import {normalizePath} from './utils';
 
 export default {
 
@@ -51,7 +52,7 @@ export default {
   //blocks(parent, child) { },
 
   options(parent, child) {
-    parent = Object.assign(parent || newObject());
+    parent = Object.assign(parent || create(null));
     let excepts = this.overrideKeys(child);
     for (let key of excepts) {
       delete parent[key];
