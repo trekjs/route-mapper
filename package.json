@@ -33,7 +33,7 @@
     "webpack": "^1.5.3"
   },
   "dependencies": {
-    "6to5-runtime": "^3.3.3",
+    "6to5-runtime": "^3.3.7",
     "actions": "^1.2.0",
     "debug": "^2.1.1",
     "lodash-node": "^3.0.1",
