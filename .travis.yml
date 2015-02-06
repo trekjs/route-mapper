@@ -1,11 +1,6 @@
 language: node_js
 node_js:
-before_script:
-  - "nvm --version"
-  - "rm -rf ~/.nvm"
-  - "curl https://raw.githubusercontent.com/creationix/nvm/v0.23.3/install.sh | bash"
-  - "source ~/.nvm/nvm.sh"
-  - "nvm install iojs"
+  - iojs
 script:
   - "npm run prepublish"
   - "npm test"
