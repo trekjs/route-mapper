@@ -252,3 +252,14 @@ describe('Mapper#resources', () => {
     pathHelpers.admin_product_path(233).should.equal('/admin/products/233');
   });
 });
+
+
+describe('Mapper#format', () => {
+  let routeMapper = new RouteMapper();
+  routeMapper.draw((m) => {
+    m.get('photos/:id', { constraints: { id: /\d+/ }, to: 'photos#show', format: 'js' });
+    m.get('users/:id.:format?', { constraints: { id: '444' }, to: 'users#show', format: 'js' });
+    m.get('comments/:id', { to: 'users#show', format: true });
+    m.get(':controller/:action/:id', { constraints: { format: /json|xml/ } });
+  });
+});

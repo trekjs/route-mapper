@@ -30,10 +30,10 @@ class Routes {
     //this.urlHelpers.clear();
   }
 
-  addRoute(mapping) {
-    let name = mapping.name;
-    let route = mapping;
-    //let route = new Route(mapping);
+  // mapping
+  addRoute(route) {
+    let name = route.name;
+    //let route = new Route(route);
     this.routes.push(route);
     if (name && !has(this.namedRoutes, name)) {
       let pathName = `${name}_path`;
@@ -46,18 +46,20 @@ class Routes {
 
   _generatePath(name, route) {
     let genPath = (...args) => {
-      if (genPath.params) {
-        let path = genPath.path;
-        args = args.slice(0, genPath.params.length);
+      let path = genPath.path;
+      let params = genPath.ast.keys;
+      if (params && params.length) {
+        args = args.slice(0, params.length);
         args.forEach((a, i) => {
-          path = path.replace(genPath.params[i], a);
+          //path = path.replace(new RegExp(':' + params[i].name + ''), a || '');
+          path = path.replace(/:[a-zA-Z0-9_\*\?]+/, a || '');
         });
         return path;
       }
       return genPath.path;
     };
     genPath.path = route.path;
-    genPath.params = genPath.path.match(/:[a-zA-Z0-9_\*\?]+/g);
+    genPath.ast = route.ast;
     return genPath;
   }
 

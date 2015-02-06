@@ -229,7 +229,7 @@ class Resources {
     }
 
     if (options.on && !VALID_ON_OPTIONS.includes(options.on)) {
-      throw new Error(`Unknown scope ${options.on} given to :on`);
+      throw new Error(`Unknown scope ${options.on} given to 'on'`);
     }
 
     let controller = this.context.get('controller');
@@ -241,7 +241,7 @@ class Resources {
     paths.forEach((p) => {
       let routeOptions = assign(options);
       routeOptions.path = p;
-      let pathWithoutFormat = p.replace(/\(\.:format\)$/, '');
+      let pathWithoutFormat = p.replace(/\.:format\??$/, '');
       if (this.isUsingMatchShorthand(pathWithoutFormat, routeOptions)) {
         routeOptions.to ?= pathWithoutFormat.replace(/^\//g, '').replace(/\/([^\/]*)$/, '#$1');
         routeOptions.to = routeOptions.to.replace(/-/g, '_');
@@ -253,7 +253,7 @@ class Resources {
   }
 
   isUsingMatchShorthand(path, options) {
-    return path && !(options.to || options.action) && /\//.test(path);
+    return path && !(options.to || options.action) && /\/[\w\/]+$/.test(path);
   }
 
   decomposedMatch(path, options) {
@@ -488,7 +488,7 @@ class Resources {
     delete options.as;
 
     let mapping = Mapping.build(this.context, this.set, path, as, options);
-    // mapping.toRoute();
+    //let [app, conditions, requirements, defaults, newas, anchor] = mapping.toRoute();
     this.set.addRoute(mapping);
   }
 
