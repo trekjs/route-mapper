@@ -82,7 +82,7 @@ class Scoping {
   }
 
   namespace(...args) {
-    return namespace.apply(this, args);
+    return _namespace.apply(this, args);
   }
 
   defaults(defaults = {}, cb) {
@@ -90,7 +90,7 @@ class Scoping {
   }
 }
 
-export function namespace (path, options = {}, cb) {
+export function _namespace (path, options = {}, cb) {
   path = String(path);
   let defaults = {
     module:         path,

@@ -4,12 +4,12 @@ import isRegExp from 'lodash-node/modern/lang/isRegExp';
 import isObject from 'lodash-node/modern/lang/isObject';
 import compact from 'lodash-node/modern/array/compact';
 import assign from 'lodash-node/modern/object/assign';
-import debug from 'debug';
+import originalDebug from 'debug';
 import pathToRegexp from 'path-to-regexp';
-import {normalizePath} from './utils';
+import {normalizePath as _normalizePath} from './utils';
 import {URL_OPTIONS} from './const';
 
-var debug = debug('route-mapper:mapping');
+var debug = originalDebug('route-mapper:mapping');
 
 class Mapping {
 
@@ -186,7 +186,7 @@ class Mapping {
   }
 
   normalizePath(path, format) {
-    path = normalizePath(path);
+    path = _normalizePath(path);
     if (format === true) {
       return `${path}.:format`
     } else if (this.isOptionalFormat(path, format)) {

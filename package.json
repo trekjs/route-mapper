@@ -18,24 +18,24 @@
     "restful",
     "rest"
   ],
-  "author": "fundon <cfddream@gmail.com>",
+  "author": "Fangdun Cai <cfddream@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "6to5": "^3.3.12",
-    "express": "^4.11.2",
-    "gulp": "^3.8.10",
-    "gulp-6to5": "^3.0.0",
-    "hapi": "^8.1.0",
-    "koa": "^0.16.0",
-    "koa-router": "^3.8.0",
+    "babel": "^4.4.5",
+    "express": "^4.12.0",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^4.0.0",
+    "hapi": "^8.2.0",
+    "koa": "^0.18.0",
+    "koa-router": "^4.2.0",
     "mocha": "^2.1.0",
-    "should": "^4.6.5"
+    "should": "^5.0.1"
   },
   "dependencies": {
-    "6to5-runtime": "^3.3.12",
     "actions": "^1.2.0",
+    "babel-runtime": "^4.4.5",
     "debug": "^2.1.1",
-    "lodash-node": "^3.1.0",
+    "lodash-node": "^3.3.0",
     "path-to-regexp": "^1.0.3",
     "pluralize": "^1.1.2"
   }

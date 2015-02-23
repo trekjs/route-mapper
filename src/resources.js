@@ -6,16 +6,16 @@ import isString from 'lodash-node/modern/lang/isString';
 import has from 'lodash-node/modern/object/has';
 import compact from 'lodash-node/modern/array/compact';
 import assign from 'lodash-node/modern/object/assign';
-import debug from 'debug';
+import originalDebug from 'debug';
 import {buildArgs, normalizePath} from './utils';
-import {root} from './base';
-import {namespace} from './scoping';
+import {_root} from './base';
+import {_namespace} from './scoping';
 import Mapping from './mapping';
 import Resource from './resource';
 import SingletonResource from './singleton_resource';
 import {VALID_ON_OPTIONS, RESOURCE_OPTIONS, CANONICAL_ACTIONS} from './const';
 
-var debug = debug('route-mapper:resources');
+var debug = originalDebug('route-mapper:resources');
 
 class Resources {
 
@@ -164,10 +164,10 @@ class Resources {
     args = buildArgs.apply(undefined, args);
     if (this.isResourceScope()) {
       this.nested(() => {
-        namespace.apply(this, args);
+        _namespace.apply(this, args);
       });
     } else {
-      namespace.apply(this, args);
+      _namespace.apply(this, args);
     }
     return this;
   }
@@ -195,11 +195,11 @@ class Resources {
     if (this.context.isResources()) {
       this.withScopeLevel('root', () => {
         this.scope(this.parentResource().path, () => {
-          root.call(this, options);
+          _root.call(this, options);
         });
       });
     } else {
-      root.call(this, options);
+      _root.call(this, options);
     }
 
     return this;

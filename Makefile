@@ -1,26 +1,38 @@
 
 MOCHA = ./node_modules/.bin/mocha
-TO5 = ./node_modules/.bin/6to5-node
-
+BABEL = ./node_modules/.bin/babel-node
 SRC = lib/*.js
+OPTIONS =  "-r -g --blacklist 'regenerator,es6.templateLiterals'"
 
 TESTS = test/*.test.js
+IOJS_ENV ?= test
+
+BIN = iojs
+
+ifeq ($(findstring io.js, $(shell which node)),)
+	BIN = node
+endif
+
+ifeq (node, $(BIN))
+	FLAGS = --harmony
+endif
+
 
 test:
-	@NODE_ENV=test $(MOCHA) \
-		--require test/6to5.js \
+	@IOJS_ENV=$(IOJS_ENV) $(BIN) $(FLAGS) $(MOCHA) \
+		--require test/babel \
 		--require should \
 		$(TESTS) \
 		--bail
 
 bench:
-		@$(MAKE) -C benchmarks
+	@$(MAKE) -C benchmarks
 
 koa:
-	@$(TO5) ./examples/koa/index.js
+	@$(BABEL) $(OPTIONS) ./examples/koa/index.js
 
 express:
-	@$(TO5) ./examples/express/index.js
+	@$(BABEL) $(OPTIONS) ./examples/express/index.js
 
 .PHONY: test bench
 

@@ -6,7 +6,7 @@ class Base {
   // root('pages#main')
   // root({ to: 'pages#main' })
   root(options, cb) {
-    return root.call(this, options, cb);
+    return _root.call(this, options, cb);
   }
 
   // Options
@@ -115,7 +115,7 @@ class Base {
 
 }
 
-export function root (options, cb) {
+export function _root (options, cb) {
   options = assign({}, DEFAULT_OPTIONS, options);
   return this.match('/', options, cb);
 }
