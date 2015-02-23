@@ -27,14 +27,18 @@ routeMapper.routes.forEach((r) => {
   r.via.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
-    let c = require(__dirname + '/controllers/' + controller + '.js');
-    let a;
-    if (c && (a = c[action])) {
-      if (!Array.isArray(a)) {
-        a = [a];
-      }
-      app[m](r.path, ...a);
-    };
+    try {
+      let c = require(__dirname + '/controllers/' + controller + '.js');
+      let a;
+      if (c && (a = c[action])) {
+        if (!Array.isArray(a)) {
+          a = [a];
+        }
+        app[m](r.path, ...a);
+      };
+    } catch (e) {
+      console.log(e);
+    }
   });
 });
 
