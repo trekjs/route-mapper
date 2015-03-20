@@ -1,11 +1,11 @@
 {
   "name": "route-mapper",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Route Mapper - Generate Rails Style Routing & RESTful Routes",
   "main": "lib/route_mapper",
   "scripts": {
     "test": "make test",
-    "prepublish": "gulp"
+    "prepublish": "make clean && make build"
   },
   "repository": "trekjs/route-mapper",
   "keywords": [
