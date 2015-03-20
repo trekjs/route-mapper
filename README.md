@@ -121,27 +121,25 @@ import RouteMapper from '../..';
 let app = express();
 
 let routeMapper = new RouteMapper();
-routeMapper.draw((m) => {
-  m.root('welcome#index');
-  m.resources('photos');
-  m.constraints({ subdomain: 'api' }, () => {
-    m.namespace('api',  { defaults: { format: 'json' }, path: '/' }, () => {
-        m.scope({ module: 'v1' }, () => {
-          m.resources('users');
+routeMapper
+  .root('welcome#index')
+  .resources('photos')
+  .constraints({ subdomain: 'api' }, () => {
+    .namespace('api',  { defaults: { format: 'json' }, path: '/' }, () => {
+        routeMapper.scope({ module: 'v1' }, () => {
+          routeMapper.resources('users');
         });
       }
     );
   });
-});
 
 
 app.use(function (req, res, next) {
-  res.locals.pathHelpers = routeMapper.pathHelpers;
   next();
 });
 
 routeMapper.routes.forEach((r) => {
-  r.via.forEach((m) => {
+  r.verb.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
     let c = require(__dirname + '/controllers/' + controller + '.js');
@@ -168,26 +166,24 @@ import RouteMapper from '../..';
 let app = koa();
 
 let routeMapper = new RouteMapper();
-routeMapper.draw((m) => {
-  m.root('welcome#index');
-  m.get('about', { to: 'welcome#about' });
-  m.resources('posts', () => {
+routeMapper
+  .root('welcome#index')
+  .get('about', { to: 'welcome#about' })
+  .resources('posts', () => {
     m.resources('comments');
+  })
+  .scope({ path: '~:username?', module: 'users', as: 'user'}, () => {
+    routeMapper.root('welcome#index');
   });
-  m.scope({ path: '~:username?', module: 'users', as: 'user'}, () => {
-    m.root('welcome#index');
-  });
-});
 
 app.use(function *(next) {
-  this.pathHelpers = routeMapper.pathHelpers;
   yield next;
 });
 
 app.use(router(app));
 
 routeMapper.routes.forEach((r) => {
-  r.via.forEach((m) => {
+  r.verb.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
     let c = require(__dirname + '/controllers/' + controller + '.js');
