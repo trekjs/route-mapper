@@ -1,8 +1,9 @@
 
 MOCHA = ./node_modules/.bin/mocha
-BABEL = ./node_modules/.bin/babel-node
+BABEL = ./node_modules/.bin/babel
+BABEL_NODE = ./node_modules/.bin/babel-node
+ISTANBUL = ./node_modules/.bin/istanbul
 SRC = lib/*.js
-OPTIONS =  "-r -g --blacklist 'regenerator,es6.templateLiterals'"
 
 TESTS = test/*.test.js
 IOJS_ENV ?= test
@@ -17,10 +18,16 @@ ifeq (node, $(BIN))
 	FLAGS = --harmony
 endif
 
+build:
+	mkdir -p lib
+	$(BIN) $(BABEL) src --out-dir lib --copy-files
+
+clean:
+	rm -rf lib
 
 test:
 	@IOJS_ENV=$(IOJS_ENV) $(BIN) $(FLAGS) $(MOCHA) \
-		--require test/babel \
+		--require babel/register \
 		--require should \
 		$(TESTS) \
 		--bail
@@ -29,10 +36,10 @@ bench:
 	@$(MAKE) -C benchmarks
 
 koa:
-	@$(BABEL) $(OPTIONS) ./examples/koa/index.js
+	@$(BABEL_NODE) ./examples/koa/index.js
 
 express:
-	@$(BABEL) $(OPTIONS) ./examples/express/index.js
+	@$(BABEL_NODE) ./examples/express/index.js
 
 .PHONY: test bench
 

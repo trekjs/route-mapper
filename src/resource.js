@@ -1,6 +1,7 @@
+import has from 'lodash-node/modern/object/has';
 import isString from 'lodash-node/modern/lang/isString';
-import {ACTIONS} from 'actions';
-import {plural, singular} from 'pluralize';
+import { plural, singular } from 'pluralize';
+import { ACTIONS } from 'actions';
 
 class Resource {
 
@@ -32,16 +33,19 @@ class Resource {
   }
 
   get name() {
-    //return this.as || this._name;
     return isString(this.as) ? this.as : this._name;
   }
 
   get plural() {
-    return this._plural ?= this.name;
+    if (!has(this, '_plural')) this._plural = plural(this.name);
+    return this._plural;
+    //return this._plural ? = plural(this.name);
   }
 
   get singular() {
-    return this._singular ?= singular(this.name);
+    if (!has(this, '_singular')) this._singular = singular(this.name);
+    return this._singular;
+    //return this._singular ? = singular(this.name);
   }
 
   get memberName() {
@@ -56,11 +60,12 @@ class Resource {
     } else {
       return this.plural;
     }
-    //return this.plural this.singular === this.plural ? `${this.plural}_index` : this.plural;
   }
 
   get resourceScope() {
-    return { controller: this.controller };
+    return {
+      controller: this.controller
+    };
   }
 
   get collectionScope() {
@@ -76,20 +81,21 @@ class Resource {
   }
 
   get nestedParam() {
-    //return (this.param && this.param !== 'id') ? this.param : this.singular + '_' + this.param;
-    return `${this.singular}_${this.param}`;
+    return this.param !== 'id' ? this.param : this.singular + '_' + this.param;
+    //return this.param !== 'id' ? this.param : this.singular + '_' + this.param;
+    //return `${this.singular}_${this.param}`;
   }
 
   get nestedScope() {
     return `${this.path}/:${this.nestedParam}`;
   }
 
-  newScope(newPath) {
-    return `${this.path}/${newPath}`;
+  get isShallow() {
+    return this.shallow;
   }
 
-  isShallow() {
-    return this.shallow;
+  newScope(newPath) {
+    return `${this.path}/${newPath}`;
   }
 
 }

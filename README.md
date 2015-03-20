@@ -1,9 +1,8 @@
 # route-mapper
 
-Generate Rails Style Routing & RESTful Routes. See [Rails Routing][] doc.   
-Write with `ES6+`, build with [6to5][] for `ES5`.
+Generate Rails Style Routing & RESTful Routes. See [Rails Routing][] doc.
+Write with `ES6+`, build with [Babel][] for `ES5`.
 
-[![es6+][es6-image]][es6-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![David-dm status][David-dm-image]][David-dm-url]
@@ -13,58 +12,61 @@ Write with `ES6+`, build with [6to5][] for `ES5`.
 
 ```js
 let routeMapper = new RouteMapper();
-routeMapper.draw((m) => {
+routeMapper
 
   // You can have the root of your site routed with "root"
-  m.root('welcome#index');
+  .root('welcome#index')
 
   // /products/233  controller = catalog, action = view
-  m.get('products/:id', { to: 'catalog#view' });
+  .get('products/:id', { to: 'catalog#view' })
 
   // Example named route that can be invoked with purchase_path(id: product.id)
   // /products/233/purchase === purchase_path(233)
-  m.get('products/:id/purchase', { to: 'catalog#purchase', as: 'purchase' });
+  .get('products/:id/purchase', { to: 'catalog#purchase', as: 'purchase' })
 
   // Example resource route (maps HTTP verbs to controller actions automatically):
-  m.resources('products');
+  .resources('products')
 
   // Example resource route with options:
-  m.resources('products', () => {
-    m.member(() => {
-      m.get('short');
-      m.post('toggle');
-    });
+  .resources('products', () => {
+    routeMapper.member(() => {
+      routeMapper
+        .get('short')
+        .post('toggle');
+    })
 
-    m.collection(() => {
-      m.get('sold');
-    });
-  });
+    .collection(() => {
+      routeMapper.get('sold');
+    })
+  })
 
   // Example resource route with sub-resources:
-  m.resources('products', () => {
-    m.resources('comments', 'sales');
-    m.resource('seller');
-  });
+  .resources('products', () => {
+    routeMapper
+      .resources('comments', 'sales')
+      .resource('seller');
+  })
 
   // Example resource route with more complex sub-resources:
-  m.resources('products', () => {
-    m.resources('comments')
-    m.resources('sales', () => {
-      m.get('recent', { on: 'collection' });
-    });
-  });
+  .resources('products', () => {
+    routeMapper
+      .resources('comments')
+      .resources('sales', () => {
+        routeMapper.get('recent', { on: 'collection' });
+      });
+  })
 
   // Example resource route with concerns:
-  m.concern('toggleable', () => {
-    m.post('toggle');
-  });
-  m.resources('posts', { concerns: 'toggleable' });
-  m.resources('photos', { concerns: 'toggleable' });
+  .concern('toggleable', () => {
+    routeMapper.post('toggle');
+  })
+  .resources('posts', { concerns: 'toggleable' })
+  .resources('photos', { concerns: 'toggleable' })
 
   // Example resource route within a namespace:
-  m.namespace('admin', () => {
+  .namespace('admin', () => {
     // Directs /admin/products/*
-    m.resources('products');
+    routeMapper.resources('products');
   });
 
 });
@@ -205,7 +207,7 @@ app.listen(3300);
 
 
 [Rails Routing]: http://guides.rubyonrails.org/routing.html
-[6to5]: https://6to5.org/
+[Babel]: https://babeljs.io/
 [es6-image]: https://img.shields.io/badge/es-6+-brightgreen.svg?style=flat-square
 [es6-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla
 [npm-image]: https://img.shields.io/npm/v/route-mapper.svg?style=flat-square

@@ -5,26 +5,26 @@ import RouteMapper from '../..';
 let app = koa();
 
 let routeMapper = new RouteMapper();
-routeMapper.draw((m) => {
-  m.root('welcome#index');
-  m.get('about', { to: 'welcome#about' });
-  m.resources('posts', () => {
-    m.resources('comments');
+routeMapper
+  .root('welcome#index')
+  .get('about', {
+    to: 'welcome#about'
+  })
+  .resources('posts', () => {
+    routeMapper.resources('comments');
+  })
+  .scope({ path: '~:username?', module: 'users', as: 'user' }, () => {
+    routeMapper.root('welcome#index');
   });
-  m.scope({ path: '~:username?', module: 'users', as: 'user'}, () => {
-    m.root('welcome#index');
-  });
-});
 
-app.use(function *(next) {
-  this.pathHelpers = routeMapper.pathHelpers;
+app.use(function*(next) {
   yield next;
 });
 
 app.use(router(app));
 
 routeMapper.routes.forEach((r) => {
-  r.via.forEach((m) => {
+  r.verb.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
     let c = require(__dirname + '/controllers/' + controller + '.js');

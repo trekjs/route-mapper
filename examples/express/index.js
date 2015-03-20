@@ -4,27 +4,21 @@ import RouteMapper from '../..';
 let app = express();
 
 let routeMapper = new RouteMapper();
-routeMapper.draw((m) => {
-  m.root('welcome#index');
-  m.resources('photos');
-  m.constraints({ subdomain: 'api' }, () => {
-    m.namespace('api',  { defaults: { format: 'json' }, path: '/' }, () => {
-        m.scope({ module: 'v1' }, () => {
-          m.resources('users');
-        });
-      }
-    );
+routeMapper
+  .root('welcome#index')
+  .resources('photos')
+  .namespace('api', { path: '/' }, () => {
+    routeMapper.scope({ module: 'v1' }, () => {
+      routeMapper.resources('users');
+    });
   });
-});
 
-app.use(function (req, res, next) {
-  res.locals.pathHelpers = routeMapper.pathHelpers;
+app.use(function(req, res, next) {
   next();
 });
 
-
 routeMapper.routes.forEach((r) => {
-  r.via.forEach((m) => {
+  r.verb.forEach((m) => {
     let controller = r.controller;
     let action = r.action;
     try {
@@ -34,6 +28,7 @@ routeMapper.routes.forEach((r) => {
         if (!Array.isArray(a)) {
           a = [a];
         }
+        console.log(r.path, controller, action)
         app[m](r.path, ...a);
       };
     } catch (e) {

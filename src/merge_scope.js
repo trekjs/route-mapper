@@ -1,16 +1,15 @@
 import assign from 'lodash-node/modern/object/assign';
-import {normalizePath} from './utils';
+import { normalizePath } from './utils';
 
 export default {
 
   // parent/child
   path(parent, child) {
-    //return normalizePath([parent, child].join('/'));
     return parent ? normalizePath(`${parent}/${child}`) : child;
   },
 
   // parent/child
-  shallow_path(parent, child) {
+  shallowPath(parent, child) {
     return parent ? normalizePath(`${parent}/${child}`) : child;
   },
 
@@ -20,7 +19,7 @@ export default {
   },
 
   // parent_child
-  shallow_prefix(parent, child) {
+  shallowPrefix(parent, child) {
     return parent ? `${parent}_${child}` : child;
   },
 
@@ -37,7 +36,7 @@ export default {
     return child;
   },
 
-  path_names(parent, child) {
+  pathNames(parent, child) {
     return this.options(parent, child);
   },
 
@@ -48,8 +47,6 @@ export default {
   defaults(parent, child) {
     return this.options(parent, child);
   },
-
-  //blocks(parent, child) { },
 
   options(parent, child) {
     parent = assign(parent || {});

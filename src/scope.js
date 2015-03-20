@@ -1,9 +1,18 @@
 import has from 'lodash-node/modern/object/has';
 
 const OPTIONS = [
-  'path', 'shallow_path', 'as', 'shallow_prefix', 'module',
-  'controller', 'action', 'path_names', 'constraints',
-  'shallow', /*'blocks',*/ 'defaults', 'options'
+  'path',
+  'shallowPath',
+  'as',
+  'shallowPrefix',
+  'module',
+  'controller',
+  'action',
+  'pathNames',
+  'shallow',
+  'constraints',
+  'defaults',
+  'options'
 ];
 
 const RESOURCE_SCOPES = ['resource', 'resources'];
@@ -11,8 +20,8 @@ const RESOURCE_METHOD_SCOPES = ['collection', 'member', 'new'];
 
 class Scope {
 
-  constructor(hash, parent = {}, scopeLevel = null) {
-    this.hash = hash;
+  constructor(current, parent = {}, scopeLevel = null) {
+    this.current = current;
     this.parent = parent;
     this.scopeLevel = scopeLevel;
   }
@@ -21,19 +30,19 @@ class Scope {
     return OPTIONS;
   }
 
-  isNested() {
+  get isNested() {
     return this.scopeLevel === 'nested';
   }
 
-  isResources() {
+  get isResources() {
     return this.scopeLevel === 'resources';
   }
 
-  isResourceScope() {
+  get isResourceScope() {
     return RESOURCE_SCOPES.includes(this.scopeLevel);
   }
 
-  isResourceMethodScope() {
+  get isResourceMethodScope() {
     return RESOURCE_METHOD_SCOPES.includes(this.scopeLevel);
   }
 
@@ -54,20 +63,19 @@ class Scope {
     }
   }
 
-  // maybe should use Proxy
   get(key, value) {
-    if (has(this.hash, key)) { return this.hash[key]; }
-    if (has(this.parent, key)) { return this.parent[key]; }
-    if (this.parent instanceof Scope) { return this.parent.get(key, value); }
+    if (has(this.current, key)) return this.current[key];
+    if (has(this.parent, key)) return this.parent[key];
+    if (this.parent instanceof Scope) return this.parent.get(key, value);
     return value;
   }
 
   set(key, value) {
-    this.hash[key] = value;
+    this.current[key] = value;
   }
 
-  create(hash) {
-    return new Scope(hash, this, this.scopeLevel);
+  create(current) {
+    return new Scope(current, this, this.scopeLevel);
   }
 
   createLevel(level) {
