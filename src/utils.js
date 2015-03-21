@@ -9,6 +9,29 @@
 import _ from 'lodash-node';
 import { normalize, resolve } from 'path';
 
+/**
+ * Split a string to an array.
+ *
+ * @example
+ *  splitTo('controller#action')
+ *  // => [ 'controller', 'action' ]
+ *
+ * @param {String} to
+ * @return {Array} [ controller, action ]
+ */
+export const splitTo = (to = '') => {
+  if (/#/.test(to)) {
+    return to.split('#');
+  }
+  return [];
+};
+
+/**
+ * Normalize Path
+ *
+ * @param {String} path
+ * @return {String}
+ */
 export const normalizePath = path => {
   path = '/' + path;
   path = resolve(normalize(path));
@@ -17,6 +40,12 @@ export const normalizePath = path => {
   return path;
 };
 
+/**
+ * Parse the arguments and return an special array.
+ *
+ * @param {Array|ArrayLike} args
+ * @return {Array} [ [path, path], {}, function ]
+ */
 export const parseArgs = args => {
   args = [...args];
   let l = args.length,

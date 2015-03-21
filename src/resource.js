@@ -1,18 +1,25 @@
 import has from 'lodash-node/modern/object/has';
 import isString from 'lodash-node/modern/lang/isString';
+import camelCase from 'lodash-node/modern/string/camelCase';
 import { plural, singular } from 'pluralize';
 import { ACTIONS } from 'actions';
 
+/**
+ * Resource
+ *
+ * @class Resource
+ */
 class Resource {
 
-  constructor(entities, options) {
+  constructor(entities, options, camelCase) {
     this._name = String(entities);
     this.path = options.path || this._name;
     this.controller = options.controller || this._name;
     this.as = options.as;
     this.param = options.param || 'id';
-    this.options = options;
     this.shallow = false;
+    this.options = options;
+    this.camelCase = camelCase;
   }
 
   get defaultActions() {
@@ -39,13 +46,11 @@ class Resource {
   get plural() {
     if (!has(this, '_plural')) this._plural = plural(this.name);
     return this._plural;
-    //return this._plural ? = plural(this.name);
   }
 
   get singular() {
     if (!has(this, '_singular')) this._singular = singular(this.name);
     return this._singular;
-    //return this._singular ? = singular(this.name);
   }
 
   get memberName() {
@@ -53,13 +58,15 @@ class Resource {
   }
 
   get collectionName() {
+    let name = '';
     if (!this.plural) {
-      return 'index';
+      name = 'index';
     } else if (this.singular === this.plural) {
-      return `${this.plural}_index`;
+      name = `${this.plural}_index`;
     } else {
-      return this.plural;
+      name = this.plural;
     }
+    return this.camelCase ? camelCase(name) : name;
   }
 
   get resourceScope() {
@@ -81,9 +88,8 @@ class Resource {
   }
 
   get nestedParam() {
-    return this.param !== 'id' ? this.param : this.singular + '_' + this.param;
-    //return this.param !== 'id' ? this.param : this.singular + '_' + this.param;
-    //return `${this.singular}_${this.param}`;
+    let param = this.param !== 'id' ? this.param : this.singular + '_' + this.param;
+    return this.camelCase ? camelCase(param) : param;
   }
 
   get nestedScope() {

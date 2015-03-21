@@ -8,19 +8,14 @@ class Route {
   constructor($scope, path, options) {
     this.build($scope, path, options);
 
-    //this.as = options.as;
-    //this.to = options.to;
     this.path = this.normalizePath(path, this.format);
     this.pathWithoutFormat = this.path.replace(/\.:format\??$/, '');
 
     let ast = pathToRegexp(this.path);
     let pathParams = ast.keys;
-    //console.log(ast)
+
     options = this.normalizeOptions(options, this.format, pathParams, ast, $scope.get('module'));
 
-    console.log(options)
-
-    //console.log('route', options)
   }
 
   // @private
@@ -92,7 +87,7 @@ class Route {
       }
     }
 
-    let toEndpoint = splitTo(this.to);
+    let toEndpoint = utils.splitTo(this.to);
     this._controller = toEndpoint[0] || this.defaultController;
     this._action = toEndpoint[1] || this.defaultAction;
     this._controller = this.addControllerModule(this._controller, modyoule);
@@ -146,13 +141,5 @@ delegate(Route.prototype, 'options')
   .getter('format')
   .getter('as')
   .getter('to')
-
-
-function splitTo(to = '') {
-  if (/#/.test(to)) {
-    return to.split('#');
-  }
-  return [];
-}
 
 export default Route;

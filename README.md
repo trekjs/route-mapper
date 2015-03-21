@@ -21,7 +21,7 @@ routeMapper
   .get('products/:id', { to: 'catalog#view' })
 
   // Example named route that can be invoked with purchase_path(id: product.id)
-  // /products/233/purchase === purchase_path(233)
+  // /products/233/purchase === purchasePath(233)
   .get('products/:id/purchase', { to: 'catalog#purchase', as: 'purchase' })
 
   // Example resource route (maps HTTP verbs to controller actions automatically):
@@ -83,6 +83,7 @@ routeMapper
 * Named Routes
 * URL Helpers
 * Pluralized or Singularized
+* CamelCase or Underscore Styles
 * ...
 
 

@@ -1,6 +1,13 @@
 import has from 'lodash-node/modern/object/has';
 
-const OPTIONS = [
+/**
+ * Options keywords.
+ *
+ * @const
+ * @static
+ * @public
+ */
+export const OPTIONS = [
   'path',
   'shallowPath',
   'as',
@@ -15,10 +22,29 @@ const OPTIONS = [
   'options'
 ];
 
-const RESOURCE_SCOPES = ['resource', 'resources'];
-const RESOURCE_METHOD_SCOPES = ['collection', 'member', 'new'];
+/**
+ * Resource Scopes.
+ *
+ * @const
+ * @static
+ * @public
+ */
+export const RESOURCE_SCOPES = ['resource', 'resources'];
 
-class Scope {
+/**
+ * Resource Method Scopes.
+ *
+ * @const
+ * @static
+ * @public
+ */
+export const RESOURCE_METHOD_SCOPES = ['collection', 'member', 'new'];
+
+/**
+ * @class Scope
+ * @public
+ */
+export default class Scope {
 
   constructor(current, parent = {}, scopeLevel = null) {
     this.current = current;
@@ -81,6 +107,5 @@ class Scope {
   createLevel(level) {
     return new Scope(this, this, level);
   }
-}
 
-export default Scope;
+}

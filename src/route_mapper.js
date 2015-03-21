@@ -6,9 +6,10 @@
 
 'use strict';
 
-import _ from 'lodash-node';
+import Actions from 'actions';
 import _debug from 'debug';
 import delegate from 'delegates';
+import _ from 'lodash-node';
 import * as utils from './utils';
 import mergeScope from './merge_scope';
 import Scope from './scope';
@@ -39,26 +40,33 @@ const RESOURCE_OPTIONS = [
   'concerns'
 ];
 
-const CANONICAL_ACTIONS = [
-  'index',
-  'create',
-  'new',
-  'show',
-  'update',
-  'destroy'
-];
+const DEFAULT_OPTIONS = {
+  pathNames: DEFAULT_RESOURCES_PATH_NAMES,
+  camelCase: true
+};
 
+/**
+ * @class RouteMapper
+ * @public
+ */
 class RouteMapper {
 
-  constructor(pathNames = DEFAULT_RESOURCES_PATH_NAMES) {
+  constructor(options = DEFAULT_OPTIONS) {
+    _.defaults(options, DEFAULT_OPTIONS);
+    let { camelCase, pathNames } = options;
+    this.camelCase = camelCase;
     this.$scope = new Scope({
       pathNames: pathNames
     });
+    this.namedRoutes = Object.create(null);
     this.nesting = [];
-    this.namedRoutes = {};
     this.routes = [];
   }
 
+  /*
+   * @method
+   * @public
+   */
   scope() {
     let [paths, options, cb] = utils.parseArgs(arguments);
     let scope = {};
@@ -71,21 +79,17 @@ class RouteMapper {
     }
 
     if (!this.isNestedScope) {
-      if (_.has(options, 'path')) {
-        if (!_.has(options, 'shallowPath')) {
-          options.shallowPath = options.path;
-        }
+      if (_.has(options, 'path') && !_.has(options, 'shallowPath')) {
+        options.shallowPath = options.path;
       }
-      if (_.has(options, 'as')) {
-        if (!_.has(options, 'shallowPrefix')) {
-          options.shallowPrefix = options.as;
-        }
+      if (_.has(options, 'as') && !_.has(options, 'shallowPrefix')) {
+        options.shallowPrefix = options.as;
       }
     }
 
     if (_.isObject(options.constraints)) {
       let defaults = {};
-      for (let k of Object.keys(options.constraints)) {
+      for (let k of _.keys(options.constraints)) {
         if (URL_OPTIONS.includes(k)) {
           defaults[k] = options.constraints[k];
         }
@@ -105,7 +109,7 @@ class RouteMapper {
       }
 
       if (value) {
-        scope[option] = mergeScope[option](this.$scope.get(option), value);
+        scope[option] = mergeScope[option](this.$scope.get(option), value, this.camelCase);
       }
     });
 
@@ -173,7 +177,7 @@ class RouteMapper {
       throw new Error('Must be called with a path and/or options');
     }
 
-    if (this.$scope.isResources) {
+    if (this.isResources) {
       this.withScopeLevel('root', () => {
         this.scope(this.parentResource.path, () => {
           _root.call(this, options);
@@ -185,7 +189,7 @@ class RouteMapper {
 
     return this;
 
-    function _root(options, cb) {
+    function _root(options) {
       options = _.assign({}, {
         as: 'root',
         verb: 'get'
@@ -194,6 +198,7 @@ class RouteMapper {
     }
   }
 
+  // TODO
   mount() {}
 
   _mapMethod(method, args) {
@@ -212,7 +217,7 @@ class RouteMapper {
 
     this.resourceScope(
       kind,
-      new SingletonResource(resources.pop(), options), () => {
+      new SingletonResource(resources.pop(), options, this.camelCase), () => {
 
         if (_.isFunction(cb)) {
           cb.call(this);
@@ -252,7 +257,7 @@ class RouteMapper {
 
     this.resourceScope(
       kind,
-      new Resource(resources.pop(), options), () => {
+      new Resource(resources.pop(), options, this.camelCase), () => {
 
         if (_.isFunction(cb)) {
           cb.call(this);
@@ -377,21 +382,15 @@ class RouteMapper {
   }
 
   constraints(constraints = {}, cb) {
-    return this.scope({
-      constraints: constraints
-    }, cb);
+    return this.scope({ constraints: constraints }, cb);
   }
 
   defaults(defaults = {}, cb) {
-    return this.scope({
-      defaults: defaults
-    }, cb);
+    return this.scope({ defaults: defaults }, cb);
   }
 
   shallow(cb) {
-    return this.scope({
-      shallow: true
-    }, cb);
+    return this.scope({ shallow: true }, cb);
   }
 
   concern(name, callable, cb) {
@@ -442,7 +441,7 @@ class RouteMapper {
       return true;
     }
 
-    Object.keys(options).forEach((k) => {
+    _.keys(options).forEach((k) => {
       if (_.isRegExp(options[k])) {
         if (!options.constraints) options.constraints = {};
         options.constraints[k] = options[k];
@@ -451,14 +450,14 @@ class RouteMapper {
     });
 
     let scopeOptions = {};
-    Object.keys(options).forEach((k) => {
+    _.keys(options).forEach((k) => {
       if (!RESOURCE_OPTIONS.includes(k)) {
         scopeOptions[k] = options[k];
         delete options[k];
       }
     });
 
-    if (Object.keys(scopeOptions).length) {
+    if (_.keys(scopeOptions).length) {
       this.scope(scopeOptions, () => {
         this[method](resources.pop(), options, cb);
       });
@@ -489,7 +488,6 @@ class RouteMapper {
     this.$scope = this.$scope.parent;
   }
 
-  //shallowScope(path, options = {}, cb) {
   shallowScope() {
     let [paths, options, cb] = utils.parseArgs(arguments);
     let scope = {
@@ -500,7 +498,6 @@ class RouteMapper {
     this.scope(...paths, options, cb);
     this.$scope = this.$scope.parent;
   }
-
 
   withScopeLevel(kind, cb) {
     if (_.isFunction(cb)) {
@@ -571,16 +568,11 @@ class RouteMapper {
       action = null;
     }
 
-    // let as = this.nameForAction(options.as, action);
-    // delete options.as;
-    //
-    // let route = new Route(this.$scope, path, as, options);
-
-    options.as = this.nameForAction(options.as, action);
+    options.as = _.camelCase(this.nameForAction(options.as, action));
 
     let route = new Route(this.$scope, path, options);
 
-    debug(`route: ${route.verb} ${route.path} ${route.controller}#${route.action}`);
+    debug(`route: ${route.as} ${route.verb} ${route.path} ${route.controller}#${route.action}`);
 
     this.routes.push(route);
   }
@@ -632,7 +624,6 @@ class RouteMapper {
     }
 
     if (prefix && prefix !== '/') {
-      //return normalizePath(prefix.replace(/-/g, '_'));
       return prefix.replace(/-/g, '_');
     }
 
@@ -648,8 +639,7 @@ class RouteMapper {
   }
 
   get isShallow() {
-    return (this.parentResource instanceof Resource) &&
-      this.$scope.get('shallow');
+    return (this.parentResource instanceof Resource) && this.$scope.get('shallow');
   }
 
   get isScopeActionOptions() {
@@ -684,7 +674,7 @@ class RouteMapper {
   }
 
   isCanonicalAction(action) {
-    return this.isResourceMethodScope && CANONICAL_ACTIONS.includes(action);
+    return this.isResourceMethodScope && Actions.CANONICAL_ACTIONS.includes(action);
   }
 
   isUsingMatchShorthand(path, options) {
@@ -694,7 +684,7 @@ class RouteMapper {
   scopeActionOptions() {
     let options = this.$scope.get('options');
     let o = {};
-    Object.keys(options)
+    _.keys(options)
       .forEach((k) => {
         if (k === 'only' || k === 'except') {
           o[k] = options[k];
@@ -708,6 +698,8 @@ class RouteMapper {
   }
 
 }
+
+_.assign(RouteMapper, Actions);
 
 // HTTP verbs
 [

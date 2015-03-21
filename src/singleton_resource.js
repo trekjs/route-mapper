@@ -3,6 +3,11 @@ import { SINGLETON_ACTIONS } from 'actions';
 import { plural } from 'pluralize';
 import Resource from './resource';
 
+/**
+ * Singleton Resource
+ *
+ * @class SingletonResource
+ */
 class SingletonResource extends Resource {
 
   constructor(entities, options) {
@@ -19,13 +24,11 @@ class SingletonResource extends Resource {
   get plural() {
     if (!has(this, '_plural')) this._plural = plural(this.name);
     return this._plural;
-    //return  this._plural ?= plural(this.name);
   }
 
   get singular() {
     if (!has(this, '_singular')) this._singular = this.name;
     return this._singular;
-    //return this._singular ?= this.name;
   }
 
   get memberName() {
