@@ -1,4 +1,4 @@
-import RouteMapper from '../src/route_mapper';
+import RouteMapper from '../src/RouteMapper';
 
 let routeMapper = new RouteMapper();
 
