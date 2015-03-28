@@ -7,8 +7,12 @@ let routeMapper = new RouteMapper();
 routeMapper
   .root('welcome#index')
   .resources('photos')
-  .namespace('api', { path: '/' }, () => {
-    routeMapper.scope({ module: 'v1' }, () => {
+  .namespace('api', {
+    path: '/'
+  }, () => {
+    routeMapper.scope({
+      module: 'v1'
+    }, () => {
       routeMapper.resources('users');
     });
   });

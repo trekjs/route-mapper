@@ -13,7 +13,11 @@ routeMapper
   .resources('posts', () => {
     routeMapper.resources('comments');
   })
-  .scope({ path: '~:username?', module: 'users', as: 'user' }, () => {
+  .scope({
+    path: '~:username?',
+    module: 'users',
+    as: 'user'
+  }, () => {
     routeMapper.root('welcome#index');
   });
 
