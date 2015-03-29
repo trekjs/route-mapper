@@ -1,8 +1,8 @@
 {
   "name": "route-mapper",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Route Mapper - Generate Rails Style Routing & RESTful Routes",
-  "main": "lib/route_mapper",
+  "main": "lib/RouteMapper",
   "scripts": {
     "test": "DEBUG=route-mapper make test",
     "prepublish": "make clean && make build"
