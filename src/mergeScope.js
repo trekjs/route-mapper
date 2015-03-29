@@ -1,3 +1,11 @@
+/*!
+ * route-mapper - lib/mergeScope
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 import assign from 'lodash-node/modern/object/assign';
 import { normalizePath } from './utils';
 

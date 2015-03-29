@@ -18,8 +18,14 @@ import Resource from './Resource';
  */
 class SingletonResource extends Resource {
 
-  constructor(entities, options) {
-    super(entities, options);
+  /**
+   * @constructor
+   * @param {String} entity         - The singleton resource name
+   * @param {Object} options        - Defaults to empby object
+   * @param {Boolean} [camelCase]   - Defaults to true
+   */
+  constructor(entity, options = Object.create(null), camelCase = true) {
+    super(entity, options, camelCase);
     this.as = null;
     this.controller = options.controller || this.plural;
     this.as = options.as;
@@ -29,20 +35,40 @@ class SingletonResource extends Resource {
     return SINGLETON_ACTIONS;
   }
 
+  /**
+   * @example
+   *  resource.memberName
+   *  // => photos
+   */
   get plural() {
     if (!has(this, '_plural')) this._plural = pluralize.plural(this.name);
     return this._plural;
   }
 
+  /**
+   * @example
+   *  resource.memberName
+   *  // => photo
+   */
   get singular() {
     if (!has(this, '_singular')) this._singular = this.name;
     return this._singular;
   }
 
+  /**
+   * @example
+   *  resource.memberName
+   *  // => photo
+   */
   get memberName() {
     return this.singular;
   }
 
+  /**
+   * @example
+   *  resource.collectionName
+   *  // => photo
+   */
   get collectionName() {
     return this.singular;
   }

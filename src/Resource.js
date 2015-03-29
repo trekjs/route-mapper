@@ -57,20 +57,43 @@ class Resource {
     return isString(this.as) ? this.as : this._name;
   }
 
+  /**
+   * @example
+   *  resource.plural
+   *  // => photos
+   */
   get plural() {
     if (!has(this, '_plural')) this._plural = pluralize.plural(this.name);
     return this._plural;
   }
 
+  /**
+   * @example
+   *  resource.singular
+   *  // => photo
+   */
   get singular() {
     if (!has(this, '_singular')) this._singular = pluralize.singular(this.name);
     return this._singular;
   }
 
+  /**
+   * @example
+   *  resource.memberName
+   *  // => photo
+   */
   get memberName() {
     return this.singular;
   }
 
+  /**
+   * @example
+   *  resource.collectionName
+   *  // => index
+   *  // => photoIndex
+   *  // => photo_index
+   *  // => photo
+   */
   get collectionName() {
     let name = '';
     if (!this.plural) {
@@ -93,6 +116,13 @@ class Resource {
     return this.path;
   }
 
+  /**
+   * @example
+   *  resource.memberScope
+   *  // => photos/:id
+   *  // => photos/:photoId/users/id
+   *  // => photos/:photo_id/users/id
+   */
   get memberScope() {
     return `${this.path}/:${this.param}`;
   }
@@ -101,11 +131,25 @@ class Resource {
     return this.memberScope;
   }
 
+  /**
+   * @example
+   *  resource.nestedParam
+   *  // => id
+   *  // => photoId
+   *  // => photo_id
+   */
   get nestedParam() {
     let param = this.param !== 'id' ? this.param : this.singular + '_' + this.param;
     return this.camelCase ? camelCase(param) : param;
   }
 
+  /**
+   * @example
+   *  resource.nestedScope
+   *  // => photos/:id
+   *  // => photos/:photoId/users/:id
+   *  // => photos/:photo_id/users/:id
+   */
   get nestedScope() {
     return `${this.path}/:${this.nestedParam}`;
   }
@@ -114,6 +158,11 @@ class Resource {
     return this.shallow;
   }
 
+  /**
+   * @example
+   *  resource.newScope('edit')
+   *  // => photos/edit
+   */
   newScope(newPath) {
     return `${this.path}/${newPath}`;
   }

@@ -4,12 +4,11 @@ let routeMapper = new RouteMapper();
 
 routeMapper
 
-  .resources('photos', { as: 'google' }, () => {
+  .resources('photos', { as: 'google', format: false }, () => {
     routeMapper.resources('books', () => {
       routeMapper.resources('users')
     });
   })
-
 
   .root('welcome#index')
 

@@ -3,6 +3,7 @@ MOCHA = ./node_modules/.bin/mocha
 BABEL = ./node_modules/.bin/babel
 BABEL_NODE = ./node_modules/.bin/babel-node
 ISTANBUL = ./node_modules/.bin/istanbul
+ESLINT = ./node_modules/.bin/eslint
 SRC = lib/*.js
 
 TESTS = test/*.test.js
@@ -34,6 +35,9 @@ test:
 
 bench:
 	@$(MAKE) -C benchmarks
+
+lint:
+	@$(ESLINT) src
 
 koa:
 	@$(BABEL_NODE) ./examples/koa/index.js

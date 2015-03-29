@@ -1,5 +1,5 @@
 /*!
- * route-mapper
+ * route-mapper - lib/RouteMapper
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
@@ -10,7 +10,7 @@ import Actions from 'actions';
 import _debug from 'debug';
 import delegate from 'delegates';
 import _ from 'lodash-node';
-import * as utils from './utils';
+import utils from './utils';
 import mergeScope from './mergeScope';
 import Scope from './Scope';
 import Resource from './Resource';
@@ -40,18 +40,34 @@ const RESOURCE_OPTIONS = [
   'concerns'
 ];
 
+/*
+const URL_OPTIONS = [
+  'protocol',
+  'host',
+  'domain',
+  'subdomain',
+  'port',
+  'path'
+];
+*/
+
 const DEFAULT_OPTIONS = {
   pathNames: DEFAULT_RESOURCES_PATH_NAMES,
   camelCase: true
 };
 
 /**
- * @class RouteMapper
+ * RouteMapper
+ *
+ * @class
  * @public
  */
 class RouteMapper {
 
-  constructor(options = DEFAULT_OPTIONS) {
+  /**
+   * @param {Object} options
+   */
+  constructor(options = Object.create(DEFAULT_OPTIONS)) {
     _.defaults(options, DEFAULT_OPTIONS);
     let { camelCase, pathNames } = options;
     this.camelCase = camelCase;
@@ -63,9 +79,32 @@ class RouteMapper {
     this.routes = [];
   }
 
-  /*
-   * @method
-   * @public
+  /**
+   * Scopes a set of routes to the given default options.
+   *
+   * @example
+   *  scope({ path: ':account_id', as: 'acount' }, () => {
+   *    resources('posts')
+   *  })
+   *  // => /accounts/:account_id/photos
+   *
+   *  scope({ module: 'admin' }, () => {
+   *    resources('posts')
+   *  })
+   *  // => /posts  admin/posts
+   *
+   *  scope({ path: '/admin' }, () => {
+   *    resources('posts')
+   *  })
+   *  // => /admin/posts
+   *
+   *  scope({ as: 'sekret' }, () => {
+   *    resources('posts')
+   *  })
+   *
+   * @method scope
+   *
+   * @return {RouteMapper} this
    */
   scope() {
     let [paths, options, cb] = utils.parseArgs(arguments);
@@ -109,7 +148,7 @@ class RouteMapper {
       }
 
       if (value) {
-        scope[option] = mergeScope[option](this.$scope.get(option), value, this.camelCase);
+        scope[option] = mergeScope[option](this.$scope.get(option), value);
       }
     });
 
@@ -124,6 +163,27 @@ class RouteMapper {
     }
 
     return this;
+  }
+
+  /**
+   * Scopes routes to a specific controller.
+   *
+   * @example
+   *  controller('food', () => {
+   *    match('bacon', { action: 'bacon' })
+   *  })
+   *
+   * @method controller
+   *
+   * @return {RouteMapper} this
+   */
+  controller(controller, options = {}, cb) {
+    if (_.isFunction(options)) {
+      cb = options;
+      options = {};
+    }
+    options.controller = controller;
+    return this.scope(options, cb);
   }
 
   match() {
@@ -236,7 +296,7 @@ class RouteMapper {
         }
 
         if (actions.includes('new')) {
-          this['new'](() => {
+          this.new(() => {
             this.get('new');
           });
         }
@@ -279,7 +339,7 @@ class RouteMapper {
         });
 
         if (actions.includes('new')) {
-          this['new'](() => {
+          this.new(() => {
             this.get('new');
           });
         }
@@ -372,15 +432,6 @@ class RouteMapper {
     }
   }
 
-  controller(controller, options = {}, cb) {
-    if (_.isFunction(options)) {
-      cb = options;
-      options = {};
-    }
-    options.controller = controller;
-    return this.scope(options, cb);
-  }
-
   constraints(constraints = {}, cb) {
     return this.scope({ constraints: constraints }, cb);
   }
@@ -406,7 +457,7 @@ class RouteMapper {
   }
 
   concerns() {
-    let [names, options, cb] = parseArgs(arguments);
+    let [names, options, cb] = utils.parseArgs(arguments);
     names.forEach(name => {
       let concern = this._concerns[name];
       if (_.isFunction(concern)) {
@@ -525,7 +576,7 @@ class RouteMapper {
         this.put('update');
       }
       if (actions.includes('destroy')) {
-        this['delete']('destroy');
+        this.delete('destroy');
       }
     });
   }
@@ -562,7 +613,7 @@ class RouteMapper {
     action = String(action);
     if (/^[\w\-\/]+$/.test(action)) {
       if (!action.includes('/') && !_.has(options, 'action')) {
-        options.action = action.replace(/-/g, '_')
+        options.action = action.replace(/-/g, '_');
       }
     } else {
       action = null;
@@ -699,6 +750,7 @@ class RouteMapper {
 
 }
 
+// Extends Const Actions
 _.assign(RouteMapper, Actions);
 
 // HTTP verbs
@@ -708,11 +760,13 @@ _.assign(RouteMapper, Actions);
   'post',
   'put',
   'patch',
-  // delete
   'delete',
+  // alias delete
   'del'
 ].forEach((verb) => {
-  RouteMapper.prototype[verb] = function() {
+  let method = verb;
+  if (verb === 'del') verb = 'delete';
+  RouteMapper.prototype[method] = function() {
     return this._mapMethod(verb, arguments);
   };
 });
@@ -720,8 +774,8 @@ _.assign(RouteMapper, Actions);
 // Delegates
 delegate(RouteMapper.prototype, '$scope')
   .getter('isResources')
-  .getter('isResourceScope')
   .getter('isNestedScope')
-  .getter('isResourceMethodScope')
+  .getter('isResourceScope')
+  .getter('isResourceMethodScope');
 
 export default RouteMapper;

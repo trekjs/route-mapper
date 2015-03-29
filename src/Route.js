@@ -1,8 +1,21 @@
+/*!
+ * route-mapper - lib/Route
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 import _ from 'lodash-node';
 import delegate from 'delegates';
 import pathToRegexp from 'path-to-regexp';
-import * as utils from './utils';
+import utils from './utils';
 
+/**
+ * Route
+ *
+ * @class
+ */
 class Route {
 
   constructor($scope, path, options) {
@@ -14,18 +27,19 @@ class Route {
     let ast = pathToRegexp(this.path);
     let pathParams = ast.keys;
 
-    options = this.normalizeOptions(options, this.format, pathParams, ast, $scope.get('module'));
-
+    this.options = this.normalizeOptions(options, this.format, pathParams, ast, $scope.get('module'));
   }
 
-  // @private
+  /**
+   * @private
+   */
   build($scope, path, options) {
     _.defaults(options, $scope.get('options'));
 
     this.defaultController = options.controller || $scope.get('controller');
     this.defaultAction = options.action || $scope.get('action');
 
-    this.defaults = _.defaults(options.defaults || {}, $scope.get('defaults') || {});
+    // this.defaults = _.defaults(options.defaults || {}, $scope.get('defaults') || {});
     this.$scope = $scope;
     this.options = options;
 
@@ -35,7 +49,7 @@ class Route {
     delete options.shallow_path;
     delete options.shallow_prefix;
     delete options.shallow;
-    delete options.defaults;
+    // delete options.defaults;
     delete options.controller;
     delete options.action;
   }
@@ -59,9 +73,9 @@ class Route {
   normalizePath(path, format) {
     path = utils.normalizePath(path);
     if (format === true) {
-      return `${path}.:format`
+      return `${path}.:format`;
     } else if (this.isOptionalFormat(path, format)) {
-      return `${path}.:format?`
+      return `${path}.:format?`;
     } else {
       return path;
     }
@@ -73,7 +87,7 @@ class Route {
 
   normalizeOptions(options, formatted, pathParams, pathAst, modyoule) {
     if (pathParams.filter(p => {
-        return p.name === 'controller'
+        return p.name === 'controller';
       }).length) {
       if (modyoule) {
         throw new Error(`'controller' segment is not allowed within a namespace block`);
@@ -112,7 +126,7 @@ class Route {
       hash[name] = cb(part);
     } else {
       if (!pathParams.filter(p => {
-          return p.name === name
+          return p.name === name;
         }).length) {
         throw new Error(`Missing :${name} key on routes definition, please check your routes.`);
       }
@@ -140,6 +154,6 @@ class Route {
 delegate(Route.prototype, 'options')
   .getter('format')
   .getter('as')
-  .getter('to')
+  .getter('to');
 
 export default Route;

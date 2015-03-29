@@ -1,3 +1,11 @@
+/*!
+ * route-mapper - lib/Scope
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 import has from 'lodash-node/modern/object/has';
 
 /**
@@ -41,12 +49,18 @@ export const RESOURCE_SCOPES = ['resource', 'resources'];
 export const RESOURCE_METHOD_SCOPES = ['collection', 'member', 'new'];
 
 /**
- * @class Scope
- * @public
+ * Scope
+ *
+ * @class
  */
 export default class Scope {
 
-  constructor(current, parent = {}, scopeLevel = null) {
+  /**
+   * @param {Object} current    - The current scope
+   * @param {Object} parent     - The parent scope
+   * @param {String} scopeLevel - The scope level
+   */
+  constructor(current, parent = {}, scopeLevel = '') {
     this.current = current;
     this.parent = parent;
     this.scopeLevel = scopeLevel;

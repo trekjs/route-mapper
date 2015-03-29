@@ -1,5 +1,5 @@
 /*!
- * route-mapper - utils
+ * route-mapper - lib/utils
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
@@ -19,12 +19,12 @@ import { normalize, resolve } from 'path';
  * @param {String} to
  * @return {Array} [ controller, action ]
  */
-export const splitTo = (to = '') => {
+function splitTo(to = '') {
   if (/#/.test(to)) {
     return to.split('#');
   }
   return [];
-};
+}
 
 /**
  * Normalize Path
@@ -32,21 +32,31 @@ export const splitTo = (to = '') => {
  * @param {String} path
  * @return {String}
  */
-export const normalizePath = path => {
+function normalizePath(path) {
   path = '/' + path;
   path = resolve(normalize(path));
   path = path.replace(/(%[a-f0-9]{2})/g, ($1) => $1.toUpperCase());
   if (path === '') path = '/';
   return path;
-};
+}
 
 /**
  * Parse the arguments and return an special array.
  *
+ * @example
+ *  parseArgs(path)
+ *  // => [[path], {}, undefined]
+ *  parseArgs(path, cb)
+ *  // => [[path], {}, cb]
+ *  parseArgs(path, options)
+ *  // => [[path], options, undefined]
+ *  parseArgs(options)
+ *  // => [[], options, undefined]
+ *
  * @param {Array|ArrayLike} args
  * @return {Array} [ [path, path], {}, function ]
  */
-export const parseArgs = args => {
+function parseArgs(args) {
   args = [...args];
   let l = args.length,
     last = args[l - 1],
@@ -69,3 +79,5 @@ export const parseArgs = args => {
   }
   return [_.compact(_.flatten(paths, true)), options || {}, cb];
 }
+
+export default { splitTo, normalizePath, parseArgs };
