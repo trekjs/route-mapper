@@ -39,7 +39,7 @@ class Route {
     this.defaultController = options.controller || $scope.get('controller');
     this.defaultAction = options.action || $scope.get('action');
 
-    // this.defaults = _.defaults(options.defaults || {}, $scope.get('defaults') || {});
+    this.defaults = _.defaults(options.defaults || {}, $scope.get('defaults') || {});
     this.$scope = $scope;
     this.options = options;
 
@@ -49,7 +49,7 @@ class Route {
     delete options.shallow_path;
     delete options.shallow_prefix;
     delete options.shallow;
-    // delete options.defaults;
+    delete options.defaults;
     delete options.controller;
     delete options.action;
   }
