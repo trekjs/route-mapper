@@ -40,7 +40,6 @@ const RESOURCE_OPTIONS = [
   'concerns'
 ];
 
-/*
 const URL_OPTIONS = [
   'protocol',
   'host',
@@ -49,7 +48,6 @@ const URL_OPTIONS = [
   'port',
   'path'
 ];
-*/
 
 const DEFAULT_OPTIONS = {
   pathNames: DEFAULT_RESOURCES_PATH_NAMES,
