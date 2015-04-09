@@ -1,5 +1,5 @@
 /*!
- * route-mapper - lib/SingletonResource
+ * route-mapper - SingletonResource
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

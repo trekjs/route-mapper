@@ -1,5 +1,5 @@
 /*!
- * route-mapper - lib/utils
+ * route-mapper - utils
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

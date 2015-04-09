@@ -1,5 +1,5 @@
 /*!
- * route-mapper - lib/Scope
+ * route-mapper - Scope
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

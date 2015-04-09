@@ -4,8 +4,11 @@
   "description": "Route Mapper - Generate Rails Style Routing & RESTful Routes",
   "main": "lib/RouteMapper",
   "scripts": {
-    "test": "DEBUG=route-mapper make test",
-    "prepublish": "make clean && make build"
+    "compile": "babel src --out-dir lib --copy-files",
+    "prepublish": "npm run compile",
+    "test": "mocha --require babel/register --require should --reporter spec --bail --check-leaks test/**/*.test.js",
+    "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly -- --require should --reporter spec --check-leaks test/**/*.test.js",
+    "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --require should --reporter dot --check-leaks test/**/*.test.js"
   },
   "repository": "trekjs/route-mapper",
   "keywords": [
@@ -21,11 +24,12 @@
   "author": "Fangdun Cai <cfddream@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^4.x",
-    "babel-eslint": "^2.0.2",
-    "eslint": "^0.18.0",
+    "babel": "^5.x",
+    "babel-eslint": "^2.x",
+    "eslint": "^0.18.x",
     "express": "^4.x",
-    "koa": "^0.18.x",
+    "isparta": "^3.x",
+    "koa": "^0.19.x",
     "koa-router": "^4.x",
     "mocha": "^2.x",
     "should": "^5.x"

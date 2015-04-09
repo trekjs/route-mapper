@@ -1,5 +1,5 @@
 /*!
- * route-mapper - lib/mergeScope
+ * route-mapper - mergeScope
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

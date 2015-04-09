@@ -1,5 +1,5 @@
 /*!
- * route-mapper - lib/RouteMapper
+ * route-mapper - RouteMapper
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
