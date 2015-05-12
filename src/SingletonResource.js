@@ -4,9 +4,7 @@
  * MIT Licensed
  */
 
-'use strict';
-
-import has from 'lodash-node/modern/object/has';
+import _ from 'lodash';
 import pluralize from 'pluralize';
 import { SINGLETON_ACTIONS } from 'actions';
 import Resource from './Resource';
@@ -41,7 +39,7 @@ class SingletonResource extends Resource {
    *  // => photos
    */
   get plural() {
-    if (!has(this, '_plural')) this._plural = pluralize.plural(this.name);
+    if (!_.has(this, '_plural')) this._plural = pluralize.plural(this.name);
     return this._plural;
   }
 
@@ -51,7 +49,7 @@ class SingletonResource extends Resource {
    *  // => photo
    */
   get singular() {
-    if (!has(this, '_singular')) this._singular = this.name;
+    if (!_.has(this, '_singular')) this._singular = this.name;
     return this._singular;
   }
 

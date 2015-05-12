@@ -4,11 +4,7 @@
  * MIT Licensed
  */
 
-'use strict';
-
-import has from 'lodash-node/modern/object/has';
-import isString from 'lodash-node/modern/lang/isString';
-import camelCase from 'lodash-node/modern/string/camelCase';
+import _ from 'lodash';
 import pluralize from 'pluralize';
 import { ACTIONS } from 'actions';
 
@@ -43,8 +39,8 @@ class Resource {
   get actions() {
     let only = this.options.only;
     let except = this.options.except;
-    if (isString(only)) only = [only];
-    if (isString(except)) except = [except];
+    if (_.isString(only)) only = [only];
+    if (_.isString(except)) except = [except];
     if (only && only.length) {
       return only;
     } else if (except && except.length) {
@@ -54,7 +50,7 @@ class Resource {
   }
 
   get name() {
-    return isString(this.as) ? this.as : this._name;
+    return _.isString(this.as) ? this.as : this._name;
   }
 
   /**
@@ -63,7 +59,7 @@ class Resource {
    *  // => photos
    */
   get plural() {
-    if (!has(this, '_plural')) this._plural = pluralize.plural(this.name);
+    if (!_.has(this, '_plural')) this._plural = pluralize.plural(this.name);
     return this._plural;
   }
 
@@ -73,7 +69,7 @@ class Resource {
    *  // => photo
    */
   get singular() {
-    if (!has(this, '_singular')) this._singular = pluralize.singular(this.name);
+    if (!_.has(this, '_singular')) this._singular = pluralize.singular(this.name);
     return this._singular;
   }
 
@@ -103,7 +99,7 @@ class Resource {
     } else {
       name = this.plural;
     }
-    return this.camelCase ? camelCase(name) : name;
+    return this.camelCase ? _.camelCase(name) : name;
   }
 
   get resourceScope() {
@@ -140,7 +136,7 @@ class Resource {
    */
   get nestedParam() {
     let param = this.param !== 'id' ? this.param : this.singular + '_' + this.param;
-    return this.camelCase ? camelCase(param) : param;
+    return this.camelCase ? _.camelCase(param) : param;
   }
 
   /**

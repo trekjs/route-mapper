@@ -4,9 +4,7 @@
  * MIT Licensed
  */
 
-'use strict';
-
-import assign from 'lodash-node/modern/object/assign';
+import _ from 'lodash';
 import { normalizePath } from './utils';
 
 export default {
@@ -57,12 +55,12 @@ export default {
   },
 
   options(parent, child) {
-    parent = assign(parent || {});
+    parent = _.assign(parent || {});
     let excepts = this.overrideKeys(child);
     for (let key of excepts) {
       delete parent[key];
     }
-    return assign(parent, child);
+    return _.assign(parent, child);
   },
 
   shallow(parent, child) {

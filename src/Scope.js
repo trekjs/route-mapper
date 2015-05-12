@@ -4,9 +4,7 @@
  * MIT Licensed
  */
 
-'use strict';
-
-import has from 'lodash-node/modern/object/has';
+import _ from 'lodash';
 
 /**
  * Options keywords.
@@ -104,8 +102,8 @@ export default class Scope {
   }
 
   get(key, value) {
-    if (has(this.current, key)) return this.current[key];
-    if (has(this.parent, key)) return this.parent[key];
+    if (_.has(this.current, key)) return this.current[key];
+    if (_.has(this.parent, key)) return this.parent[key];
     if (this.parent instanceof Scope) return this.parent.get(key, value);
     return value;
   }

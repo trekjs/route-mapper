@@ -4,12 +4,10 @@
  * MIT Licensed
  */
 
-'use strict';
-
 import Actions from 'actions';
 import _debug from 'debug';
 import delegate from 'delegates';
-import _ from 'lodash-node';
+import _ from 'lodash';
 import utils from './utils';
 import mergeScope from './mergeScope';
 import Scope from './Scope';

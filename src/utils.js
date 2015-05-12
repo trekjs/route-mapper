@@ -4,9 +4,7 @@
  * MIT Licensed
  */
 
-'use strict';
-
-import _ from 'lodash-node';
+import _ from 'lodash';
 import { normalize, resolve } from 'path';
 
 /**
