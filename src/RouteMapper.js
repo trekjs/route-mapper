@@ -65,7 +65,9 @@ class RouteMapper {
    */
   constructor(options = Object.create(DEFAULT_OPTIONS)) {
     _.defaults(options, DEFAULT_OPTIONS);
-    let { camelCase, pathNames } = options;
+    let {
+      camelCase, pathNames
+    } = options;
     this.camelCase = camelCase;
     this.$scope = new Scope({
       pathNames: pathNames
@@ -103,7 +105,7 @@ class RouteMapper {
    * @return {RouteMapper} this
    */
   scope() {
-    let [paths, options, cb] = utils.parseArgs(arguments);
+    let [paths, options, cb] = utils.parseArgs(...arguments);
     let scope = {};
 
     if (paths.length) {
@@ -183,7 +185,7 @@ class RouteMapper {
   }
 
   match() {
-    let [paths, options, cb] = utils.parseArgs(arguments);
+    let [paths, options, cb] = utils.parseArgs(...arguments);
 
     let to = options.to;
     if (to) {
@@ -258,13 +260,13 @@ class RouteMapper {
   mount() {}
 
   _mapMethod(method, args) {
-    let [paths, options, cb] = utils.parseArgs(args);
+    let [paths, options, cb] = utils.parseArgs(...args);
     options.verb = method;
     return this.match(paths, options, cb);
   }
 
   resource() {
-    let [resources, options, cb] = utils.parseArgs(arguments);
+    let [resources, options, cb] = utils.parseArgs(...arguments);
     let kind = 'resource';
 
     if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
@@ -304,7 +306,7 @@ class RouteMapper {
   }
 
   resources() {
-    let [resources, options, cb] = utils.parseArgs(arguments);
+    let [resources, options, cb] = utils.parseArgs(...arguments);
     let kind = 'resources';
 
     if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
@@ -403,7 +405,7 @@ class RouteMapper {
   }
 
   namespace() {
-    let args = utils.parseArgs(arguments);
+    let args = utils.parseArgs(...arguments);
     if (this.isResourceScope) {
       this.nested(() => {
         _namespace.apply(this, args);
@@ -429,15 +431,21 @@ class RouteMapper {
   }
 
   constraints(constraints = {}, cb) {
-    return this.scope({ constraints: constraints }, cb);
+    return this.scope({
+      constraints: constraints
+    }, cb);
   }
 
   defaults(defaults = {}, cb) {
-    return this.scope({ defaults: defaults }, cb);
+    return this.scope({
+      defaults: defaults
+    }, cb);
   }
 
   shallow(cb) {
-    return this.scope({ shallow: true }, cb);
+    return this.scope({
+      shallow: true
+    }, cb);
   }
 
   concern(name, callable, cb) {
@@ -453,7 +461,7 @@ class RouteMapper {
   }
 
   concerns() {
-    let [names, options, cb] = utils.parseArgs(arguments);
+    let [names, options, cb] = utils.parseArgs(...arguments);
     names.forEach(name => {
       let concern = this._concerns[name];
       if (_.isFunction(concern)) {
@@ -536,7 +544,7 @@ class RouteMapper {
   }
 
   shallowScope() {
-    let [paths, options, cb] = utils.parseArgs(arguments);
+    let [paths, options, cb] = utils.parseArgs(...arguments);
     let scope = {
       as: this.$scope.get('shallowPrefix'),
       path: this.$scope.get('shallowPath')

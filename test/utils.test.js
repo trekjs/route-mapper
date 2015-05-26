@@ -38,17 +38,17 @@ describe('Utils', () => {
     assert.deepEqual({}, a[1]);
     assert.equal(undefined, a[2]);
 
-    a = utils.parseArgs(['posts', () => {}]);
+    a = utils.parseArgs('posts', () => {});
     assert.deepEqual(['posts'], a[0]);
     assert.deepEqual({}, a[1]);
     assert.equal('function', typeof a[2]);
 
-    a = utils.parseArgs(['posts', {}]);
+    a = utils.parseArgs('posts', {});
     assert.deepEqual(['posts'], a[0]);
     assert.deepEqual({}, a[1]);
     assert.equal(undefined, a[2]);
 
-    a = utils.parseArgs([{}, () => {}]);
+    a = utils.parseArgs({}, () => {});
     assert.deepEqual([], a[0]);
     assert.deepEqual({}, a[1]);
     assert.equal('function', typeof a[2]);
@@ -63,7 +63,7 @@ describe('Utils', () => {
     assert.deepEqual({}, a[1]);
     assert.equal('function', typeof a[2]);
 
-    a = utils.parseArgs(['posts', 'tags', {}, () => {}]);
+    a = utils.parseArgs('posts', 'tags', {}, () => {});
     assert.deepEqual(['posts', 'tags'], a[0]);
     assert.deepEqual({}, a[1]);
     assert.equal('function', typeof a[2]);

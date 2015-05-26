@@ -54,15 +54,14 @@ function normalizePath(path) {
  * @param {Array|ArrayLike} args
  * @return {Array} [ [path, path], {}, function ]
  */
-function parseArgs(args) {
-  args = [...args];
+function parseArgs(...args) {
   let l = args.length,
     last = args[l - 1],
     cb, options, paths;
   if (_.isFunction(last)) {
     cb = last;
     args.pop();
-    let res = parseArgs(args);
+    let res = parseArgs(...args);
     paths = res[0];
     options = res[1];
   } else if (_.isObject(last) && !_.isArray(last)) {
@@ -71,11 +70,13 @@ function parseArgs(args) {
     paths = args;
   } else if (!last && l > 0) {
     args.pop();
-    return parseArgs(args);
+    return parseArgs(...args);
   } else {
     paths = args;
   }
   return [_.compact(_.flatten(paths, true)), options || {}, cb];
 }
 
-export default { splitTo, normalizePath, parseArgs };
+export default {
+  splitTo, normalizePath, parseArgs
+};

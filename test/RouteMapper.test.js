@@ -39,4 +39,6 @@ routeMapper
       .resource('seller', { format: false, controller: 'ggggg' })
   })
 
-  .get(':controller/:action')
+  .get(':controller/:action');
+
+// console.log(routeMapper.routes)
