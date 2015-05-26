@@ -48,7 +48,9 @@ describe('SingletonResource', () => {
   });
 
   it('as', () => {
-    let r = new SingletonResource('person', { as: 'me' }, false);
+    let r = new SingletonResource('person', {
+      as: 'me'
+    }, false);
     r.name.should.be.equal('me');
     r.path.should.be.equal('person');
     r.controller.should.be.equal('people');

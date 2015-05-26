@@ -48,7 +48,9 @@ describe('Resource', () => {
   });
 
   it('as', () => {
-    let r = new Resource('books', { as: 'iBooks' }, false);
+    let r = new Resource('books', {
+      as: 'iBooks'
+    }, false);
     r.name.should.be.equal('iBooks');
     r.path.should.be.equal('books');
     r.controller.should.be.equal('books');
