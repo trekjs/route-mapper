@@ -57,15 +57,13 @@ function normalizePath(path) {
 function parseArgs(...args) {
   let l = args.length,
     last = args[l - 1],
-    cb, options, paths;
+    cb, opts, paths;
   if (_.isFunction(last)) {
     cb = last;
     args.pop();
-    let res = parseArgs(...args);
-    paths = res[0];
-    options = res[1];
+    [paths, opts] = parseArgs(...args);
   } else if (_.isObject(last) && !_.isArray(last)) {
-    options = last;
+    opts = last;
     args.pop();
     paths = args;
   } else if (!last && l > 0) {
@@ -74,7 +72,7 @@ function parseArgs(...args) {
   } else {
     paths = args;
   }
-  return [_.compact(_.flatten(paths, true)), options || {}, cb];
+  return [_.compact(_.flatten(paths, true)), opts || {}, cb];
 }
 
 const mergeScope = {
