@@ -26,7 +26,7 @@ describe('SingletonResource', () => {
   });
 
   it('undercase', () => {
-    let r = new SingletonResource('person', {}, false);
+    let r = new SingletonResource('person', { camelCase: false });
     r.name.should.be.equal('person');
     r.controller.should.be.equal('people');
     r.param.should.be.equal('id');
@@ -49,8 +49,9 @@ describe('SingletonResource', () => {
 
   it('as', () => {
     let r = new SingletonResource('person', {
-      as: 'me'
-    }, false);
+      as: 'me',
+      camelCase: false
+    });
     r.name.should.be.equal('me');
     r.path.should.be.equal('person');
     r.controller.should.be.equal('people');

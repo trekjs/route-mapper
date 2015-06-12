@@ -26,7 +26,7 @@ describe('Resource', () => {
   });
 
   it('undercase', () => {
-    let r = new Resource('books', {}, false);
+    let r = new Resource('books', { camelCase: false });
     r.name.should.be.equal('books');
     r.controller.should.be.equal('books');
     r.param.should.be.equal('id');
@@ -49,8 +49,9 @@ describe('Resource', () => {
 
   it('as', () => {
     let r = new Resource('books', {
-      as: 'iBooks'
-    }, false);
+      as: 'iBooks',
+      camelCase: false
+    });
     r.name.should.be.equal('iBooks');
     r.path.should.be.equal('books');
     r.controller.should.be.equal('books');

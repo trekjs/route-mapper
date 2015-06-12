@@ -24,10 +24,10 @@
   "author": "Fangdun Cai <cfddream@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^5.4.7",
-    "babel-eslint": "^3.1.9",
+    "babel": "^5.5.4",
+    "babel-eslint": "^3.1.15",
     "debug": "~2.2.0",
-    "eslint": "^0.21.2",
+    "eslint": "^0.22.1",
     "express": "^4.12.4",
     "isparta": "^3.x",
     "koa": "^0.21.0",

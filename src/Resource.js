@@ -8,6 +8,8 @@ import _ from 'lodash';
 import pluralize from 'pluralize';
 import { ACTIONS } from 'actions';
 
+const OPTIONS = { camelCase: true, param: 'id' };
+
 /**
  * Resource
  *
@@ -19,17 +21,19 @@ class Resource {
    * @constructor
    * @param {String} entities       - The resource name
    * @param {Object} options        - Defaults to empby object
-   * @param {Boolean} [camelCase]   - Defaults to true
    */
-  constructor(entities, options = Object.create(null), camelCase = true) {
+  constructor(entities, options = {}) {
+    options = _.partialRight(_.assign, function(v, o, k) {
+      return _.has(options, k) ? v : o;
+    })(options, OPTIONS);
     this._name = String(entities);
     this.path = options.path || this._name;
     this.controller = options.controller || this._name;
     this.as = options.as;
-    this.param = options.param || 'id';
+    this.param = options.param;
     this.shallow = false;
     this.options = options;
-    this.camelCase = camelCase;
+    this.camelCase = options.camelCase;
   }
 
   get defaultActions() {

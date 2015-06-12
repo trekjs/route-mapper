@@ -9,7 +9,6 @@ import _debug from 'debug';
 import delegate from 'delegates';
 import _ from 'lodash';
 import utils from './utils';
-import mergeScope from './mergeScope';
 import Scope from './Scope';
 import Resource from './Resource';
 import SingletonResource from './SingletonResource';
@@ -48,8 +47,7 @@ const URL_OPTIONS = [
 ];
 
 const DEFAULT_OPTIONS = {
-  pathNames: DEFAULT_RESOURCES_PATH_NAMES,
-  camelCase: true
+  pathNames: DEFAULT_RESOURCES_PATH_NAMES
 };
 
 /**
@@ -65,12 +63,8 @@ class RouteMapper {
    */
   constructor(options = Object.create(DEFAULT_OPTIONS)) {
     _.defaults(options, DEFAULT_OPTIONS);
-    let {
-      camelCase, pathNames
-    } = options;
-    this.camelCase = camelCase;
     this.$scope = new Scope({
-      pathNames: pathNames
+      pathNames: options.pathNames
     });
     this.namedRoutes = Object.create(null);
     this.nesting = [];
@@ -146,7 +140,7 @@ class RouteMapper {
       }
 
       if (value) {
-        scope[option] = mergeScope[option](this.$scope.get(option), value);
+        scope[option] = utils.mergeScope[option](this.$scope.get(option), value);
       }
     });
 
@@ -275,7 +269,7 @@ class RouteMapper {
 
     this.resourceScope(
       kind,
-      new SingletonResource(resources.pop(), options, this.camelCase), () => {
+      new SingletonResource(resources.pop(), options), () => {
 
         if (_.isFunction(cb)) {
           cb.call(this);
@@ -315,7 +309,7 @@ class RouteMapper {
 
     this.resourceScope(
       kind,
-      new Resource(resources.pop(), options, this.camelCase), () => {
+      new Resource(resources.pop(), options), () => {
 
         if (_.isFunction(cb)) {
           cb.call(this);

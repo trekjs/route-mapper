@@ -20,10 +20,9 @@ class SingletonResource extends Resource {
    * @constructor
    * @param {String} entity         - The singleton resource name
    * @param {Object} options        - Defaults to empby object
-   * @param {Boolean} [camelCase]   - Defaults to true
    */
-  constructor(entity, options = Object.create(null), camelCase = true) {
-    super(entity, options, camelCase);
+  constructor(entity, options = {}) {
+    super(entity, options);
     this.as = null;
     this.controller = options.controller || this.plural;
     this.as = options.as;
