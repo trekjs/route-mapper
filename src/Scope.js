@@ -15,36 +15,17 @@ import _ from 'lodash';
  */
 export const OPTIONS = [
   'path',
-  'shallowPath',
   'as',
-  'shallowPrefix',
   'module',
   'controller',
   'action',
   'pathNames',
-  'shallow',
-  'constraints',
-  'defaults',
   'options'
 ];
 
-/**
- * Resource Scopes.
- *
- * @const
- * @static
- * @public
- */
-export const RESOURCE_SCOPES = ['resource', 'resources'];
+const RESOURCE_SCOPES = ['resource', 'resources'];
 
-/**
- * Resource Method Scopes.
- *
- * @const
- * @static
- * @public
- */
-export const RESOURCE_METHOD_SCOPES = ['collection', 'member', 'new'];
+const RESOURCE_METHOD_SCOPES = ['collection', 'member', 'new'];
 
 /**
  * Scope

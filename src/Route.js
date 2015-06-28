@@ -5,7 +5,6 @@
  */
 
 import _ from 'lodash';
-import delegate from 'delegates';
 import pathToRegexp from 'path-to-regexp';
 import utils from './utils';
 
@@ -25,7 +24,7 @@ class Route {
     let ast = pathToRegexp(this.path);
     let pathParams = ast.keys;
 
-    this.options = this.normalizeOptions(options, this.format, pathParams, ast, $scope.get('module'));
+    this.options = this.normalizeOptions(options, this.options.format, pathParams, ast, $scope.get('module'));
   }
 
   /**
@@ -70,6 +69,7 @@ class Route {
 
   normalizePath(path, format) {
     path = utils.normalizePath(path);
+    return path;
     if (format === true) {
       return `${path}.:format`;
     } else if (this.isOptionalFormat(path, format)) {
@@ -99,7 +99,7 @@ class Route {
       }
     }
 
-    let toEndpoint = utils.splitTo(this.to);
+    let toEndpoint = utils.splitTo(this.options.to);
     this._controller = toEndpoint[0] || this.defaultController;
     this._action = toEndpoint[1] || this.defaultAction;
     this._controller = this.addControllerModule(this._controller, modyoule);
@@ -147,11 +147,5 @@ class Route {
   }
 
 }
-
-// Delegates
-delegate(Route.prototype, 'options')
-  .getter('format')
-  .getter('as')
-  .getter('to');
 
 export default Route;

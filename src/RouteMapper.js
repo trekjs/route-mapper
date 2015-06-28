@@ -4,22 +4,17 @@
  * MIT Licensed
  */
 
-import Actions from 'actions';
-import _debug from 'debug';
-import delegate from 'delegates';
 import _ from 'lodash';
+import _debug from 'debug';
+import Actions from 'actions';
 import utils from './utils';
+import Http from './Http';
 import Scope from './Scope';
 import Resource from './Resource';
 import SingletonResource from './SingletonResource';
 import Route from './Route';
 
 const debug = _debug('route-mapper');
-
-const DEFAULT_RESOURCES_PATH_NAMES = {
-  'new': 'new',
-  'edit': 'edit'
-};
 
 const VALID_ON_OPTIONS = [
   'new',
@@ -37,17 +32,11 @@ const RESOURCE_OPTIONS = [
   'concerns'
 ];
 
-const URL_OPTIONS = [
-  'protocol',
-  'host',
-  'domain',
-  'subdomain',
-  'port',
-  'path'
-];
-
 const DEFAULT_OPTIONS = {
-  pathNames: DEFAULT_RESOURCES_PATH_NAMES
+  pathNames: {
+    'new': 'new',
+    'edit': 'edit'
+  }
 };
 
 /**
@@ -56,12 +45,13 @@ const DEFAULT_OPTIONS = {
  * @class
  * @public
  */
-class RouteMapper {
+class RouteMapper extends Http {
 
   /**
    * @param {Object} options
    */
-  constructor(options = Object.create(DEFAULT_OPTIONS)) {
+  constructor(options = {}) {
+    super();
     _.defaults(options, DEFAULT_OPTIONS);
     this.$scope = new Scope({
       pathNames: options.pathNames
@@ -105,11 +95,9 @@ class RouteMapper {
     if (paths.length) {
       options.path = paths.join('/');
     }
-    if (!_.has(options, 'constraints')) {
-      options.constraints = {};
-    }
 
-    if (!this.isNestedScope) {
+    /*
+    if (!this.$scope.isNestedScope) {
       if (_.has(options, 'path') && !_.has(options, 'shallowPath')) {
         options.shallowPath = options.path;
       }
@@ -117,18 +105,7 @@ class RouteMapper {
         options.shallowPrefix = options.as;
       }
     }
-
-    if (_.isObject(options.constraints)) {
-      let defaults = {};
-      for (let k of _.keys(options.constraints)) {
-        if (URL_OPTIONS.includes(k)) {
-          defaults[k] = options.constraints[k];
-        }
-      }
-      options.defaults = _.assign(defaults, options.defaults || {});
-    } else {
-      options.constraints = {};
-    }
+    */
 
     this.$scope.options.forEach((option) => {
       let value;
@@ -144,15 +121,13 @@ class RouteMapper {
       }
     });
 
-    if (_.isFunction(cb)) {
-      // begin, new
-      this.$scope = this.$scope.create(scope);
+    // begin, new
+    this.$scope = this.$scope.create(scope);
 
-      cb.call(this);
+    if (_.isFunction(cb))  cb.call(this);
 
-      // end, reroll
-      this.$scope = this.$scope.parent;
-    }
+    // end, reroll
+    this.$scope = this.$scope.parent;
 
     return this;
   }
@@ -229,7 +204,7 @@ class RouteMapper {
       throw new Error('Must be called with a path and/or options');
     }
 
-    if (this.isResources) {
+    if (this.$scope.isResources) {
       this.withScopeLevel('root', () => {
         this.scope(this.parentResource.path, () => {
           _root.call(this, options);
@@ -252,12 +227,6 @@ class RouteMapper {
 
   // TODO
   mount() {}
-
-  _mapMethod(method, args) {
-    let [paths, options, cb] = utils.parseArgs(...args);
-    options.verb = method;
-    return this.match(paths, options, cb);
-  }
 
   resource() {
     let [resources, options, cb] = utils.parseArgs(...arguments);
@@ -343,7 +312,7 @@ class RouteMapper {
   }
 
   collection(cb) {
-    if (!this.isResourceScope) {
+    if (!this.$scope.isResourceScope) {
       throw new Error(`Can't use collection outside resource(s) scope`);
     }
 
@@ -355,23 +324,19 @@ class RouteMapper {
   }
 
   member(cb) {
-    if (!this.isResourceScope) {
+    if (!this.$scope.isResourceScope) {
       throw new Error(`Can't use member outside resource(s) scope`);
     }
 
     this.withScopeLevel('member', () => {
-      if (this.isShallow) {
-        this.shallowScope(this.parentResource.memberScope, cb);
-      } else {
-        this.scope(this.parentResource.memberScope, cb);
-      }
+      this.scope(this.parentResource.memberScope, cb);
     });
 
     return this;
   }
 
   ['new'](cb) {
-    if (!this.isResourceScope) {
+    if (!this.$scope.isResourceScope) {
       throw new Error(`Can't use new outside resource(s) scope`);
     }
 
@@ -383,16 +348,12 @@ class RouteMapper {
   }
 
   nested(cb) {
-    if (!this.isResourceScope) {
+    if (!this.$scope.isResourceScope) {
       throw new Error(`Can't use nested outside resource(s) scope`);
     }
 
     this.withScopeLevel('nested', () => {
-      if (this.isShallow && this.shallowNestingDepth >= 1) {
-        this.shallowScope(this.parentResource.nestedScope, this.nestedOptions, cb);
-      } else {
-        this.scope(this.parentResource.nestedScope, this.nestedOptions, cb);
-      }
+      this.scope(this.parentResource.nestedScope, this.nestedOptions, cb);
     });
 
     return this;
@@ -400,7 +361,7 @@ class RouteMapper {
 
   namespace() {
     let args = utils.parseArgs(...arguments);
-    if (this.isResourceScope) {
+    if (this.$scope.isResourceScope) {
       this.nested(() => {
         _namespace.apply(this, args);
       });
@@ -422,24 +383,6 @@ class RouteMapper {
       _.assign(defaults, options);
       return this.scope(defaults, cb);
     }
-  }
-
-  constraints(constraints = {}, cb) {
-    return this.scope({
-      constraints: constraints
-    }, cb);
-  }
-
-  defaults(defaults = {}, cb) {
-    return this.scope({
-      defaults: defaults
-    }, cb);
-  }
-
-  shallow(cb) {
-    return this.scope({
-      shallow: true
-    }, cb);
   }
 
   concern(name, callable, cb) {
@@ -475,28 +418,12 @@ class RouteMapper {
       return true;
     }
 
-    if (options.shallow) {
-      delete options.shallow;
-      this.shallow(() => {
-        this[method](resources.pop(), options, cb);
-      });
-      return true;
-    }
-
-    if (this.isResourceScope) {
+    if (this.$scope.isResourceScope) {
       this.nested(() => {
         this[method](resources.pop(), options, cb);
       });
       return true;
     }
-
-    _.keys(options).forEach((k) => {
-      if (_.isRegExp(options[k])) {
-        if (!options.constraints) options.constraints = {};
-        options.constraints[k] = options[k];
-        delete options[k];
-      }
-    });
 
     let scopeOptions = {};
     _.keys(options).forEach((k) => {
@@ -523,7 +450,6 @@ class RouteMapper {
   }
 
   resourceScope(kind, resource, cb) {
-    resource.shallow = this.$scope.get('shallow');
     this.$scope = this.$scope.create({
       scopeLevelResource: resource
     });
@@ -549,15 +475,13 @@ class RouteMapper {
   }
 
   withScopeLevel(kind, cb) {
-    if (_.isFunction(cb)) {
-      // begin, new
-      this.$scope = this.$scope.createLevel(kind);
+    // begin, new
+    this.$scope = this.$scope.createLevel(kind);
 
-      cb.call(this);
+    if (_.isFunction(cb)) cb.call(this);
 
-      // end, reroll
-      this.$scope = this.$scope.parent;
-    }
+    // end, reroll
+    this.$scope = this.$scope.parent;
   }
 
   setMemberMappingsForResource() {
@@ -679,16 +603,8 @@ class RouteMapper {
     return prefix;
   }
 
-  get shallowNestingDepth() {
-    return this.nesting.filter(r => r.isShallow).length;
-  }
-
   get parentResource() {
     return this.$scope.get('scopeLevelResource');
-  }
-
-  get isShallow() {
-    return (this.parentResource instanceof Resource) && this.$scope.get('shallow');
   }
 
   get isScopeActionOptions() {
@@ -701,21 +617,7 @@ class RouteMapper {
     let options = {
       as: parentResource.memberName
     };
-    if (this.isParamConstraint) {
-      options.constraints = {
-        [parentResource.nestedParam]: this.paramConstraint
-      };
-    }
     return options;
-  }
-
-  get isParamConstraint() {
-    let constraints = this.$scope.get('constraints');
-    return constraints && constraints[this.parentResource.param];
-  }
-
-  get paramConstraint() {
-    return this.$scope.get('constraints')[this.parentResource.param];
   }
 
   isActionOptions(options) {
@@ -723,7 +625,7 @@ class RouteMapper {
   }
 
   isCanonicalAction(action) {
-    return this.isResourceMethodScope && Actions.CANONICAL_ACTIONS.includes(action);
+    return this.$scope.isResourceMethodScope && Actions.CANONICAL_ACTIONS.includes(action);
   }
 
   isUsingMatchShorthand(path, options) {
@@ -747,33 +649,5 @@ class RouteMapper {
   }
 
 }
-
-// Extends Const Actions
-_.assign(RouteMapper, Actions);
-
-// HTTP verbs
-[
-  'get',
-  'options',
-  'post',
-  'put',
-  'patch',
-  'delete',
-  // alias delete
-  'del'
-].forEach((verb) => {
-  let method = verb;
-  if (verb === 'del') verb = 'delete';
-  RouteMapper.prototype[method] = function() {
-    return this._mapMethod(verb, arguments);
-  };
-});
-
-// Delegates
-delegate(RouteMapper.prototype, '$scope')
-  .getter('isResources')
-  .getter('isNestedScope')
-  .getter('isResourceScope')
-  .getter('isResourceMethodScope');
 
 export default RouteMapper;

@@ -114,6 +114,7 @@ const mergeScope = {
     return this.options(parent, child);
   },
 
+  /*
   constraints(parent, child) {
     return this.options(parent, child);
   },
@@ -121,6 +122,7 @@ const mergeScope = {
   defaults(parent, child) {
     return this.options(parent, child);
   },
+  */
 
   options(parent, child) {
     parent = _.assign(parent || {});
@@ -131,9 +133,11 @@ const mergeScope = {
     return _.assign(parent, child);
   },
 
+  /*
   shallow(parent, child) {
     return child ? true : false;
   },
+  */
 
   overrideKeys(child) {
     return (child.only || child.except) ? ['only', 'except'] : [];

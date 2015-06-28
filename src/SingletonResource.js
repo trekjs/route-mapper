@@ -38,8 +38,7 @@ class SingletonResource extends Resource {
    *  // => photos
    */
   get plural() {
-    if (!_.has(this, '_plural')) this._plural = pluralize.plural(this.name);
-    return this._plural;
+    return pluralize.plural(this.name);
   }
 
   /**
@@ -48,8 +47,7 @@ class SingletonResource extends Resource {
    *  // => photo
    */
   get singular() {
-    if (!_.has(this, '_singular')) this._singular = this.name;
-    return this._singular;
+    return this.name;
   }
 
   /**

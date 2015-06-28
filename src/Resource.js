@@ -8,7 +8,10 @@ import _ from 'lodash';
 import pluralize from 'pluralize';
 import { ACTIONS } from 'actions';
 
-const OPTIONS = { camelCase: true, param: 'id' };
+const OPTIONS = {
+  camelCase: true,
+  param: 'id'
+};
 
 /**
  * Resource
@@ -27,12 +30,11 @@ class Resource {
       return _.has(options, k) ? v : o;
     })(options, OPTIONS);
     this._name = String(entities);
+    this.options = options;
     this.path = options.path || this._name;
     this.controller = options.controller || this._name;
     this.as = options.as;
     this.param = options.param;
-    this.shallow = false;
-    this.options = options;
     this.camelCase = options.camelCase;
   }
 
@@ -46,15 +48,15 @@ class Resource {
     if (_.isString(only)) only = [only];
     if (_.isString(except)) except = [except];
     if (only && only.length) {
-      return only;
+      return _.intersection(this.defaultActions, only);
     } else if (except && except.length) {
-      return this.defaultActions.filter((a) => except.indexOf(a) < 0);
+      return _.without(this.defaultActions, ...except);
     }
-    return this.defaultActions;
+    return this.defaultActions.slice(0);
   }
 
   get name() {
-    return _.isString(this.as) ? this.as : this._name;
+    return this.as || this._name;
   }
 
   /**
@@ -63,8 +65,7 @@ class Resource {
    *  // => photos
    */
   get plural() {
-    if (!_.has(this, '_plural')) this._plural = pluralize.plural(this.name);
-    return this._plural;
+    return pluralize.plural(this.name);
   }
 
   /**
@@ -73,8 +74,7 @@ class Resource {
    *  // => photo
    */
   get singular() {
-    if (!_.has(this, '_singular')) this._singular = pluralize.singular(this.name);
-    return this._singular;
+    return pluralize.singular(this.name);
   }
 
   /**
@@ -152,10 +152,6 @@ class Resource {
    */
   get nestedScope() {
     return `${this.path}/:${this.nestedParam}`;
-  }
-
-  get isShallow() {
-    return this.shallow;
   }
 
   /**
