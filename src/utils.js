@@ -82,18 +82,8 @@ const mergeScope = {
     return parent ? normalizePath(`${parent}/${child}`) : child;
   },
 
-  // parent/child
-  shallowPath(parent, child) {
-    return parent ? normalizePath(`${parent}/${child}`) : child;
-  },
-
   // parent_child
   as(parent, child) {
-    return parent ? `${parent}_${child}` : child;
-  },
-
-  // parent_child
-  shallowPrefix(parent, child) {
     return parent ? `${parent}_${child}` : child;
   },
 
@@ -114,16 +104,6 @@ const mergeScope = {
     return this.options(parent, child);
   },
 
-  /*
-  constraints(parent, child) {
-    return this.options(parent, child);
-  },
-
-  defaults(parent, child) {
-    return this.options(parent, child);
-  },
-  */
-
   options(parent, child) {
     parent = _.assign(parent || {});
     let excepts = this.overrideKeys(child);
@@ -132,12 +112,6 @@ const mergeScope = {
     }
     return _.assign(parent, child);
   },
-
-  /*
-  shallow(parent, child) {
-    return child ? true : false;
-  },
-  */
 
   overrideKeys(child) {
     return (child.only || child.except) ? ['only', 'except'] : [];

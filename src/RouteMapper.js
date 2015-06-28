@@ -96,17 +96,6 @@ class RouteMapper extends Http {
       options.path = paths.join('/');
     }
 
-    /*
-    if (!this.$scope.isNestedScope) {
-      if (_.has(options, 'path') && !_.has(options, 'shallowPath')) {
-        options.shallowPath = options.path;
-      }
-      if (_.has(options, 'as') && !_.has(options, 'shallowPrefix')) {
-        options.shallowPrefix = options.as;
-      }
-    }
-    */
-
     this.$scope.options.forEach((option) => {
       let value;
       if (option === 'options') {
@@ -460,17 +449,6 @@ class RouteMapper extends Http {
     });
 
     this.nesting.pop();
-    this.$scope = this.$scope.parent;
-  }
-
-  shallowScope() {
-    let [paths, options, cb] = utils.parseArgs(...arguments);
-    let scope = {
-      as: this.$scope.get('shallowPrefix'),
-      path: this.$scope.get('shallowPath')
-    };
-    this.$scope = this.$scope.create(scope);
-    this.scope(...paths, options, cb);
     this.$scope = this.$scope.parent;
   }
 

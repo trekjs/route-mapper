@@ -43,11 +43,6 @@ class Route {
     // cleanup options
     delete options.only;
     delete options.except;
-    delete options.shallow_path;
-    delete options.shallow_prefix;
-    delete options.shallow;
-    delete options.defaults;
-    delete options.controller;
     delete options.action;
   }
 
