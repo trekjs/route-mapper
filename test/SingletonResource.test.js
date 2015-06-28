@@ -18,10 +18,8 @@ describe('SingletonResource', () => {
     });
     r.collectionScope.should.be.equal('person');
     r.memberScope.should.be.equal('person');
-    r.shallowScope.should.be.equal(r.memberScope);
     r.nestedParam.should.be.equal('personId');
     r.nestedScope.should.be.equal('person');
-    r.isShallow.should.be.equal(false);
     r.newScope('change').should.be.equal('person/change');
   });
 
@@ -40,10 +38,8 @@ describe('SingletonResource', () => {
     });
     r.collectionScope.should.be.equal('person');
     r.memberScope.should.be.equal('person');
-    r.shallowScope.should.be.equal(r.memberScope);
     r.nestedParam.should.be.equal('person_id');
     r.nestedScope.should.be.equal('person');
-    r.isShallow.should.be.equal(false);
     r.newScope('change').should.be.equal('person/change');
   });
 
@@ -58,7 +54,8 @@ describe('SingletonResource', () => {
     r.as.should.be.equal('me');
     r.param.should.be.equal('id');
     r.camelCase.should.be.equal(false);
-    r.plural.should.be.equal('people');
+    //r.plural.should.be.equal('people');
+    r.plural.should.be.equal('us');
     r.singular.should.be.equal('me');
     r.memberName.should.be.equal('me');
     r.collectionName.should.be.equal('me')
@@ -67,10 +64,8 @@ describe('SingletonResource', () => {
     });
     r.collectionScope.should.be.equal('person');
     r.memberScope.should.be.equal('person');
-    r.shallowScope.should.be.equal(r.memberScope);
     r.nestedParam.should.be.equal('me_id');
     r.nestedScope.should.be.equal('person');
-    r.isShallow.should.be.equal(false);
     r.newScope('change').should.be.equal('person/change');
   });
 });

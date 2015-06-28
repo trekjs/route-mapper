@@ -127,10 +127,6 @@ class Resource {
     return `${this.path}/:${this.param}`;
   }
 
-  get shallowScope() {
-    return this.memberScope;
-  }
-
   /**
    * @example
    *  resource.nestedParam

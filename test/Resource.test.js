@@ -18,10 +18,8 @@ describe('Resource', () => {
     });
     r.collectionScope.should.be.equal('books');
     r.memberScope.should.be.equal('books/:id');
-    r.shallowScope.should.be.equal(r.memberScope);
     r.nestedParam.should.be.equal('bookId');
     r.nestedScope.should.be.equal('books/:bookId');
-    r.isShallow.should.be.equal(false);
     r.newScope('change').should.be.equal('books/change');
   });
 
@@ -40,10 +38,8 @@ describe('Resource', () => {
     });
     r.collectionScope.should.be.equal('books');
     r.memberScope.should.be.equal('books/:id');
-    r.shallowScope.should.be.equal(r.memberScope);
     r.nestedParam.should.be.equal('book_id');
     r.nestedScope.should.be.equal('books/:book_id');
-    r.isShallow.should.be.equal(false);
     r.newScope('change').should.be.equal('books/change');
   });
 
@@ -67,10 +63,8 @@ describe('Resource', () => {
     });
     r.collectionScope.should.be.equal('books');
     r.memberScope.should.be.equal('books/:id');
-    r.shallowScope.should.be.equal(r.memberScope);
     r.nestedParam.should.be.equal('iBook_id');
     r.nestedScope.should.be.equal('books/:iBook_id');
-    r.isShallow.should.be.equal(false);
     r.newScope('change').should.be.equal('books/change');
   });
 });
