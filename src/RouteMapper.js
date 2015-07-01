@@ -113,7 +113,7 @@ class RouteMapper extends Http {
     // begin, new
     this.$scope = this.$scope.create(scope);
 
-    if (_.isFunction(cb))  cb.call(this);
+    if (_.isFunction(cb)) cb.call(this);
 
     // end, reroll
     this.$scope = this.$scope.parent;
@@ -162,10 +162,8 @@ class RouteMapper extends Http {
 
     let controller = this.$scope.get('controller');
     let action = this.$scope.get('action');
-    if (controller && action) {
-      if (!_.has(options, 'to')) {
-        options.to = `${controller}#${action}`;
-      }
+    if (controller && action && !_.has(options, 'to')) {
+      options.to = `${controller}#${action}`;
     }
 
     paths.forEach((p) => {
@@ -365,9 +363,7 @@ class RouteMapper extends Http {
       let defaults = {
         module: path,
         path: options.path || path,
-        as: options.as || path,
-        shallowPath: options.path || path,
-        shallowPrefix: options.as || path
+        as: options.as || path
       };
       _.assign(defaults, options);
       return this.scope(defaults, cb);
