@@ -51,8 +51,8 @@ class RouteMapper extends Http {
    * @param {Object} options
    */
   constructor(options = {}) {
-    super();
     _.defaults(options, DEFAULT_OPTIONS);
+    super();
     this.$scope = new Scope({
       pathNames: options.pathNames
     });
@@ -110,13 +110,11 @@ class RouteMapper extends Http {
       }
     });
 
-    // begin, new
-    this.$scope = this.$scope.create(scope);
-
-    if (_.isFunction(cb)) cb.call(this);
-
-    // end, reroll
-    this.$scope = this.$scope.parent;
+    if (_.isFunction(cb)) {
+      this.$scope = this.$scope.create(scope);
+      cb.call(this);
+      this.$scope = this.$scope.parent;
+    }
 
     return this;
   }
