@@ -1,5 +1,5 @@
 import utils from '../src/utils';
-import assert from 'assert';
+import assert from 'power-assert';
 
 describe('Utils', () => {
 

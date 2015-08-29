@@ -1,3 +1,4 @@
+import METHODS from 'methods';
 import {
   parseArgs
 }
@@ -11,15 +12,13 @@ class Http {
     return this.match(paths, opts, cb)
   }
 
+  static get METHODS() {
+    return METHODS;
+  }
+
 }
 
-[
-  'get',
-  'post',
-  'put',
-  'patch',
-  'delete'
-].forEach((m) => {
+METHODS.forEach((m) => {
   Http.prototype[m] = function() {
     return this._mapMethod(m, arguments);
   };

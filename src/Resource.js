@@ -56,7 +56,8 @@ class Resource {
   }
 
   get name() {
-    return this.as || this._name;
+    let as = this.as || this._name;
+    return this.camelCase ? _.camelCase(as) : as;
   }
 
   /**

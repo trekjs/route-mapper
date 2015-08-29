@@ -1,5 +1,4 @@
 import SingletonResource from '../src/SingletonResource';
-import assert from 'assert';
 
 describe('SingletonResource', () => {
 

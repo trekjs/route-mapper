@@ -54,11 +54,13 @@ class RouteMapper extends Http {
     _.defaults(options, DEFAULT_OPTIONS);
     super();
     this.$scope = new Scope({
-      pathNames: options.pathNames
+      pathNames: options.pathNames,
     });
     this.namedRoutes = Object.create(null);
     this.nesting = [];
     this.routes = [];
+    this.camelCase = true;
+    this._concerns = Object.create(null);
   }
 
   /**
@@ -221,6 +223,9 @@ class RouteMapper extends Http {
       return this;
     }
 
+    // set style
+    options.camelCase = this.camelCase;
+
     this.resourceScope(
       kind,
       new SingletonResource(resources.pop(), options), () => {
@@ -260,6 +265,9 @@ class RouteMapper extends Http {
     if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
       return this;
     }
+
+    // set style
+    options.camelCase = this.camelCase;
 
     this.resourceScope(
       kind,
@@ -513,13 +521,17 @@ class RouteMapper extends Http {
       action = null;
     }
 
-    options.as = _.camelCase(this.nameForAction(options.as, action));
+    options.camelCase = this.camelCase;
+    options.as = this.nameForAction(options.as, action);
 
     let route = new Route(this.$scope, path, options);
+
+    /*
 
     debug(`route: ${route.as} ${route.verb} ${route.path} ${route.controller}#${route.action}`);
 
     this.routes.push(route);
+    */
   }
 
   pathForAction(action, path) {

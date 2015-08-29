@@ -1,5 +1,4 @@
 import Resource from '../src/Resource';
-import assert from 'assert';
 
 describe('Resource', () => {
 
