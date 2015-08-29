@@ -24,6 +24,7 @@ class Route {
     this.defaultController = options.controller || $scope.get('controller');
     this.defaultAction = options.action || $scope.get('action');
     this.$scope = $scope;
+    this.path = path;
     this.options = options;
     this.camelCase = options.camelCase;
 
@@ -36,8 +37,6 @@ class Route {
     this._controller = toEndpoint[0] || this.defaultController;
     this._action = toEndpoint[1] || this.defaultAction;
     this._controller = this.addControllerModule(this._controller, $scope.get('module'));
-
-    debug(this.as, this.verb, path, `${this.controller}#${this.action}`);
   }
 
   get as() {

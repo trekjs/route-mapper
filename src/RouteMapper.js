@@ -526,12 +526,9 @@ class RouteMapper extends Http {
 
     let route = new Route(this.$scope, path, options);
 
-    /*
-
-    debug(`route: ${route.as} ${route.verb} ${route.path} ${route.controller}#${route.action}`);
+    debug(route.as, route.verb, route.path, `${route.controller}#${route.action}`);
 
     this.routes.push(route);
-    */
   }
 
   pathForAction(action, path) {
