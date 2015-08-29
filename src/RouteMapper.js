@@ -92,7 +92,7 @@ class RouteMapper extends Http {
    */
   scope() {
     let [paths, options, cb] = utils.parseArgs(...arguments);
-    let scope = {};
+    let scopeOptions = Object.create(null);
 
     if (paths.length) {
       options.path = paths.join('/');
@@ -108,12 +108,12 @@ class RouteMapper extends Http {
       }
 
       if (value) {
-        scope[option] = utils.mergeScope[option](this.$scope.get(option), value);
+        scopeOptions[option] = utils.mergeScope[option](this.$scope.get(option), value);
       }
     });
 
     if (_.isFunction(cb)) {
-      this.$scope = this.$scope.create(scope);
+      this.$scope = this.$scope.create(scopeOptions);
       cb.call(this);
       this.$scope = this.$scope.parent;
     }
@@ -216,10 +216,10 @@ class RouteMapper extends Http {
   mount() {}
 
   resource() {
-    let [resources, options, cb] = utils.parseArgs(...arguments);
+    let [resourcesArray, options, cb] = utils.parseArgs(...arguments);
     let kind = 'resource';
 
-    if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
+    if (this.applyCommonBehaviorFor(kind, resourcesArray, options, cb)) {
       return this;
     }
 
@@ -228,7 +228,7 @@ class RouteMapper extends Http {
 
     this.resourceScope(
       kind,
-      new SingletonResource(resources.pop(), options), () => {
+      new SingletonResource(resourcesArray.pop(), options), () => {
 
         if (_.isFunction(cb)) {
           cb.call(this);
@@ -259,10 +259,10 @@ class RouteMapper extends Http {
   }
 
   resources() {
-    let [resources, options, cb] = utils.parseArgs(...arguments);
+    let [resourcesArray, options, cb] = utils.parseArgs(...arguments);
     let kind = 'resources';
 
-    if (this.applyCommonBehaviorFor(kind, resources, options, cb)) {
+    if (this.applyCommonBehaviorFor(kind, resourcesArray, options, cb)) {
       return this;
     }
 
@@ -271,7 +271,7 @@ class RouteMapper extends Http {
 
     this.resourceScope(
       kind,
-      new Resource(resources.pop(), options), () => {
+      new Resource(resourcesArray.pop(), options), () => {
 
         if (_.isFunction(cb)) {
           cb.call(this);

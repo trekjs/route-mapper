@@ -42,3 +42,4 @@ routeMapper.routes.forEach((r) => {
 });
 
 app.listen(3300);
+console.log('Open http://localhost:3300.');
