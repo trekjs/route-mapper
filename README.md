@@ -161,27 +161,28 @@ app.listen(3300);
 
 ```js
 import koa from 'koa';
-import router from 'koa-router';
+import Router from 'koa-router';
 import RouteMapper from '../..';
 
 let app = koa();
+let router = new Router();
 
 let routeMapper = new RouteMapper();
 routeMapper
   .root('welcome#index')
-  .get('about', { to: 'welcome#about' })
-  .resources('posts', () => {
-    m.resources('comments');
+  .get('about', {
+    to: 'welcome#about'
   })
-  .scope({ path: '~:username?', module: 'users', as: 'user'}, () => {
+  .resources('posts', () => {
+    routeMapper.resources('comments');
+  })
+  .scope({
+    path: '~:username?',
+    module: 'users',
+    as: 'user'
+  }, () => {
     routeMapper.root('welcome#index');
   });
-
-app.use(function *(next) {
-  yield next;
-});
-
-app.use(router(app));
 
 routeMapper.routes.forEach((r) => {
   r.verb.forEach((m) => {
@@ -189,14 +190,17 @@ routeMapper.routes.forEach((r) => {
     let action = r.action;
     let c = require(__dirname + '/controllers/' + controller + '.js');
     let a;
+    // console.log(m, r.path);
     if (c && (a = c[action])) {
       if (!Array.isArray(a)) {
         a = [a];
       }
-      app[m](r.path, ...a);
+      router[m](r.path, ...a);
     };
   });
 });
+
+app.use(router.routes());
 
 app.listen(3300);
 ```
