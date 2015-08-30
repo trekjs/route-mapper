@@ -89,13 +89,9 @@ routeMapper
 
 ## APIs
 
+* `get()`, `post()`, `put()`, `delete()` ..., HTTP verbs
 * `root`
 * `match`
-* `get`
-* `post`
-* `patch`
-* `put`
-* `delete`
 * `scope`
 * `controller`
 * `namespace`
