@@ -6,7 +6,6 @@
 
 import _ from 'lodash';
 import _debug from 'debug';
-import pathToRegexp from 'path-to-regexp';
 import utils from './utils';
 
 const debug = _debug('route-mapper:route');
@@ -70,6 +69,17 @@ class Route {
       return _.compact([modyoule, controller]).join('/');
     }
     return controller;
+  }
+
+  pathHelp(...params) {
+    let p = this.path;
+    let matches = p.match(/:[a-z]+[0-9a-zA-Z_]+/g);
+    if (matches) {
+      matches.forEach((m, i) => {
+        p = p.replace(m, params[i])
+      })
+    }
+    return p;
   }
 
 }

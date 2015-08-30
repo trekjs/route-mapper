@@ -6,6 +6,11 @@
 
 import _ from 'lodash';
 import _debug from 'debug';
+/*
+import vm from 'vm';
+import Module from 'module';
+import * as babel from 'babel';
+*/
 import Actions from 'actions';
 import utils from './utils';
 import Http from './Http';
@@ -56,10 +61,10 @@ class RouteMapper extends Http {
     this.$scope = new Scope({
       pathNames: options.pathNames,
     });
-    this.namedRoutes = Object.create(null);
     this.nesting = [];
     this.routes = [];
     this.camelCase = true;
+    this.helpers = Object.create(null);
     this._concerns = Object.create(null);
   }
 
@@ -528,6 +533,9 @@ class RouteMapper extends Http {
 
     debug(route.as, route.verb, route.path, `${route.controller}#${route.action}`);
 
+    if (!_.has(this.helpers, route.as)) {
+      this.helpers[route.as] = route.pathHelp.bind(route);
+    }
     this.routes.push(route);
   }
 
@@ -560,7 +568,7 @@ class RouteMapper extends Http {
 
     if (candidate) {
       if (!as) {
-        if (/^[_a-zA-Z]/.test(candidate) && !(_.has(this.namedRoutes, candidate))) {
+        if (/^[_a-zA-Z]/.test(candidate) && !(_.has(this.helpers, candidate))) {
           return candidate;
         }
       } else {
@@ -627,6 +635,16 @@ class RouteMapper extends Http {
 
   actionPath(name, path) {
     return path || this.$scope.get('pathNames')[name] || name;
+  }
+
+  draw(filename) {
+    /*
+    let result = babel.transformFileSync(filename, {
+      ast: false
+    });
+    this['this'] = this.global = this;
+    vm.runInNewContext(result.code, this);
+   */
   }
 
 }
