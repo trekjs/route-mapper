@@ -96,13 +96,11 @@ routeMapper
 * `controller`
 * `namespace`
 * `constraints`
-* `defaults`
 * `resource`
 * `resources`
   * `collection`
   * `member`
   * `nested`
-* `shallow`
 * `concern`
 * `concerns`
 
