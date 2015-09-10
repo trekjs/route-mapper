@@ -103,6 +103,7 @@ routeMapper
   * `nested`
 * `concern`
 * `concerns`
+* `draw(filename)`
 
 
 ## [Examples](./examples)
