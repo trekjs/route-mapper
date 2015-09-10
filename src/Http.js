@@ -1,6 +1,4 @@
 import METHODS from 'methods';
-import camelCase from 'lodash/string/camelCase';
-import trim from 'lodash/string/trim';
 import { parseArgs } from './utils';
 
 class Http {
@@ -18,8 +16,9 @@ class Http {
 }
 
 METHODS.forEach((m) => {
-  let name = m === 'delete' ? 'del' : m.replace('-', '');
-  Http.prototype[m.replace('-', '')] = eval(`(function ${name}() {
+  let v = m.replace('-', '');
+  let name = v === 'delete' ? 'del' : v;
+  Http.prototype[v] = eval(`(function ${name}() {
     return this._mapMethod('${m}', arguments);
   })`);
 });
