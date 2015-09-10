@@ -6,11 +6,8 @@
 
 import _ from 'lodash';
 import _debug from 'debug';
-/*
 import vm from 'vm';
-import Module from 'module';
 import * as babel from 'babel';
-*/
 import Actions from 'actions';
 import utils from './utils';
 import Http from './Http';
@@ -638,13 +635,20 @@ class RouteMapper extends Http {
   }
 
   draw(filename) {
-    /*
     let result = babel.transformFileSync(filename, {
       ast: false
     });
-    this['this'] = this.global = this;
-    vm.runInNewContext(result.code, this);
-   */
+
+    let g = Object.create(null);
+    Object.setPrototypeOf(g, this);
+    let t = this;
+    while(t !== null && (t = Object.getPrototypeOf(t))) {
+      let keys = Object.keys(t);
+      keys.forEach((m) => {
+        g[m] = t[m].bind(this);
+      });
+    }
+    vm.runInNewContext(result.code, g);
   }
 
 }
