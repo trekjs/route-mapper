@@ -9,6 +9,7 @@ import _debug from 'debug';
 import vm from 'vm';
 import * as babel from 'babel';
 import Actions from 'actions';
+import getPrototypesOf from 'object-getprototypesof';
 import utils from './utils';
 import Http from './Http';
 import Scope from './Scope';
@@ -641,13 +642,13 @@ class RouteMapper extends Http {
 
     let g = Object.create(null);
     Object.setPrototypeOf(g, this);
-    let t = this;
-    while(t !== null && (t = Object.getPrototypeOf(t))) {
-      let keys = Object.keys(t);
+    let arr = getPrototypesOf(g);
+    arr.forEach((p) => {
+      let keys = Object.keys(p);
       keys.forEach((m) => {
-        g[m] = t[m].bind(this);
+        if (_.isFunction(p[m])) g[m] = p[m].bind(this);
       });
-    }
+    });
     vm.runInNewContext(result.code, g);
   }
 
