@@ -1,6 +1,6 @@
 {
   "name": "route-mapper",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Route Mapper - Generate Rails Style Routing & RESTful Routes",
   "main": "lib/RouteMapper",
   "scripts": {
@@ -30,7 +30,7 @@
     "koa": "^1.0.0",
     "koa-router": "^5.1.2",
     "mocha": "^2.3.2",
-    "power-assert": "^1.0.0",
+    "power-assert": "^1.0.1",
     "should": "^7.1.0"
   },
   "dependencies": {
@@ -39,7 +39,7 @@
     "lodash": "^3.10.1",
     "methods": "^1.1.1",
     "object-getprototypesof": "^1.0.1",
-    "pluralize": "^1.2.0"
+    "pluralize": "^1.2.1"
   },
   "files": [
     "index.js",
