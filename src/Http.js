@@ -17,8 +17,7 @@ class Http {
 
 METHODS.forEach((m) => {
   let v = m.replace('-', '');
-  let name = v === 'delete' ? 'del' : v;
-  Http.prototype[v] = eval(`(function ${name}() {
+  Http.prototype[v] = eval(`(function $${v}() {
     return this._mapMethod('${m}', arguments);
   })`);
 });
