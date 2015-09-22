@@ -1,6 +1,6 @@
 {
   "name": "route-mapper",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Route Mapper - Generate Rails Style Routing & RESTful Routes",
   "main": "lib/RouteMapper",
   "scripts": {
