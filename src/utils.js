@@ -21,7 +21,7 @@ function splitTo(to = '') {
   if (/#/.test(to)) {
     return to.split('#')
   }
-  return [];
+  return []
 }
 
 /**
@@ -60,7 +60,7 @@ function parseArgs(...args) {
     cb, opts, paths
   if (_.isFunction(last)) {
     cb = last
-    args.pop()
+    args.pop(); // don't remove this semicolon
     [paths, opts] = parseArgs(...args)
   } else if (_.isObject(last) && !_.isArray(last)) {
     opts = last
@@ -117,7 +117,7 @@ const mergeScope = {
     return (child.only || child.except) ? ['only', 'except'] : []
   }
 
-};
+}
 
 export default {
   splitTo,

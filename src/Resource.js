@@ -25,7 +25,7 @@ export default class Resource {
    */
   constructor(entities, options = {}) {
     options = _.partialRight(_.assign, function(v, o, k) {
-      return _.has(options, k) ? v : o;
+      return _.has(options, k) ? v : o
     })(options, OPTIONS)
     this._name = String(entities)
     this.options = options
