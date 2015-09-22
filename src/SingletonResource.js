@@ -4,17 +4,15 @@
  * MIT Licensed
  */
 
-import _ from 'lodash';
-import pluralize from 'pluralize';
-import { SINGLETON_ACTIONS } from 'actions';
-import Resource from './Resource';
+import _ from 'lodash'
+import pluralize from 'pluralize'
+import { SINGLETON_ACTIONS } from 'actions'
+import Resource from './Resource'
 
 /**
  * Singleton Resource
- *
- * @class
  */
-class SingletonResource extends Resource {
+export default class SingletonResource extends Resource {
 
   /**
    * @constructor
@@ -22,14 +20,14 @@ class SingletonResource extends Resource {
    * @param {Object} options        - Defaults to empby object
    */
   constructor(entity, options = {}) {
-    super(entity, options);
-    this.as = null;
-    this.controller = options.controller || this.plural;
-    this.as = options.as;
+    super(entity, options)
+    this.as = null
+    this.controller = options.controller || this.plural
+    this.as = options.as
   }
 
   get defaultActions() {
-    return SINGLETON_ACTIONS;
+    return SINGLETON_ACTIONS
   }
 
   /**
@@ -38,7 +36,7 @@ class SingletonResource extends Resource {
    *  // => photos
    */
   get plural() {
-    return pluralize.plural(this.name);
+    return pluralize.plural(this.name)
   }
 
   /**
@@ -47,7 +45,7 @@ class SingletonResource extends Resource {
    *  // => photo
    */
   get singular() {
-    return this.name;
+    return this.name
   }
 
   /**
@@ -56,7 +54,7 @@ class SingletonResource extends Resource {
    *  // => photo
    */
   get memberName() {
-    return this.singular;
+    return this.singular
   }
 
   /**
@@ -65,17 +63,15 @@ class SingletonResource extends Resource {
    *  // => photo
    */
   get collectionName() {
-    return this.singular;
+    return this.singular
   }
 
   get memberScope() {
-    return this.path;
+    return this.path
   }
 
   get nestedScope() {
-    return this.path;
+    return this.path
   }
 
 }
-
-export default SingletonResource;

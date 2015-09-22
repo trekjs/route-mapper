@@ -4,21 +4,19 @@
  * MIT Licensed
  */
 
-import _ from 'lodash';
-import pluralize from 'pluralize';
-import { ACTIONS } from 'actions';
+import _ from 'lodash'
+import pluralize from 'pluralize'
+import { ACTIONS } from 'actions'
 
 const OPTIONS = {
   camelCase: true,
   param: 'id'
-};
+}
 
 /**
  * Resource
- *
- * @class
  */
-class Resource {
+export default class Resource {
 
   /**
    * @constructor
@@ -28,36 +26,36 @@ class Resource {
   constructor(entities, options = {}) {
     options = _.partialRight(_.assign, function(v, o, k) {
       return _.has(options, k) ? v : o;
-    })(options, OPTIONS);
-    this._name = String(entities);
-    this.options = options;
-    this.path = options.path || this._name;
-    this.controller = options.controller || this._name;
-    this.as = options.as;
-    this.param = options.param;
-    this.camelCase = options.camelCase;
+    })(options, OPTIONS)
+    this._name = String(entities)
+    this.options = options
+    this.path = options.path || this._name
+    this.controller = options.controller || this._name
+    this.as = options.as
+    this.param = options.param
+    this.camelCase = options.camelCase
   }
 
   get defaultActions() {
-    return ACTIONS;
+    return ACTIONS
   }
 
   get actions() {
-    let only = this.options.only;
-    let except = this.options.except;
-    if (_.isString(only)) only = [only];
-    if (_.isString(except)) except = [except];
+    let only = this.options.only
+    let except = this.options.except
+    if (_.isString(only)) only = [only]
+    if (_.isString(except)) except = [except]
     if (only && only.length) {
-      return _.intersection(this.defaultActions, only);
+      return _.intersection(this.defaultActions, only)
     } else if (except && except.length) {
-      return _.without(this.defaultActions, ...except);
+      return _.without(this.defaultActions, ...except)
     }
-    return this.defaultActions.slice(0);
+    return this.defaultActions.slice(0)
   }
 
   get name() {
-    let as = this.as || this._name;
-    return this.camelCase ? _.camelCase(as) : as;
+    let as = this.as || this._name
+    return this.camelCase ? _.camelCase(as) : as
   }
 
   /**
@@ -66,7 +64,7 @@ class Resource {
    *  // => photos
    */
   get plural() {
-    return pluralize.plural(this.name);
+    return pluralize.plural(this.name)
   }
 
   /**
@@ -75,7 +73,7 @@ class Resource {
    *  // => photo
    */
   get singular() {
-    return pluralize.singular(this.name);
+    return pluralize.singular(this.name)
   }
 
   /**
@@ -84,7 +82,7 @@ class Resource {
    *  // => photo
    */
   get memberName() {
-    return this.singular;
+    return this.singular
   }
 
   /**
@@ -96,25 +94,25 @@ class Resource {
    *  // => photo
    */
   get collectionName() {
-    let name = '';
+    let name = ''
     if (!this.plural) {
-      name = 'index';
+      name = 'index'
     } else if (this.singular === this.plural) {
-      name = `${this.plural}_index`;
+      name = `${this.plural}_index`
     } else {
-      name = this.plural;
+      name = this.plural
     }
-    return this.camelCase ? _.camelCase(name) : name;
+    return this.camelCase ? _.camelCase(name) : name
   }
 
   get resourceScope() {
     return {
       controller: this.controller
-    };
+    }
   }
 
   get collectionScope() {
-    return this.path;
+    return this.path
   }
 
   /**
@@ -125,7 +123,7 @@ class Resource {
    *  // => photos/:photo_id/users/id
    */
   get memberScope() {
-    return `${this.path}/:${this.param}`;
+    return `${this.path}/:${this.param}`
   }
 
   /**
@@ -136,8 +134,8 @@ class Resource {
    *  // => photo_id
    */
   get nestedParam() {
-    let param = this.param !== 'id' ? this.param : this.singular + '_' + this.param;
-    return this.camelCase ? _.camelCase(param) : param;
+    let param = this.param !== 'id' ? this.param : this.singular + '_' + this.param
+    return this.camelCase ? _.camelCase(param) : param
   }
 
   /**
@@ -148,7 +146,7 @@ class Resource {
    *  // => photos/:photo_id/users/:id
    */
   get nestedScope() {
-    return `${this.path}/:${this.nestedParam}`;
+    return `${this.path}/:${this.nestedParam}`
   }
 
   /**
@@ -157,9 +155,7 @@ class Resource {
    *  // => photos/edit
    */
   newScope(newPath) {
-    return `${this.path}/${newPath}`;
+    return `${this.path}/${newPath}`
   }
 
 }
-
-export default Resource;

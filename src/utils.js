@@ -4,8 +4,8 @@
  * MIT Licensed
  */
 
-import _ from 'lodash';
-import { normalize, resolve } from 'path';
+import _ from 'lodash'
+import { normalize, resolve } from 'path'
 
 /**
  * Split a string to an array.
@@ -19,7 +19,7 @@ import { normalize, resolve } from 'path';
  */
 function splitTo(to = '') {
   if (/#/.test(to)) {
-    return to.split('#');
+    return to.split('#')
   }
   return [];
 }
@@ -31,11 +31,11 @@ function splitTo(to = '') {
  * @return {String}
  */
 function normalizePath(path) {
-  path = '/' + path;
-  path = resolve(normalize(path));
-  path = path.replace(/(%[a-f0-9]{2})/g, ($1) => $1.toUpperCase());
-  if (path === '') path = '/';
-  return path;
+  path = '/' + path
+  path = resolve(normalize(path))
+  path = path.replace(/(%[a-f0-9]{2})/g, ($1) => $1.toUpperCase())
+  if (path === '') path = '/'
+  return path
 }
 
 /**
@@ -57,64 +57,64 @@ function normalizePath(path) {
 function parseArgs(...args) {
   let l = args.length,
     last = args[l - 1],
-    cb, opts, paths;
+    cb, opts, paths
   if (_.isFunction(last)) {
-    cb = last;
-    args.pop();
-    [paths, opts] = parseArgs(...args);
+    cb = last
+    args.pop()
+    [paths, opts] = parseArgs(...args)
   } else if (_.isObject(last) && !_.isArray(last)) {
-    opts = last;
-    args.pop();
-    paths = args;
+    opts = last
+    args.pop()
+    paths = args
   } else if (!last && l > 0) {
-    args.pop();
-    return parseArgs(...args);
+    args.pop()
+    return parseArgs(...args)
   } else {
-    paths = args;
+    paths = args
   }
-  return [_.compact(_.flatten(paths, true)), opts || {}, cb];
+  return [_.compact(_.flatten(paths, true)), opts || {}, cb]
 }
 
 const mergeScope = {
 
   // parent/child
   path(parent, child) {
-    return parent ? normalizePath(`${parent}/${child}`) : child;
+    return parent ? normalizePath(`${parent}/${child}`) : child
   },
 
   // parent_child
   as(parent, child) {
-    return parent ? `${parent}_${child}` : child;
+    return parent ? `${parent}_${child}` : child
   },
 
   // parent/child
   module(parent, child) {
-    return parent ? normalizePath(`${parent}/${child}`) : child;
+    return parent ? normalizePath(`${parent}/${child}`) : child
   },
 
   controller(parent, child) {
-    return child;
+    return child
   },
 
   action(parent, child) {
-    return child;
+    return child
   },
 
   pathNames(parent, child) {
-    return this.options(parent, child);
+    return this.options(parent, child)
   },
 
   options(parent, child) {
-    parent = _.assign(parent || {});
-    let excepts = this.overrideKeys(child);
+    parent = _.assign(parent || {})
+    let excepts = this.overrideKeys(child)
     for (let key of excepts) {
-      delete parent[key];
+      delete parent[key]
     }
-    return _.assign(parent, child);
+    return _.assign(parent, child)
   },
 
   overrideKeys(child) {
-    return (child.only || child.except) ? ['only', 'except'] : [];
+    return (child.only || child.except) ? ['only', 'except'] : []
   }
 
 };
@@ -124,4 +124,4 @@ export default {
   parseArgs,
   mergeScope,
   normalizePath
-};
+}
