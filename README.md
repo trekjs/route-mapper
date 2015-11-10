@@ -111,101 +111,120 @@ routeMapper
 ### [Express example](./examples/express)
 
 ```js
-import express from 'express';
-import RouteMapper from '../..';
+'use strict'
 
-let app = express();
+import express from 'express'
+import RouteMapper from '../..'
 
-let routeMapper = new RouteMapper();
+const app = express()
+
+let routeMapper = new RouteMapper()
+
 routeMapper
   .root('welcome#index')
   .resources('photos')
-  .constraints({ subdomain: 'api' }, () => {
-    .namespace('api',  { defaults: { format: 'json' }, path: '/' }, () => {
-        routeMapper.scope({ module: 'v1' }, () => {
-          routeMapper.resources('users');
-        });
-      }
-    );
-  });
+  .namespace('api', {
+    path: '/'
+  }, () => {
+    routeMapper.scope({
+      module: 'v1'
+    }, () => {
+      routeMapper.resources('users')
+    })
+  })
 
-
-app.use(function (req, res, next) {
-  next();
-});
+app.use(function(req, res, next) {
+  next()
+})
 
 routeMapper.routes.forEach((r) => {
-  r.verb.forEach((m) => {
-    let controller = r.controller;
-    let action = r.action;
-    let c = require(__dirname + '/controllers/' + controller + '.js');
-    let a;
-    if (c && (a = c[action])) {
-      if (!Array.isArray(a)) {
-        a = [a];
-      }
-      app[m](r.path, ...a);
-    };
-  });
-});
+  const { controller, action } = r
+  try {
+    let c = require(__dirname + '/controllers/' + controller + '.js')
+    if (c) {
+      c = c.default || c
+      r.verb.forEach(m => {
+        let a
+        if (a = c[action]) {
+          if (!Array.isArray(a)) {
+            a = [a]
+          }
+          console.log(r.path, controller, action)
+          app[m](r.path, ...a)
+        }
+      })
+    }
+  } catch (e) {
+    console.log(e)
+  }
+})
 
-app.listen(3300);
+app.listen(3300)
+console.log('Open http://localhost:3300.')
 ```
 
 ### [Koa example](./examples/koa)
 
 ```js
-import koa from 'koa';
-import Router from 'koa-router';
-import RouteMapper from '../..';
+'use strict'
 
-let app = koa();
-let router = new Router();
+import koa from 'koa'
+import Router from 'koa-router'
+import RouteMapper from '../..'
 
-let routeMapper = new RouteMapper();
+const app = koa()
+const router = new Router()
+
+const routeMapper = new RouteMapper()
+
 routeMapper
   .root('welcome#index')
   .get('about', {
     to: 'welcome#about'
   })
   .resources('posts', () => {
-    routeMapper.resources('comments');
+    routeMapper.resources('comments')
   })
   .scope({
     path: '~:username?',
     module: 'users',
     as: 'user'
   }, () => {
-    routeMapper.root('welcome#index');
-  });
+    routeMapper.root('welcome#index')
+  })
 
-routeMapper.routes.forEach((r) => {
-  r.verb.forEach((m) => {
-    let controller = r.controller;
-    let action = r.action;
-    let c = require(__dirname + '/controllers/' + controller + '.js');
-    let a;
-    // console.log(m, r.path);
-    if (c && (a = c[action])) {
-      if (!Array.isArray(a)) {
-        a = [a];
-      }
-      router[m](r.path, ...a);
-    };
-  });
-});
+routeMapper.routes.forEach(r => {
+  const { controller, action } = r
+  try {
+    let c = require(__dirname + '/controllers/' + controller + '.js')
+    if (c) {
+      c = c.default || c
+      r.verb.forEach(m => {
+        let a
+        if (a = c[action]) {
+          if (!Array.isArray(a)) {
+            a = [a]
+          }
+          console.log(r.path, controller, action)
+          router[m](r.path, ...a)
+        }
+      })
+    }
+  } catch (e) {
+    console.log(e)
+  }
+})
 
-app.use(router.routes());
+app.use(router.routes())
 
-app.listen(3300);
+console.log('Open http://localhost:3300.')
+app.listen(3300)
 ```
 
 
 
 [Rails Routing]: http://guides.rubyonrails.org/routing.html
 [Babel]: https://babeljs.io/
-[es6-image]: https://img.shields.io/badge/es-6+-brightgreen.svg?style=flat-square
-[es6-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla
 [npm-image]: https://img.shields.io/npm/v/route-mapper.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/route-mapper
 [travis-image]: https://img.shields.io/travis/trekjs/route-mapper/master.svg?style=flat-square

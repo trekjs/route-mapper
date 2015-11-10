@@ -25,7 +25,8 @@ export default class Http {
 
 METHODS.forEach((m) => {
   const v = m.replace('-', '')
-  Http.prototype[v] = eval(`(function $${v}() {
-    return this._mapMethod('${m}', arguments)
-  })`)
+  Object.defineProperty(Http.prototype, v, {
+    value: eval(`(function $${v}() {
+                return this._mapMethod('${m}', arguments) })`)
+  })
 })

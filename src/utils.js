@@ -35,7 +35,7 @@ function splitTo(to = '') {
 function normalizePath(path) {
   path = '/' + path
   path = resolve(normalize(path))
-  path = path.replace(/(%[a-f0-9]{2})/g, ($1) => $1.toUpperCase())
+  path = path.replace(/(%[a-f0-9]{2})/g, $1 => $1.toUpperCase())
   if (path === '') path = '/'
   return path
 }
@@ -64,7 +64,7 @@ function parseArgs(...args) {
     cb = last
     args.pop(); // don't remove this semicolon
     [paths, opts] = parseArgs(...args)
-  } else if (_.isObject(last) && !_.isArray(last)) {
+  } else if (_.isObject(last) && !Array.isArray(last)) {
     opts = last
     args.pop()
     paths = args
@@ -107,13 +107,8 @@ const mergeScope = {
   },
 
   options(parent, child) {
-    parent = _.assign(parent || {})
     const excepts = this.overrideKeys(child)
-    let key
-    for (key of excepts) {
-      delete parent[key]
-    }
-    return _.assign(parent, child)
+    return Object.assign(_.omit(parent, excepts), child)
   },
 
   overrideKeys(child) {

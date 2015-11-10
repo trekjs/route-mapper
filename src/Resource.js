@@ -7,8 +7,8 @@
  */
 
 import _ from 'lodash'
-import pluralize from 'pluralize'
 import { ACTIONS } from 'actions'
+import pluralize from 'pluralize'
 
 const OPTIONS = {
   camelCase: true,

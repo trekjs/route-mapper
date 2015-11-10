@@ -8,9 +8,9 @@
 
 import _ from 'lodash'
 import _debug from 'debug'
-import vm from 'vm'
-import * as babel from 'babel-core'
 import Actions from 'actions'
+import * as babel from 'babel-core'
+import vm from 'vm'
 import utils from './utils'
 import Http from './Http'
 import Scope from './Scope'

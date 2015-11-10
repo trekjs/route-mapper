@@ -23,7 +23,7 @@ export default class SingletonResource extends Resource {
    */
   constructor(entity, options = {}) {
     super(entity, options)
-    this.as = null
+    this.as = undefined
     this.controller = options.controller || this.plural
     this.as = options.as
   }
