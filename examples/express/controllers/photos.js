@@ -1,8 +1,13 @@
+'use strict'
+
 export default {
-  index: (req, res) => {
-    res.send('photos index');
+
+  index(req, res) {
+    res.send('photos index')
   },
-  show: (req, res) => {
-    res.send(`photo ${req.params.id}`);
+
+  show(req, res) {
+    res.send(`photo ${req.params.id}`)
   }
-};
+
+}

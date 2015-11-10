@@ -1,7 +1,9 @@
-export let index = function*() {
-  this.body = 'photos index';
-};
+'use strict'
 
-export let show = function*() {
-  this.body = `photo ${this.params.id}`;
-};
+export const index = function*() {
+  this.body = 'photos index'
+}
+
+export const show = function*() {
+  this.body = `photo ${this.params.id}`
+}

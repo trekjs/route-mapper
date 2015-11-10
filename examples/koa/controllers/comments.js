@@ -1,15 +1,17 @@
-export let index = function*() {
-  this.body = 'comments index';
-};
+'use strict'
 
-export let show = function*() {
-  this.body = `post ${this.params.post_id}, comment ${this.params.id}`;
-};
+export const index = function*() {
+  this.body = 'comments index'
+}
+
+export const show = function*() {
+  this.body = `post ${this.params.post_id}, comment ${this.params.id}`
+}
 
 exports['new'] = function*() {
   this.body = 'new comment'
-};
+}
 
-export let edit = function*() {
+export const edit = function*() {
   this.body = `edit commment ${this.params.id}`
-};
+}

@@ -1,44 +1,53 @@
-import koa from 'koa';
-import Router from 'koa-router';
-import RouteMapper from '../..';
+'use strict'
 
-let app = koa();
-let router = new Router();
+import koa from 'koa'
+import Router from 'koa-router'
+import RouteMapper from '../..'
 
-let routeMapper = new RouteMapper();
+const app = koa()
+const router = new Router()
+
+const routeMapper = new RouteMapper()
+
 routeMapper
   .root('welcome#index')
   .get('about', {
     to: 'welcome#about'
   })
   .resources('posts', () => {
-    routeMapper.resources('comments');
+    routeMapper.resources('comments')
   })
   .scope({
     path: '~:username?',
     module: 'users',
     as: 'user'
   }, () => {
-    routeMapper.root('welcome#index');
-  });
+    routeMapper.root('welcome#index')
+  })
 
-routeMapper.routes.forEach((r) => {
-  r.verb.forEach((m) => {
-    let controller = r.controller;
-    let action = r.action;
-    let c = require(__dirname + '/controllers/' + controller + '.js');
-    let a;
-    console.log(m, r.path);
-    if (c && (a = c[action])) {
-      if (!Array.isArray(a)) {
-        a = [a];
-      }
-      router[m](r.path, ...a);
-    };
-  });
-});
+routeMapper.routes.forEach(r => {
+  const { controller, action } = r
+  try {
+    let c = require(__dirname + '/controllers/' + controller + '.js')
+    if (c) {
+      c = c.default || c
+      r.verb.forEach(m => {
+        let a
+        if (a = c[action]) {
+          if (!Array.isArray(a)) {
+            a = [a]
+          }
+          console.log(r.path, controller, action)
+          router[m](r.path, ...a)
+        }
+      })
+    }
+  } catch (e) {
+    console.log(e)
+  }
+})
 
-app.use(router.routes());
+app.use(router.routes())
 
-console.log('Open http://localhost:3300.');
-app.listen(3300);
+console.log('Open http://localhost:3300.')
+app.listen(3300)

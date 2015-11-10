@@ -1,3 +1,6 @@
-export let index = (req, res) => {
-  res.send('Welcome Index!');
-};
+'use strict'
+
+export const index = (req, res) => {
+  res.send('Welcome Index!')
+}
+

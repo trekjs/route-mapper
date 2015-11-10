@@ -1,9 +1,12 @@
-import express from 'express';
-import RouteMapper from '../..';
+'use strict'
 
-let app = express();
+import express from 'express'
+import RouteMapper from '../..'
 
-let routeMapper = new RouteMapper();
+const app = express()
+
+const routeMapper = new RouteMapper()
+
 routeMapper
   .root('welcome#index')
   .resources('photos')
@@ -13,33 +16,35 @@ routeMapper
     routeMapper.scope({
       module: 'v1'
     }, () => {
-      routeMapper.resources('users');
-    });
-  });
+      routeMapper.resources('users')
+    })
+  })
 
 app.use(function(req, res, next) {
-  next();
-});
+  next()
+})
 
-routeMapper.routes.forEach((r) => {
-  r.verb.forEach((m) => {
-    let controller = r.controller;
-    let action = r.action;
-    try {
-      let c = require(__dirname + '/controllers/' + controller + '.js');
-      let a;
-      if (c && (a = c[action])) {
-        if (!Array.isArray(a)) {
-          a = [a];
+routeMapper.routes.forEach(r => {
+  const { controller, action } = r
+  try {
+    let c = require(__dirname + '/controllers/' + controller + '.js')
+    if (c) {
+      c = c.default || c
+      r.verb.forEach(m => {
+        let a
+        if (a = c[action]) {
+          if (!Array.isArray(a)) {
+            a = [a]
+          }
+          console.log(r.path, controller, action)
+          app[m](r.path, ...a)
         }
-        console.log(r.path, controller, action)
-        app[m](r.path, ...a);
-      };
-    } catch (e) {
-      console.log(e);
+      })
     }
-  });
-});
+  } catch (e) {
+    console.log(e)
+  }
+})
 
-app.listen(3300);
-console.log('Open http://localhost:3300.');
+app.listen(3300)
+console.log('Open http://localhost:3300.')

@@ -1,5 +1,9 @@
+'use strict'
+
 export default {
-  index: (req, res) => {
-    res.send('API v1 users');
+
+  index(req, res) {
+    res.send('API v1 users')
   }
-};
+
+}

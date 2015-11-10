@@ -1,13 +1,17 @@
-export let index = [
-  function*(next) {
-    this.body = 'Welcome index!';
-    yield * next;
-  },
-  function*() {
-    this.body += '\nHello route-mapper!';
-  }
-];
+'use strict'
 
-export let about = function*() {
-  this.body = 'About ME!';
-};
+export const index = [
+
+  function*(next) {
+    this.body = 'Welcome index!'
+    yield* next
+  },
+
+  function*() {
+    this.body += '\nHello route-mapper!'
+  }
+]
+
+export const about = function*() {
+  this.body = 'About ME!'
+}
