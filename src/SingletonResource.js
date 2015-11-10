@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * route-mapper - SingletonResource
  * Copyright(c) 2015 Fangdun Cai

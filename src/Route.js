@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * route-mapper - Route
  * Copyright(c) 2015 Fangdun Cai
@@ -5,10 +7,7 @@
  */
 
 import _ from 'lodash'
-import _debug from 'debug'
 import utils from './utils'
-
-const debug = _debug('route-mapper:route')
 
 /**
  * Route
@@ -30,14 +29,15 @@ export default class Route {
     delete options.except
     delete options.action
 
-    let toEndpoint = utils.splitTo(options.to)
+    const toEndpoint = utils.splitTo(options.to)
     this._controller = toEndpoint[0] || this.defaultController
     this._action = toEndpoint[1] || this.defaultAction
-    this._controller = this.addControllerModule(this._controller, $scope.get('module'))
+    this._controller = this.addControllerModule(this._controller,
+                                                $scope.get('module'))
   }
 
   get as() {
-    let _as = this.options.as || ''
+    const _as = this.options.as || ''
     return this.camelCase ? _.camelCase(_as) : _as
   }
 
@@ -54,7 +54,8 @@ export default class Route {
   }
 
   get verb() {
-    return _.isArray(this.options.verb) ? this.options.verb : [this.options.verb]
+    return Array.isArray(this.options.verb) ?
+      this.options.verb : [this.options.verb]
   }
 
   addControllerModule(controller, modyoule) {
@@ -71,7 +72,7 @@ export default class Route {
 
   pathHelp(...params) {
     let p = this.path
-    let matches = p.match(/:[a-z]+[0-9a-zA-Z_]+/g)
+    const matches = p.match(/:[a-z]+[0-9a-zA-Z_]+/g)
     if (matches) {
       matches.forEach((m, i) => {
         p = p.replace(m, params[i])

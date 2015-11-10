@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * route-mapper - utils
  * Copyright(c) 2015 Fangdun Cai
@@ -55,9 +57,9 @@ function normalizePath(path) {
  * @return {Array} [ [path, path], {}, function ]
  */
 function parseArgs(...args) {
-  let l = args.length,
-    last = args[l - 1],
-    cb, opts, paths
+  const l = args.length
+  const last = args[l - 1]
+  let cb, opts, paths
   if (_.isFunction(last)) {
     cb = last
     args.pop(); // don't remove this semicolon
@@ -106,8 +108,9 @@ const mergeScope = {
 
   options(parent, child) {
     parent = _.assign(parent || {})
-    let excepts = this.overrideKeys(child)
-    for (let key of excepts) {
+    const excepts = this.overrideKeys(child)
+    let key
+    for (key of excepts) {
       delete parent[key]
     }
     return _.assign(parent, child)

@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * route-mapper - Resource
  * Copyright(c) 2015 Fangdun Cai
@@ -41,8 +43,8 @@ export default class Resource {
   }
 
   get actions() {
-    let only = this.options.only
-    let except = this.options.except
+    const only = this.options.only
+    const except = this.options.except
     if (_.isString(only)) only = [only]
     if (_.isString(except)) except = [except]
     if (only && only.length) {
@@ -54,7 +56,7 @@ export default class Resource {
   }
 
   get name() {
-    let as = this.as || this._name
+    const as = this.as || this._name
     return this.camelCase ? _.camelCase(as) : as
   }
 
@@ -134,7 +136,8 @@ export default class Resource {
    *  // => photo_id
    */
   get nestedParam() {
-    let param = this.param !== 'id' ? this.param : this.singular + '_' + this.param
+    const param = this.param !== 'id' ?
+      this.param : this.singular + '_' + this.param
     return this.camelCase ? _.camelCase(param) : param
   }
 

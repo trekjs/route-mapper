@@ -3,7 +3,7 @@ import routeMapper from './RouteMapper.test';
 
 describe('Router#helpers', () => {
 
-  it('should return an empty object', () => {
+  it('should not an empty object', () => {
     assert(routeMapper.helers !== null);
   });
 

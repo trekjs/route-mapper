@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * route-mapper - Http
  * Copyright(c) 2015 Fangdun Cai
@@ -5,12 +7,12 @@
  */
 
 import METHODS from 'methods'
-import { parseArgs } from './utils'
+import utils from './utils'
 
 export default class Http {
 
   _mapMethod(method, args) {
-    let [paths, opts, cb] = parseArgs(...args)
+    const [paths, opts, cb] = utils.parseArgs(...args)
     opts.verb = method
     return this.match(paths, opts, cb)
   }
@@ -22,7 +24,7 @@ export default class Http {
 }
 
 METHODS.forEach((m) => {
-  let v = m.replace('-', '')
+  const v = m.replace('-', '')
   Http.prototype[v] = eval(`(function $${v}() {
     return this._mapMethod('${m}', arguments)
   })`)

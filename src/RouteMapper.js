@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * route-mapper - RouteMapper
  * Copyright(c) 2015 Fangdun Cai
@@ -7,9 +9,8 @@
 import _ from 'lodash'
 import _debug from 'debug'
 import vm from 'vm'
-import * as babel from 'babel'
+import * as babel from 'babel-core'
 import Actions from 'actions'
-import getPrototypesOf from 'object-getprototypesof'
 import utils from './utils'
 import Http from './Http'
 import Scope from './Scope'
@@ -91,8 +92,8 @@ export default class RouteMapper extends Http {
    * @return {RouteMapper} this
    */
   scope() {
-    let [paths, options, cb] = utils.parseArgs(...arguments)
-    let scopeOptions = Object.create(null)
+    const [paths, options, cb] = utils.parseArgs(...arguments)
+    const scopeOptions = Object.create(null)
 
     if (paths.length) {
       options.path = paths.join('/')
@@ -108,7 +109,8 @@ export default class RouteMapper extends Http {
       }
 
       if (value) {
-        scopeOptions[option] = utils.mergeScope[option](this.$scope.get(option), value)
+        const f = utils.mergeScope[option].bind(utils.mergeScope)
+        scopeOptions[option] = f(this.$scope.get(option), value)
       }
     })
 
@@ -143,9 +145,9 @@ export default class RouteMapper extends Http {
   }
 
   match() {
-    let [paths, options, cb] = utils.parseArgs(...arguments)
+    const [paths, options, cb] = utils.parseArgs(...arguments)
 
-    let to = options.to
+    const to = options.to
     if (to) {
       if (!/#/.test(to)) {
         options.controller = to
@@ -160,19 +162,21 @@ export default class RouteMapper extends Http {
       throw new Error(`Unknown scope ${options.on} given to 'on'`)
     }
 
-    let controller = this.$scope.get('controller')
-    let action = this.$scope.get('action')
+    const controller = this.$scope.get('controller')
+    const action = this.$scope.get('action')
     if (controller && action && !_.has(options, 'to')) {
       options.to = `${controller}#${action}`
     }
 
     paths.forEach((p) => {
-      let routeOptions = _.assign(options)
+      const routeOptions = _.assign(options)
       routeOptions.path = p
-      let pathWithoutFormat = p.replace(/\.:format\??$/, '')
+      const pathWithoutFormat = p.replace(/\.:format\??$/, '')
       if (this.isUsingMatchShorthand(pathWithoutFormat, routeOptions)) {
         if (!_.has(options, 'to')) {
-          routeOptions.to = pathWithoutFormat.replace(/^\//g, '').replace(/\/([^\/]*)$/, '#$1')
+          routeOptions.to = pathWithoutFormat
+            .replace(/^\//g, '')
+            .replace(/\/([^\/]*)$/, '#$1')
         }
         routeOptions.to = routeOptions.to.replace(/-/g, '_')
       }
@@ -216,8 +220,8 @@ export default class RouteMapper extends Http {
   mount() {}
 
   resource() {
-    let [resourcesArray, options, cb] = utils.parseArgs(...arguments)
-    let kind = 'resource'
+    const [resourcesArray, options, cb] = utils.parseArgs(...arguments)
+    const kind = 'resource'
 
     if (this.applyCommonBehaviorFor(kind, resourcesArray, options, cb)) {
       return this
@@ -238,7 +242,7 @@ export default class RouteMapper extends Http {
           this.concerns(options.concerns)
         }
 
-        let actions = this.parentResource.actions
+        const actions = this.parentResource.actions
 
         if (actions.includes('create')) {
           this.collection(() => {
@@ -259,8 +263,8 @@ export default class RouteMapper extends Http {
   }
 
   resources() {
-    let [resourcesArray, options, cb] = utils.parseArgs(...arguments)
-    let kind = 'resources'
+    const [resourcesArray, options, cb] = utils.parseArgs(...arguments)
+    const kind = 'resources'
 
     if (this.applyCommonBehaviorFor(kind, resourcesArray, options, cb)) {
       return this
@@ -281,7 +285,7 @@ export default class RouteMapper extends Http {
           this.concerns(options.concerns)
         }
 
-        let actions = this.parentResource.actions
+        const actions = this.parentResource.actions
 
         this.collection(() => {
           if (actions.includes('index')) {
@@ -353,7 +357,7 @@ export default class RouteMapper extends Http {
   }
 
   namespace() {
-    let args = utils.parseArgs(...arguments)
+    const args = utils.parseArgs(...arguments)
     if (this.$scope.isResourceScope) {
       this.nested(() => {
         _namespace.apply(this, args)
@@ -366,7 +370,7 @@ export default class RouteMapper extends Http {
 
     function _namespace(path, options = {}, cb) {
       path = String(path)
-      let defaults = {
+      const defaults = {
         module: path,
         path: options.path || path,
         as: options.as || path
@@ -389,9 +393,9 @@ export default class RouteMapper extends Http {
   }
 
   concerns() {
-    let [names, options, cb] = utils.parseArgs(...arguments)
+    const [names, options, cb] = utils.parseArgs(...arguments)
     names.forEach(name => {
-      let concern = this._concerns[name]
+      const concern = this._concerns[name]
       if (_.isFunction(concern)) {
         concern.call(this, options)
       } else {
@@ -416,7 +420,7 @@ export default class RouteMapper extends Http {
       return true
     }
 
-    let scopeOptions = {}
+    const scopeOptions = {}
     _.keys(options).forEach((k) => {
       if (!RESOURCE_OPTIONS.includes(k)) {
         scopeOptions[k] = options[k]
@@ -466,7 +470,7 @@ export default class RouteMapper extends Http {
 
   setMemberMappingsForResource() {
     this.member(() => {
-      let actions = this.parentResource.actions
+      const actions = this.parentResource.actions
       if (actions.includes('edit')) {
         this.get('edit')
       }
@@ -484,7 +488,7 @@ export default class RouteMapper extends Http {
   }
 
   decomposedMatch(path, options) {
-    let on = options.on
+    const on = options.on
     if (on) {
       delete options.on
       this[on](() => {
@@ -509,7 +513,7 @@ export default class RouteMapper extends Http {
   }
 
   addRoute(action, options) {
-    let path = utils.normalizePath(this.pathForAction(action, options.path))
+    const path = utils.normalizePath(this.pathForAction(action, options.path))
     delete options.path
 
     action = String(action)
@@ -524,9 +528,10 @@ export default class RouteMapper extends Http {
     options.camelCase = this.camelCase
     options.as = this.nameForAction(options.as, action)
 
-    let route = new Route(this.$scope, path, options)
+    const route = new Route(this.$scope, path, options)
 
-    debug(route.as, route.verb, route.path, `${route.controller}#${route.action}`)
+    debug(route.as, route.verb,
+          route.path, `${route.controller}#${route.action}`)
 
     if (!_.has(this.helpers, route.as)) {
       this.helpers[route.as] = route.pathHelp.bind(route)
@@ -538,18 +543,18 @@ export default class RouteMapper extends Http {
     if (path && this.isCanonicalAction(action)) {
       return this.$scope.get('path')
     } else {
-      let scopePath = this.$scope.get('path')
-      let actionPath = this.actionPath(action, path)
+      const scopePath = this.$scope.get('path')
+      const actionPath = this.actionPath(action, path)
       return _.compact([scopePath, actionPath]).join('/')
     }
   }
 
   nameForAction(as, action) {
-    let prefix = this.prefixNameForAction(as, action)
-    let namePrefix = this.$scope.get('as')
+    const prefix = this.prefixNameForAction(as, action)
+    const namePrefix = this.$scope.get('as')
     let collectionName
     let memberName
-    let parentResource = this.parentResource
+    const parentResource = this.parentResource
     if (parentResource) {
       if (!(as || action)) {
         return null
@@ -558,8 +563,10 @@ export default class RouteMapper extends Http {
       memberName = parentResource.memberName
     }
 
-    let actionName = this.$scope.actionName(namePrefix, prefix, collectionName, memberName)
-    let candidate = _.compact(actionName).join('_')
+    const actionName = this.$scope.actionName(namePrefix,
+                                              prefix,
+                                              collectionName, memberName)
+    const candidate = _.compact(actionName).join('_')
 
     if (candidate) {
       if (!as) {
@@ -592,13 +599,13 @@ export default class RouteMapper extends Http {
   }
 
   get isScopeActionOptions() {
-    let options = this.$scope.get('options')
+    const options = this.$scope.get('options')
     return options && (options.only || options.except)
   }
 
   get nestedOptions() {
-    let parentResource = this.parentResource
-    let options = {
+    const parentResource = this.parentResource
+    const options = {
       as: parentResource.memberName
     }
     return options
@@ -609,7 +616,8 @@ export default class RouteMapper extends Http {
   }
 
   isCanonicalAction(action) {
-    return this.$scope.isResourceMethodScope && Actions.CANONICAL_ACTIONS.includes(action)
+    return this.$scope.isResourceMethodScope &&
+      Actions.CANONICAL_ACTIONS.includes(action)
   }
 
   isUsingMatchShorthand(path, options) {
@@ -617,8 +625,8 @@ export default class RouteMapper extends Http {
   }
 
   scopeActionOptions() {
-    let options = this.$scope.get('options')
-    let o = {}
+    const options = this.$scope.get('options')
+    const o = {}
     _.keys(options)
       .forEach((k) => {
         if (k === 'only' || k === 'except') {
@@ -633,19 +641,12 @@ export default class RouteMapper extends Http {
   }
 
   draw(filename) {
-    let result = babel.transformFileSync(filename, {
+    const result = babel.transformFileSync(filename, {
       ast: false
     })
 
-    let g = Object.create(null)
-    Object.setPrototypeOf(g, this)
-    let arr = getPrototypesOf(g)
-    arr.forEach((p) => {
-      let keys = Object.keys(p)
-      keys.forEach((m) => {
-        if (_.isFunction(p[m])) g[m] = p[m].bind(this)
-      })
-    })
+    const g = Object.create(null)
+    g.routeMapper = this
     vm.runInNewContext(result.code, g)
   }
 

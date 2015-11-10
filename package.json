@@ -5,8 +5,9 @@
   "main": "lib/RouteMapper",
   "scripts": {
     "build": "babel src --out-dir lib",
+    "lint": "eslint src",
     "prepublish": "npm run build",
-    "test": "mocha --require babel/register --require should --reporter spec --bail --check-leaks test/**/*.test.js",
+    "test": "mocha --harmony_array_includes --require babel-core/register --require should --reporter spec --bail --check-leaks test/**/*.test.js",
     "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly -- --require should --reporter spec --check-leaks test/**/*.test.js",
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --require should --reporter dot --check-leaks test/**/*.test.js"
   },
@@ -24,6 +25,17 @@
   "author": "Fangdun Cai <cfddream@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.1.2",
+    "babel-eslint": "^4.1.5",
+    "babel-plugin-transform-es2015-destructuring": "^6.0.18",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.1.3",
+    "babel-plugin-transform-es2015-parameters": "^6.0.18",
+    "babel-plugin-transform-object-rest-spread": "^6.0.14",
+    "babel-preset-stage-1": "^6.1.2",
+    "babel-preset-stage-2": "^6.1.2",
+    "babel-preset-stage-3": "^6.1.2",
+    "eslint": "^1.9.0",
+    "eslint-plugin-babel": "^2.1.1",
     "express": "^4.13.3",
     "isparta": "^3.x",
     "koa": "^1.0.0",
@@ -34,15 +46,29 @@
   },
   "dependencies": {
     "actions": "^1.3.0",
-    "babel": "^5.8.23",
+    "babel-core": "^6.1.2",
     "debug": "^2.2.0",
     "lodash": "^3.10.1",
     "methods": "^1.1.1",
-    "object-getprototypesof": "^1.0.1",
     "pluralize": "^1.2.1"
   },
   "files": [
-    "index.js",
+    "LICENSE",
     "lib"
-  ]
+  ],
+  "babel": {
+    "presets": [
+      "stage-1",
+      "stage-2",
+      "stage-3",
+      {
+        "plugins": [
+          "transform-es2015-destructuring",
+          "transform-es2015-modules-commonjs",
+          "transform-es2015-parameters",
+          "transform-object-rest-spread"
+        ]
+      }
+    ]
+  }
 }
