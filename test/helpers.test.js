@@ -16,5 +16,12 @@ describe('Router#helpers', () => {
     const expected = '/photos/233/books/377/users?admin=0&francis=bacon';
     const actual = routeMapper.helpers.google_book_users(233, 377, ...qs);
     assert(expected === actual);
+  });  
+  
+  it('should stringify a sole param into a query string for a path without params', () => {
+    const qs = [ { next: 'foobar' }, { not: 'included' } ];
+    const expected = '/user?next=foobar';
+    const actual = routeMapper.helpers.user(...qs);
+    assert(expected === actual);
   });
 });

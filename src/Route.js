@@ -72,7 +72,7 @@ export default class Route {
   }
 
   pathHelp(...params) {
-    const matches = this.path.match(/:[a-z]+[0-9a-zA-Z_]+/g)
+    const matches = this.path.match(/:[a-z]+[0-9a-zA-Z_]+/g) || []
     const qs = params.slice(matches.length).shift()
     const path = matches.reduce((a, b, i) => a.replace(b, params[i]), this.path)
     return qs ? [ path, stringify(qs) ].join('?') : path
