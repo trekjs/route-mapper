@@ -8,6 +8,7 @@
 
 import _ from 'lodash'
 import utils from './utils'
+import { stringify } from 'qs'
 
 /**
  * Route
@@ -71,14 +72,10 @@ export default class Route {
   }
 
   pathHelp(...params) {
-    let p = this.path
-    const matches = p.match(/:[a-z]+[0-9a-zA-Z_]+/g)
-    if (matches) {
-      matches.forEach((m, i) => {
-        p = p.replace(m, params[i])
-      })
-    }
-    return p
+    const matches = this.path.match(/:[a-z]+[0-9a-zA-Z_]+/g)
+    const qs = params.slice(matches.length).shift()
+    const path = matches.reduce((a, b, i) => a.replace(b, params[i]), this.path)
+    return qs ? [ path, stringify(qs) ].join('?') : path;
   }
 
 }

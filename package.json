@@ -50,7 +50,8 @@
     "debug": "^2.2.0",
     "lodash": "^3.10.1",
     "methods": "^1.1.1",
-    "pluralize": "^1.2.1"
+    "pluralize": "^1.2.1",
+    "qs": "^6.1.0"
   },
   "files": [
     "LICENSE",
