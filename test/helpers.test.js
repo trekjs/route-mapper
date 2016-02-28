@@ -11,6 +11,13 @@ describe('Router#helpers', () => {
     assert('/photos/233/books/377/users' === routeMapper.helpers.google_book_users(233, 377));
   });
   
+  it('should insert undefined when provided insufficient parameters', () => {
+    const qs = [ { admin: 0, francis: 'bacon' }, { not: 'included' } ];
+    const expected = `/photos/233/books/undefined/users?admin=0&francis=bacon`;
+    const actual = routeMapper.helpers.google_book_users(new Number(233), ...qs);
+    assert(expected === actual);
+  });
+  
   it('should stringify a single trailing param into a query string', () => {
     const qs = [ { admin: 0, francis: 'bacon' }, { not: 'included' } ];
     const expected = '/photos/233/books/377/users?admin=0&francis=bacon';

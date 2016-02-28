@@ -73,9 +73,12 @@ export default class Route {
 
   pathHelp(...params) {
     const matches = this.path.match(/:[a-z]+[0-9a-zA-Z_]+/g) || []
-    const qs = params.slice(matches.length).shift()
-    const path = matches.reduce((a, b, i) => a.replace(b, params[i]), this.path)
-    return qs ? [ path, stringify(qs) ].join('?') : path
+    const args = matches.map((m, i) => params[i])
+      .map(p => _.isObject(p) && !_.isEmpty(p) ? undefined : p)
+      .filter(p => !_.isUndefined(p))
+    const hash = params.slice(args.length).shift()
+    const path = matches.reduce((a, b, i) => a.replace(b, args[i]), this.path)
+    return hash ? [ path, stringify(hash) ].join('?') : path
   }
 
 }
