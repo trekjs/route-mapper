@@ -28,6 +28,7 @@ routeMapper
 
   // Example resource route (maps HTTP verbs to controller actions automatically):
   .resources('products')
+  .resource('user')
 
   // Example resource route with options:
   .resources('products', () => {
