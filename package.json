@@ -1,0 +1,68 @@
+{
+  "name": "route-mapper",
+  "version": "0.07.0",
+  "description": "Route Mapper - Generate Rails Style Routing & RESTful Route",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo && nyc --reporter=lcov ava"
+  },
+  "repository": "trekjs/route-mapper",
+  "keywords": [
+    "rails-routing",
+    "resources",
+    "rest",
+    "restful",
+    "route",
+    "route-mapper",
+    "routes",
+    "routing",
+    "trek"
+  ],
+  "author": "Fangdun Cai <cfddream@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "0.16.0",
+    "nyc": "8.1.0",
+    "xo": "0.16.0"
+  },
+  "xo": {
+    "esnext": true,
+    "envs": [
+      "node",
+      "es6"
+    ],
+    "semicolon": false,
+    "space": true,
+    "ignores": [
+      "benchmarks/*.js"
+    ],
+    "rules": {
+      "babel/arrow-parens": [
+        2,
+        "as-needed"
+      ],
+      "babel/object-curly-spacing": 0,
+      "curly": 0,
+      "import/no-named-as-default": 0,
+      "max-lines": 0,
+      "no-warning-comments": [
+        "error",
+        {
+          "terms": [
+            "todo",
+            "fixme"
+          ],
+          "location": "anywhere"
+        }
+      ],
+      "space-before-function-paren": [
+        2,
+        "always"
+      ],
+      "yoda": 0
+    }
+  },
+  "dependencies": {
+    "pluralize": "3.0.0"
+  }
+}
